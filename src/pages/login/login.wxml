@@ -1,0 +1,11 @@
+<view wx:if='{{loginBoxShow}}'>
+  <form bindsubmit="register">
+    <label for='eid'>
+      <input type='text' placeholder='eid' name='eid' value='{{data.eid}}' bindinput='eidInput'></input>
+    </label>
+    <label for='phone'>
+      <input type='text' placeholder='phone' name='phone' value='{{data.phone}}' bindinput='phoneInput'></input>
+    </label>
+    <button type="primary" form-type='submit'>注册</button>
+  </form>
+</view>

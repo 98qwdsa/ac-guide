@@ -1,0 +1,5 @@
+<view class='event_list_warp'>
+  <view class='event_item' wx:for="{{eventList}}" wx:key="unique" bindtap='eventClick' data-data='{{item}}'>
+    <text>{{item.name}}</text>
+  </view>
+</view>

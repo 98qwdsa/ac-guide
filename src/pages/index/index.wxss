@@ -1,0 +1,20 @@
+/**index.wxss**/
+
+.event_list_warp {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  align-content: space-around;
+}
+
+.event_list_warp .event_item {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 5rpx;
+  border: 1px solid #abcdef;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

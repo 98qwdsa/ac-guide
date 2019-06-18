@@ -1,0 +1,18 @@
+/* src/pages/index/user_event_steps/user_event_steps.wxss */
+
+.swip_item {
+  opacity: 0.3;
+}
+
+.no_opacity {
+  opacity: 1;
+}
+
+.swip_item_warp {
+  padding: 0 25rpx;
+}
+
+.swip_item .tips {
+  display: flex;
+  flex-direction: column;
+}

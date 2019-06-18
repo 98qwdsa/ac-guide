@@ -1,0 +1,24 @@
+<!--src/pages/index/user_event_steps/user_event_steps.wxml-->
+<swiper previous-margin="50rpx" next-margin='50rpx' easing-function="easeInOutCubic" bindchange="swiperChange" current="{{curIndex}}">
+  <block wx:for="{{stepList}}" wx:key="unique">
+    <swiper-item class="swip_item {{curIndex === index ? 'no_opacity' : ''}}">
+      <view class='swip_item_warp'>
+        <text class='title'>{{item.title}}</text>
+        <view class='tips'>
+          <text wx:for="{{item.tips}}" wx:for-item="tip" wx:for-index="idx" wx:key="unique">{{idx+1}}. {{tip}}</text>
+        </view>
+        <view class='attachment_warp'>
+          <view wx:if="{{item.user_step && item.user_step.length > 0}}" class='attachments'>
+
+          </view>
+          <view wx:else class='upload_attachments'>
+            <button type='primary' bindtap='uploadAttachment'>上传附件</button>
+          </view>
+        </view>
+        <view>
+          <button bindtap='nextStep' data-Uid="{{item._id}}" data-code="{{event_code}}">下一步</button>
+        </view>
+      </view>
+    </swiper-item>
+  </block>
+</swiper>
