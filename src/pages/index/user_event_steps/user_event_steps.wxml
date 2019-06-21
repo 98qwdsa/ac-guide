@@ -1,22 +1,22 @@
 <!--src/pages/index/user_event_steps/user_event_steps.wxml-->
-<swiper previous-margin="50rpx" next-margin='50rpx' easing-function="easeInOutCubic" bindchange="swiperChange" current="{{curIndex}}">
+<swiper style='height:{{swiperHeight}}px' previous-margin="50rpx" next-margin='50rpx' easing-function="easeInOutCubic" bindchange="swiperChange" current="{{curIndex}}">
   <block wx:for="{{stepList}}" wx:key="unique">
     <swiper-item class="swip_item {{curIndex === index ? 'no_opacity' : ''}}">
-      <view class='swip_item_warp'>
+      <view class='swip_item_warp' id='swip_item_warp{{index}}'>
         <text class='title'>{{item.title}}</text>
         <view class='tips'>
           <text wx:for="{{item.tips}}" wx:for-item="tip" wx:for-index="idx" wx:key="unique">{{idx+1}}. {{tip}}</text>
         </view>
-        <view class='attachment_warp'>
-          <view wx:if="{{item.user_step && item.user_step.length > 0}}" class='attachments'>
-
-          </view>
-          <view wx:else class='upload_attachments'>
-            <button type='primary' bindtap='uploadAttachment'>上传附件</button>
+        <view class='attachment_warp clearfix'>
+          <view wx:if="{{item.user_step && item.user_step.attachments.length > 0}}" class='attachments'>
+            <image mode='scaleToFill' wx:for="{{item.user_step.attachments}}" wx:key="unique" wx:for-item="e" src='{{e.src}}'></image>
           </view>
         </view>
+        <view class='upload_attachments'>
+          <button type='primary' bindtap='uploadAttachment' data-Uid="{{item._id}}">上传附件</button>
+        </view>
         <view>
-          <button bindtap='nextStep' data-Uid="{{item._id}}" data-code="{{event_code}}">下一步</button>
+          <button bindtap='nextStep' data-Uid="{{item._id}}">下一步{{index}}</button>
         </view>
       </view>
     </swiper-item>

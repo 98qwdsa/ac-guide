@@ -16,3 +16,21 @@
   display: flex;
   flex-direction: column;
 }
+
+.attachments {
+  clear: both;
+}
+
+.attachments image {
+  width: 250rpx;
+  height: 250rpx;
+  float: left;
+}
+
+.clearfix:after {
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}

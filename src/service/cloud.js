@@ -14,13 +14,15 @@ module.exports = {
             title: res.result.msg,
             duration: 1500
           })
+        } else {
+          console.log(res.result);
         }
       }).catch(e => {
         console.log(e)
         wx.showToast({
           mask: true,
           icon: 'none',
-          title: e,
+          title: 'cloud.callFunction error',
           duration: 1500
         })
       })

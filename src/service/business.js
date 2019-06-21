@@ -1,19 +1,19 @@
-const could = require('./could.js');
-const couldFileConf = {
+const cloud = require('./cloud.js');
+const cloudFileConf = {
   PATH: 'steps_attachments/'
 }
 module.exports = {
   checkUserInfo() {
-    return could.call('checkUserInfo');
+    return cloud.call('checkUserInfo');
   },
   register(data) {
-    return could.call('addUser', data);
+    return cloud.call('addUser', data);
   },
   getEventList() {
-    return could.call('queryEventList');
+    return cloud.call('queryEventList');
   },
   getSelfEventStep(code) {
-    return could.call('queryUserEventDetail', {
+    return cloud.call('queryUserEventDetail', {
       code
     });
   },
@@ -26,13 +26,18 @@ module.exports = {
             let files = [];
             res.tempFiles.forEach(e => {
               files.push({
-                cloudPath: couldFileConf.PATH + e.name,
+                cloudPath: cloudFileConf.PATH + e.name,
                 filePath: e.path
               })
             })
+            wx.showLoading({
+              mask: true,
+            })
             uploadFile(files).then(res => {
-              setRecord(res).then(res1 => {
-                reslove(res);
+              setAttachmentRecord(res, Uid, code).then(res1 => {
+                reslove(res1);
+                console.log(res1);
+                wx.hideLoading();
               });
             });
           }
@@ -42,7 +47,7 @@ module.exports = {
         }
       })
     });
-
+    //上传云存储
     function uploadFile(files = []) {
       let funArr = [];
       files.forEach(e => {
@@ -65,32 +70,27 @@ module.exports = {
         })
       })
     }
-
-    function setAttachmentRecord(res) {
-      let data = [];
+    //写入到云数据库
+    function setAttachmentRecord(res, step_Uid, code) {
+      let data = {
+        code,
+        step_Uid,
+        files: []
+      }
       res.forEach(e => {
-        data.push({
-          step_Uid,
-          file_url: e.fileId
+        data.files.push({
+          src: e.fileID,
+          type: e.fileID.replace(/.+\./, '')
         })
       });
-      return new Promise((reslove, reject) => {
-        wx.cloud.callFunction({
-          name: '',
-          data
-        }).then(res => {
-          if (res.result.code === '0000') {
-            reslove(res.data)
-          }
-        })
-      })
+      return cloud.call('employeeAddAttachments', data)
     }
   },
   nextStep(code, step_Uid) {
-    return cloud.call('employeeAddAttachments', {
+    return cloud.call('employeeAddStep', {
       code,
       step_Uid,
-      verified: 50
+      status_code: 50
     })
   }
 }

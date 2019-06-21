@@ -8,7 +8,9 @@ Page({
   data: {
     stepList: [],
     curIndex: 0,
-    event_code: ''
+    event_code: '',
+    curStep: 0,
+    swiperHeight: 100
   },
 
   /**
@@ -17,15 +19,27 @@ Page({
   onLoad: function(options) {
     this.loadData(options.code);
   },
-  loadData(code) {
+  loadData(event_code) {
     wx.showLoading({
       mask: true,
     })
-    service.getSelfEventStep(code).then(stepList => {
+    service.getSelfEventStep(event_code).then(stepList => {
+      let curStep = 0;
+      stepList.forEach((e, k) => {
+        if (e.user_step && e.user_step.currentStep) {
+          curStep = k + 1;
+          if (curStep == stepList.length) {
+            curStep--;
+          }
+        }
+      });
       this.setData({
         stepList,
-        event_code: code
-      })
+        curIndex: curStep,
+        curStep,
+        event_code
+      });
+      this.initSwiperHeight();
       console.log(stepList);
       wx.hideLoading();
     })
@@ -34,14 +48,48 @@ Page({
     this.setData({
       curIndex: e.detail.current
     })
+    this.initSwiperHeight();
   },
   uploadAttachment(e) {
-    service.uploadAttachments();
+    const dataSet = e.currentTarget.dataset;
+    service.uploadAttachments(this.data.event_code, dataSet.uid).then(data => {
+      this.setData({
+        ['stepList[' + this.data.curIndex + '].user_step']: data
+      });
+      this.initSwiperHeight()
+    });
   },
   nextStep(e) {
+    wx.showLoading({
+      mask: true
+    })
     const dataSet = e.currentTarget.dataset;
-    service.nextStep(dataSet.code, dataSet.uid).then(data => {
-      console.log(data);
+    service.nextStep(this.data.event_code, dataSet.uid).then(data => {
+      wx.hideLoading();
+      if (data._id) {
+        const stepList = [...this.data.stepList]
+        let curIndex = this.data.curIndex;
+
+        stepList[curIndex].user_step = data;
+        if (stepList[curIndex - 1]) {
+          stepList[curIndex - 1].user_step.currentStep = undefined;
+        }
+        curIndex += 1;
+        curIndex = curIndex == stepList.length ? curIndex - 1 : curIndex
+        this.setData({
+          curIndex,
+          curStep: curIndex,
+          stepList
+        })
+      }
+    })
+  },
+  initSwiperHeight() {
+    const query = wx.createSelectorQuery()
+    query.select('#swip_item_warp' + this.data.curIndex).boundingClientRect().exec(res => {
+      this.setData({
+        swiperHeight: res[0].height + 20
+      })
     })
   },
   /**

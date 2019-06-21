@@ -5,12 +5,10 @@ cloud.init();
 
 function checkParams(data) {
   let {
-    OPENID
-  } = cloud.getWXContext();
-  let {
     code,
+    user_open_id,
     step_Uid,
-    verified,
+    status_code,
     attachments_Uid
   } = data;
   let res = {
@@ -28,6 +26,15 @@ function checkParams(data) {
     }
   }
 
+  if (user_open_id === undefined) {
+    user_open_id = cloud.getWXContext().OPENID
+  } else {
+    if (typeof(user_open_id) != 'string') {
+      res.code = '1001';
+      res.msg.push('user_open_id:string');
+    }
+  }
+
   if (step_Uid === undefined) {
     res.code = '1000';
     res.msg.push('step_Uid:string')
@@ -37,12 +44,12 @@ function checkParams(data) {
       res.msg.push('step_Uid:string');
     }
   }
-  if (verified === undefined) {
-    verified = 0
+  if (status_code === undefined) {
+    status_code = 0
   } else {
-    if (typeof(verified) != 'number') {
+    if (typeof(status_code) != 'number') {
       res.code = '1001';
-      res.msg.push('verified:number');
+      res.msg.push('status_code:number');
     }
   }
 
@@ -65,13 +72,10 @@ function checkParams(data) {
   if (res.code === '0000') {
     res.data = {
       code,
-      user_open_id: OPENID,
+      user_open_id,
       step_Uid,
-      step: {
-        step_Uid,
-        verified,
-        attachments_Uid
-      }
+      status_code,
+      attachments_Uid
     }
   }
   return res;
@@ -90,7 +94,7 @@ async function checkUserPermission(open_id) {
 async function recordStep(data) {
   const DB = cloud.database();
   const COLTION = DB.collection(data.code + '_event_user');
-  const step = await checkStep(data.user_open_id);
+  const step = await checkStep(data);
 
   const res = await writeStep(step, data)
 
@@ -103,7 +107,7 @@ async function recordStep(data) {
   }
   //添加一步到事件的用户表
   async function writeStep(step, data) {
-    data.step.verified = await checkVerify(data.code, step._id);
+    data.status_code = await checkVerify(data, step._id);
     if (step && step._id) {
       return await editStep(step, data.step);
     } else {
@@ -115,12 +119,22 @@ async function recordStep(data) {
         const res = await COLTION.add({
           data: {
             user_open_id: data.user_open_id,
-            step: data.step
+            step: data.step,
+            step_Uid: data.step_Uid,
+            status_code: data.status_code,
+            attachments_Uid: data.attachments_Uid
           }
         })
 
         if (res._id) {
-          return res;
+          let record = await COLTION.doc(res._id).get();
+          const attachments = await getAttachment(data.code, [record.data.attachments_Uid]);
+          record.data = {
+            ...record.data,
+            attachments,
+            currentStep: true
+          };
+          return record.data;
         }
         return false;
       } catch (e) {
@@ -140,22 +154,39 @@ async function recordStep(data) {
       }
     }
     // 检查是否需要人工验证通过
-    async function checkVerify(code, _id) {
-      try {
-        const res = DB.collection(code + '_event_steps').doc(_id).get();
-        if (res.data && res.data.verifiers && res.data.verifiers.length > 0) {
-          return 50;
-        }
-        return 100
-      } catch (e) {
+    async function checkVerify(data, _id) {
+      if (data.status_code === 50) {
+        try {
+          const res = DB.collection(data.code + '_event_steps').doc(_id).get();
+          if (res.data && res.data.verifiers && res.data.verifiers.length > 0) {
+            return 50;
+          }
+          return 100
+        } catch (e) {
 
+        }
+      } else {
+        return 0;
       }
     }
   }
+  //获取附件
+  async function getAttachment(code, _id = []) {
+    const DB = cloud.database();
+    const _ = DB.command;
+    if (!_id.length) {
+      return [];
+    }
+    const res = await DB.collection(code + '_event_attachments').where({
+      _id: _.in(_id)
+    }).get()
+    return res.data[0].files;
+  }
 
-  async function checkStep(user_open_id) {
+  async function checkStep(data) {
     const res = await COLTION.where({
-      user_open_id
+      user_open_id: data.user_open_id,
+      step_Uid: data.step_Uid
     }).get();
 
     if (res.data.length > 0) {
@@ -167,8 +198,8 @@ async function recordStep(data) {
 
 /**
  * code:string  事件code 
+ * status_code,
  * step_Uid,
- * verified,
  * attachments_Uid
  */
 // 云函数入口函数

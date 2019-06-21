@@ -48,17 +48,17 @@ async function getUserStep(data) {
     const res = await cloud.database().collection(data.code + '_event_user').where({
       user_open_id: data.open_id
     }).get();
-    if (res.data.length < 1) {
-      return {
-        code: '2001',
-        msg: 'this is no steps for this user',
-        data: null
-      }
-    }
+    // if (res.data.length < 1) {
+    //   return {
+    //     code: '2001',
+    //     msg: 'this is no steps for this user',
+    //     data: null
+    //   }
+    // }
     return {
       code: '0000',
       msg: res.errMsg,
-      data: res.data[0]
+      data: res.data
     }
   } catch (e) {
     return {
@@ -105,7 +105,7 @@ async function getAttachment(code, _id = []) {
   const res = await DB.collection(code + '_event_attachments').where({
     _id: _.in(_id)
   }).get()
-  return res.data;
+  return res.data[0].files;
 }
 
 async function mergeSteps(steps, userSteps, code) {
@@ -114,18 +114,25 @@ async function mergeSteps(steps, userSteps, code) {
   for (i of steps) {
     let user_step = {}
     if (userSteps) {
-      const curUserStep = userSteps.steps.filter(e => {
+      const curUserStep = userSteps.filter((e, key) => {
         return i._id === e.step_Uid;
-      })[0]
+      })[0];
+      let attachments = [];
+      let currentStep = undefined;
       if (curUserStep) {
-        const attachments = await getAttachment(code, curUserStep.attachments_Uid);
-        user_step = {
-          ...curUserStep,
-          attachments
+        if (curUserStep.attachments_Uid) {
+          attachments = await getAttachment(code, [curUserStep.attachments_Uid]);
         }
-      } else {
-        user_step = null
+        if (curUserStep.status_code) {
+          currentStep = curUserStep.status_code === 100 ? true : undefined
+        }
       }
+      user_step = {
+        ...curUserStep,
+        attachments,
+        currentStep,
+      }
+
 
       NuserSteps.push({
         ...i,
