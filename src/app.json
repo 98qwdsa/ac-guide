@@ -2,7 +2,13 @@
   "pages": [
     "pages/login/login",
     "pages/index/index",
-    "pages/index/user_event_steps/user_event_steps"
+    "pages/index/user_event_steps/user_event_steps",
+    "event/list/list",
+    "admins/login/login",
+    "admins/user/detail/detail",
+    "admins/user/list/list",
+    "event/detail/detail",
+    "event/add/add"
   ],
   "window": {
     "backgroundTextStyle": "light",

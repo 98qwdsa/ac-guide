@@ -123,7 +123,7 @@ async function checkPermision(action) {
       name: 'checkUserInfo',
     })
     if (action === 'cancel') {
-      if (curUserInfo.result.data.role.indexOf['PM'] > -1 && curUserInfo.result.data.role.indexOf['HR'] > -1) {
+      if (curUserInfo.result.data.role.indexOf('PM') > -1 && curUserInfo.result.data.role.indexOf('HR') > -1) {
         return {
           code: '2002',
           msg: 'permission denied',
@@ -132,7 +132,7 @@ async function checkPermision(action) {
       }
     }
     if (action === 'edit') {
-      if (curUserInfo.result.data.role.indexOf['HR'] > -1) {
+      if (curUserInfo.result.data.role.indexOf('HR') > -1) {
         return {
           code: '2003',
           msg: 'permission denied',
@@ -179,7 +179,7 @@ async function checkObserverPermision(data) {
           open_id
         }
       })
-      if (curUserInfo.result.data === null || curUserInfo.result.data.role.indexOf['PM'] < 0 || curUserInfo.result.data.role.indexOf['HR'] < 0) {
+      if (curUserInfo.result.data === null || curUserInfo.result.data.role.indexOf('PM') < 0 || curUserInfo.result.data.role.indexOf('HR') < 0) {
         return {
           code: '2004',
           msg: 'permission denied',

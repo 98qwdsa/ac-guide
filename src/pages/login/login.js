@@ -1,5 +1,6 @@
 // pages/login/login.js
-const service = require('../../service/business.js');
+const service = require('../business.js');
+const APP = getApp();
 Page({
 
   /**
@@ -8,7 +9,7 @@ Page({
   data: {
     loginBoxShow: false,
     data: {
-      eid: '',
+      name: '',
       phone: ''
     }
   },
@@ -21,6 +22,7 @@ Page({
     });
     service.register(e.detail.value).then(res => {
       console.log(res);
+      APP.globalData.userInfo = res;
       wx.hideLoading();
       wx.redirectTo({
         url: '../index/index',
@@ -29,9 +31,9 @@ Page({
       wx.hideLoading();
     });
   },
-  eidInput(e) {
+  nameInput(e) {
     // this.setData({
-    //   ['data.eid']: e.detail.value
+    //   ['data.name']: e.detail.value
     // })
   },
   phoneInput(e) {
@@ -48,8 +50,10 @@ Page({
     });
     const userInfo = {}
     service.checkUserInfo().then(data => {
+      console.log(data);
+      APP.globalData.userInfo = data;
       wx.hideLoading();
-      wx.navigateTo({
+      wx.redirectTo({
         url: '../index/index',
       })
     }).catch(e => {

@@ -28,26 +28,26 @@ function checkParamFormat(param) {
     res.code = '1000';
     res.msg.push('data:object')
   } else {
-    if (data['eid'] === undefined && data['phone'] === undefined && data['role'] === undefined && data['power'] === undefined) {
+    if (data['name'] === undefined && data['phone'] === undefined && data['role'] === undefined && data['power'] === undefined) {
       res.code = '1002';
-      res.msg = 'should set one of them:data.eid:string, data.phone:strig, data.role:array ,data.power:arraye';
+      res.msg = 'should set one of them:data.name:string, data.phone:strig, data.role:array ,data.power:arraye';
     } else {
-      if (data.eid && typeof(data.eid) != 'string') {
+      if (data.name && typeof(data.name) != 'string') {
         res.code = '1001';
-        res.msg.push('data.eid:string')
+        res.msg.push('data.name:string')
       }
 
-      if (data.phone && typeof(data.phone) != 'string') {
+      // if (data.phone && typeof(data.phone) != 'string') {
+      //   res.code = '1001';
+      //   res.msg.push('data.phone:string')
+      // }
+
+      if (data.role && (!(data.role instanceof Array))) {
         res.code = '1001';
-        res.msg.push('data.phone:string')
+        res.msg.push('data.role:array')
       }
 
-      if (data.role && (!(data.role instanceof Array) || data.role.length < 1)) {
-        res.code = '1001';
-        res.msg.push('data.role:string')
-      }
-
-      if (data.power && (!(data.power instanceof Array) || data.power.length < 1)) {
+      if (data.power && (!(data.power instanceof Array))) {
         res.code = '1001';
         res.msg.push('data.power:string')
       }
@@ -79,9 +79,9 @@ async function checkPermission() {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
     })
-    if (curUserInfo.result.data.power.indexOf['admin'] > -1) {
+    if (curUserInfo.result.data.power.indexOf('admin') < -1) {
       return {
-        code: '0002',
+        code: '2000',
         msg: 'permission denied',
         data: null
       }
@@ -93,7 +93,7 @@ async function checkPermission() {
     }
   } catch (e) {
     return {
-      code: '1000',
+      code: '3000',
       msg: e,
       data: null
     }
@@ -108,7 +108,7 @@ async function updateUserInfo(data) {
     });
     if (res.stats.updated < 1) {
       return {
-        code: '0003',
+        code: '2001',
         msg: 'no record updated',
         data: res.stats
       }
@@ -120,7 +120,7 @@ async function updateUserInfo(data) {
     }
   } catch (e) {
     return {
-      code: '1001',
+      code: '3001',
       msg: e,
       data: null
     }
@@ -130,8 +130,7 @@ async function updateUserInfo(data) {
  * {
  *  _id:'',
  *  data:{
- *    eid:'',
- *    phone:'',
+ *    name:'',
  *    role:[],
  *    power:[]
  *  }

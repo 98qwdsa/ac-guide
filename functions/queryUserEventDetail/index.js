@@ -112,36 +112,36 @@ async function mergeSteps(steps, userSteps, code) {
   // 按事件的步骤信息获取当步骤是否体验用户参与，然后根据用户步骤查询附件
   let NuserSteps = [];
   for (i of steps) {
-    let user_step = {}
+    let user_step = null
     if (userSteps) {
       const curUserStep = userSteps.filter((e, key) => {
         return i._id === e.step_Uid;
-      })[0];
-      let attachments = [];
-      let currentStep = undefined;
-      if (curUserStep) {
-        if (curUserStep.attachments_Uid) {
-          attachments = await getAttachment(code, [curUserStep.attachments_Uid]);
-        }
-        if (curUserStep.status_code) {
-          currentStep = curUserStep.status_code === 100 ? true : undefined
-        }
-      }
-      user_step = {
-        ...curUserStep,
-        attachments,
-        currentStep,
-      }
+      })[0] || null;
+      // let attachments = [];
+      // let currentStep = undefined;
+      // if (curUserStep) {
+      //   if (curUserStep.attachments_Uid) {
+      //     attachments = await getAttachment(code, [curUserStep.attachments_Uid]);
+      //   }
+      //   if (curUserStep.status_code) {
+      //     currentStep = curUserStep.status_code === 100 ? true : undefined
+      //   }
+      // }
+      // user_step = {
+      //   ...curUserStep,
+      //   attachments,
+      //   currentStep,
+      // }
 
 
       NuserSteps.push({
         ...i,
-        user_step
+        user_step: curUserStep
       })
     } else {
       NuserSteps.push({
         ...i,
-        user_step: null
+        user_step
       })
     }
   }

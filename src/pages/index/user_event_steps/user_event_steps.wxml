@@ -7,17 +7,17 @@
         <view class='tips'>
           <text wx:for="{{item.tips}}" wx:for-item="tip" wx:for-index="idx" wx:key="unique">{{idx+1}}. {{tip}}</text>
         </view>
-        <view class='attachment_warp clearfix'>
+        <!-- <view class='attachment_warp clearfix'>
           <view wx:if="{{item.user_step && item.user_step.attachments.length > 0}}" class='attachments'>
             <image mode='scaleToFill' wx:for="{{item.user_step.attachments}}" wx:key="unique" wx:for-item="e" src='{{e.src}}'></image>
           </view>
-        </view>
-        <view class='upload_attachments'>
+        </view> -->
+        <!-- <block class='upload_attachments' wx:if="{{item.user_step.status_code !== 100}}">
           <button type='primary' bindtap='uploadAttachment' data-Uid="{{item._id}}">上传附件</button>
-        </view>
-        <view>
-          <button bindtap='nextStep' data-Uid="{{item._id}}">下一步{{index}}</button>
-        </view>
+        </block> -->
+        <block wx:if="{{item.user_step.status_code !== 100 && curStep === index}}">
+          <button bindtap='nextStep' data-Uid="{{item._id}}">下一步</button>
+        </block>
       </view>
     </swiper-item>
   </block>

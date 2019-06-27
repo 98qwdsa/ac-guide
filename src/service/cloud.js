@@ -15,6 +15,7 @@ module.exports = {
             duration: 1500
           })
         } else {
+          wx.hideLoading();
           console.log(res.result);
         }
       }).catch(e => {

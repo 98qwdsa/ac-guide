@@ -1,7 +1,7 @@
 <view wx:if='{{loginBoxShow}}'>
   <form bindsubmit="register">
-    <label for='eid'>
-      <input type='text' placeholder='eid' name='eid' value='{{data.eid}}' bindinput='eidInput'></input>
+    <label for='name'>
+      <input type='text' placeholder='name' name='name' value='{{data.name}}' bindinput='nameInput'></input>
     </label>
     <label for='phone'>
       <input type='text' placeholder='phone' name='phone' value='{{data.phone}}' bindinput='phoneInput'></input>

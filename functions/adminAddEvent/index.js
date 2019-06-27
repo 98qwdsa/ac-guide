@@ -13,7 +13,7 @@ function checkParamFormat(data) {
     icon,
     disabled,
     verifiers,
-    roles
+    role
   } = data;
   const res = {
     code: '0000',
@@ -25,7 +25,7 @@ function checkParamFormat(data) {
       icon,
       disabled,
       verifiers,
-      roles
+      role
     }
   }
   if (code === undefined) {
@@ -72,12 +72,12 @@ function checkParamFormat(data) {
       res.msg.push('verifiers:string')
     }
   }
-  if (roles === undefined) {
-    roles = ['employee'];
+  if (role === undefined) {
+    role = ['employee'];
   } else {
-    if (typeof(roles) !== 'array') {
+    if (typeof(role) !== 'array') {
       res.code = '1001';
-      res.msg.push('roles:string')
+      res.msg.push('role:string')
     }
   }
   if (res.code === '1000') {
@@ -98,7 +98,7 @@ async function checkPermision() {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
     })
-    if (curUserInfo.result.data.power.indexOf['admin'] > -1) {
+    if (curUserInfo.result.data.power.indexOf('admin') > -1) {
       return {
         code: '2000',
         msg: 'permission denied',
@@ -155,7 +155,7 @@ async function addCustomEventToEventList(data) {
       icon = '',
       disabled = false,
       verifiers = [],
-      roles = ['employee']
+      role = ['employee']
   } = data;
   try {
     const res = await COLION.add({
@@ -166,7 +166,7 @@ async function addCustomEventToEventList(data) {
         icon,
         disabled,
         verifiers,
-        roles
+        role
       }
     })
     if (res._id) {
@@ -263,7 +263,7 @@ async function createCustomEventCollection(code) {
  *  icon = '',
  *  disabled = false,
  *  verifiers = [],
- *  roles = ['employee']
+ *  role = ['employee']
  * }
  */
 

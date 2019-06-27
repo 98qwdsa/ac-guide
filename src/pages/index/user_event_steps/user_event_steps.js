@@ -1,5 +1,5 @@
 // src/pages/index/user_event_steps/user_event_steps.js
-const service = require('../../../service/business.js');
+const service = require('../../business.js');
 Page({
 
   /**
@@ -10,7 +10,7 @@ Page({
     curIndex: 0,
     event_code: '',
     curStep: 0,
-    swiperHeight: 100
+    swiperHeight: 100,
   },
 
   /**
@@ -26,7 +26,7 @@ Page({
     service.getSelfEventStep(event_code).then(stepList => {
       let curStep = 0;
       stepList.forEach((e, k) => {
-        if (e.user_step && e.user_step.currentStep) {
+        if (e.user_step && e.user_step.status_code === 100) {
           curStep = k + 1;
           if (curStep == stepList.length) {
             curStep--;

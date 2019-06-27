@@ -1,11 +1,39 @@
 /**index.wxss**/
 
+.content {
+  padding: 0 20rpx;
+}
+
+.user_info .avatarUrl {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  border: #abcdef 1px solid;
+}
+
+.user_info .nick_name {
+}
+
+.user_info .name {
+}
+
+.user_info .buttons {
+  margin: 0 auto;
+}
+
 .event_list_warp {
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  justify-content: flex-start;
+  flex-flow: row wrap;
+}
+
+.event_list_warp .event_item_warp {
+  width: 50%;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  align-content: space-around;
+  padding: 40rpx 0;
 }
 
 .event_list_warp .event_item {

@@ -1,5 +1,35 @@
-<view class='event_list_warp'>
-  <view class='event_item' wx:for="{{eventList}}" wx:key="unique" bindtap='eventClick' data-data='{{item}}'>
-    <text>{{item.name}}</text>
+<view class='content'>
+  <view class='user_info'>
+    <view class='buttons' wx:if="{{authButtonShow}}">
+      <!-- 需要使用 button 来授权登录 -->
+      <button wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
+      <view wx:else>请升级微信版本</view>
+    </view>
+    <view class='info' wx:else>
+      <view class="avatarUrl">
+        <open-data type="userAvatarUrl"></open-data>
+      </view>
+      <view class="nick_name">
+        <open-data type="userNickName"></open-data>
+      </view>
+      <text class='name'>name:{{name}}</text>
+      <navigator url="../../admins/login/login" open-type="navigate">管理员登陆</navigator>
+    </view>
+  </view>
+  <view class='event_list_warp'>
+    <view class='event_item_warp' wx:for="{{eventList}}" wx:key="unique">
+      <view class='event_item'>
+        <navigator url='./user_event_steps/user_event_steps?code={{item.code}}' open-type="navigate">
+          <text>{{item.name}}</text>
+        </navigator>
+      </view>
+    </view>
+    <view class='event_item_warp' bindtap='editEvent'>
+      <view class='event_item'>
+        <navigator url='../../event/list/list' open-type="navigate">
+          <text>编辑</text>
+        </navigator>
+      </view>
+    </view>
   </view>
 </view>

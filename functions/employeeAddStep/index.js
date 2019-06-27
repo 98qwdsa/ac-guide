@@ -107,9 +107,9 @@ async function recordStep(data) {
   }
   //添加一步到事件的用户表
   async function writeStep(step, data) {
-    data.status_code = await checkVerify(data, step._id);
+    data.status_code = await checkVerify(data, step.step_Uid);
     if (step && step._id) {
-      return await editStep(step, data.step);
+      return await editStep(step, data);
     } else {
       return await addStep(data);;
     }
@@ -142,15 +142,22 @@ async function recordStep(data) {
       }
     }
     //编辑改步骤
-    async function editStep(data, step) {
-      const res = await COLTION.doc(data._id).update({
-        data: {
-          step
-        }
-      });
+    async function editStep(step, data) {
+      try {
+        const res = await COLTION.doc(step._id).update({
+          data: {
+            status_code: data.status_code
+          }
+        });
 
-      if (res.stats.updated != undefined) {
-        return data
+        if (res.stats.updated != undefined) {
+          return {
+            ...step,
+            status_code: data.status_code
+          }
+        }
+      } catch (e) {
+        console.log(e);
       }
     }
     // 检查是否需要人工验证通过
@@ -160,10 +167,10 @@ async function recordStep(data) {
           const res = DB.collection(data.code + '_event_steps').doc(_id).get();
           if (res.data && res.data.verifiers && res.data.verifiers.length > 0) {
             return 50;
-          }
+          } 
           return 100
         } catch (e) {
-
+          console.log(e);
         }
       } else {
         return 0;
@@ -180,7 +187,10 @@ async function recordStep(data) {
     const res = await DB.collection(code + '_event_attachments').where({
       _id: _.in(_id)
     }).get()
-    return res.data[0].files;
+    if (res.data.length) {
+      return res.data[0].files;
+    }
+    return undefined;
   }
 
   async function checkStep(data) {
