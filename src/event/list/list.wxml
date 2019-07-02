@@ -1,0 +1,15 @@
+<!--src/event/list/list.wxml-->
+<view class='content'>
+  <navigator url="../add/add" open-type="navigate">
+    <button>添加事件</button>
+  </navigator>
+  <view class='event_list_warp'>
+    <view class='event_item_warp' wx:for="{{eventList}}" wx:key="unique">
+      <navigator url="../detail/detail?code={{item.code}}" open-type="navigate">
+        <view class='event_item'>
+          <text>{{item.name}}</text>
+        </view>
+      </navigator>
+    </view>
+  </view>
+</view>

@@ -50,7 +50,7 @@ function checkParamFormat(data) {
     res.code = '1000';
     res.msg.push('desc:string')
   } else {
-    if (typeof(desc) != 'string' || desc === '') {
+    if (typeof(desc) != 'string') {
       res.code = '1001';
       res.msg.push('desc:string')
     }
@@ -67,7 +67,7 @@ function checkParamFormat(data) {
     verifiers = [];
   } else {
 
-    if (typeof(verifiers) !== 'array') {
+    if (!(verifiers instanceof Array)) {
       res.code = '1001';
       res.msg.push('verifiers:string')
     }
@@ -75,7 +75,7 @@ function checkParamFormat(data) {
   if (role === undefined) {
     role = ['employee'];
   } else {
-    if (typeof(role) !== 'array') {
+    if (!(role instanceof Array)) {
       res.code = '1001';
       res.msg.push('role:string')
     }
@@ -98,7 +98,7 @@ async function checkPermision() {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
     })
-    if (curUserInfo.result.data.power.indexOf('admin') > -1) {
+    if (curUserInfo.result.data.power.indexOf('admin') < 0) {
       return {
         code: '2000',
         msg: 'permission denied',
@@ -229,17 +229,17 @@ async function createCustomEventCollection(code) {
     result.msg += 'create ' + code + '_event_user fail, ';
   }
 
-  try {
-    const attachments = await DB.createCollection(code + '_event_attachments');
-    if (attachments.errMsg != "createCollection:ok") {
-      result.code = '2004';
-      result.msg += 'create ' + code + '_event_attachments fail, ';
-    }
-  } catch (e) {
-    result.code = '3003';
-    result.data.push(e);
-    result.msg += 'create ' + code + '_event_attachments fail, ';
-  }
+  // try {
+  //   const attachments = await DB.createCollection(code + '_event_attachments');
+  //   if (attachments.errMsg != "createCollection:ok") {
+  //     result.code = '2004';
+  //     result.msg += 'create ' + code + '_event_attachments fail, ';
+  //   }
+  // } catch (e) {
+  //   result.code = '3003';
+  //   result.data.push(e);
+  //   result.msg += 'create ' + code + '_event_attachments fail, ';
+  // }
 
   try {
     const observers = await DB.createCollection(code + '_event_observeds');
@@ -296,7 +296,8 @@ exports.main = async(event, context) => {
     code: '0000',
     msg: 'add ' + event.code + ' event success',
     data: {
-      event_id: customEvent.data._id
+      _id: customEvent.data._id,
+      code: event.code
     }
   }
 }

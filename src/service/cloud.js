@@ -11,9 +11,10 @@ module.exports = {
           wx.showToast({
             mask: true,
             icon: 'none',
-            title: res.result.msg,
+            title: 'cloud internal error',
             duration: 1500
-          })
+          });
+          console.log(res.result);
         } else {
           wx.hideLoading();
           console.log(res.result);

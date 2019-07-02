@@ -1,0 +1,5 @@
+/* src/event/step/detail/detail.wxss */
+
+checkbox {
+  display: none;
+}

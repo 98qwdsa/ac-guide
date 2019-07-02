@@ -1,0 +1,20 @@
+<!--src/admins/user/list/list.wxml-->
+<form class='search_form' bindsubmit='search'>
+  <label for='name'>
+    <input placeholder='请输入中文名' name="name" value="{{name}}"></input>
+  </label>
+  <view class="btn-area">
+    <button form-type="submit">搜索</button>
+  </view>
+</form>
+<view class='user_list_warp' wx:for="{{userList}}">
+  <view class='user_item'>
+    {{item.name}}
+    <view class='buttons'>
+      <button bindtap='deleteUser' data-_id='{{item._id}}' data-index="{{index}}">删除</button>
+      <navigator url="../detail/detail?_id={{item._id}}" open-type="navigate">
+        <button>修改</button>
+      </navigator>
+    </view>
+  </view>
+</view>

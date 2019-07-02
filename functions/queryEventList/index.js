@@ -5,23 +5,47 @@ cloud.init();
 
 function checkParam(data) {
   let {
+    _id,
+    code,
     power,
-    role
+    role = 'employee'
   } = data;
+
   const res = {
     code: '0000',
     msg: [],
     data: null
   }
 
-  if (role === undefined) {
-    role = 'employee';
+  // if (Object.keys(data).length === 0) {
+  //   role = 'employee';
+  // }
+  if (_id === undefined) {
+
   } else {
-    if (typeof(role) != 'string' || role === '') {
+    if (typeof(_id) != 'string' || _id === '') {
       res.code = '1001';
-      res.msg.push('role:string');
+      res.msg.push('_id:string');
+    } else {
+      code = undefined;
+      power = undefined;
+      role = undefined;
+      return returnRes();
     }
   }
+  if (code === undefined) {
+
+  } else {
+    if (typeof(code) != 'string' || code === '') {
+      res.code = '1001';
+      res.msg.push('code:string');
+    } else {
+      power = undefined;
+      role = undefined;
+      return returnRes();
+    }
+  }
+
 
   if (power === undefined) {
 
@@ -31,24 +55,42 @@ function checkParam(data) {
       res.msg.push('power:string');
     } else {
       role = undefined;
+      return returnRes();
     }
   }
 
-  if (res.code === '1000') {
-    res.msg = 'param ' + res.msg.join(',') + ' required'
-  }
-
-  if (res.code === '1001') {
-    res.msg = 'param ' + res.msg.join(',') + ' wrong'
-  }
-  if (res.code === '0000') {
-    res.msg = 'param format ok';
-    res.data = {
-      power,
-      role
+  if (role === undefined) {
+    role = 'employee';
+  } else {
+    if (typeof(role) != 'string' || role === '') {
+      res.code = '1001';
+      res.msg.push('role:string');
+    } else {
+      return returnRes();
     }
   }
-  return res;
+
+  function returnRes() {
+    if (res.code === '1000') {
+      res.msg = 'param ' + res.msg.join(',') + ' required';
+    }
+
+    if (res.code === '1001') {
+      res.msg = 'param ' + res.msg.join(',') + ' wrong';
+    }
+    if (res.code === '0000') {
+      res.msg = 'param format ok';
+      res.data = {
+        _id,
+        code,
+        power,
+        role
+      }
+    }
+    return res;
+  }
+
+
 }
 
 async function getUserRole() {
@@ -81,10 +123,19 @@ async function getEventList(user, param) {
   const DB = cloud.database();
   const COLION = DB.collection('event_list')
   const _ = DB.command;
-  let filter = {}
+  if (param._id) {
+    return await exec({
+      _id: param._id
+    });
+  }
+  if (param.code) {
+    return await exec({
+      code: param.code
+    });
+  }
   if (param.power) {
     if (user.power.indexOf(param.power) > -1) {
-      // DBaction = COLION.where().get();
+      return await exec();
     } else {
       return {
         code: '2002',
@@ -92,12 +143,14 @@ async function getEventList(user, param) {
         data: null
       }
     }
-  } else {
-    if (param.role && user.role.indexOf(param.role) > -1) {
-      filter = {
+
+  }
+  if (param.role) {
+    if (user.role.indexOf(param.role) > -1) {
+      return await exec({
         role: _.in(user.role),
         disabled: false
-      }
+      });
     } else {
       return {
         code: '2002',
@@ -106,34 +159,35 @@ async function getEventList(user, param) {
       }
     }
   }
-
-  try {
-    const res = await COLION.where(filter).get();
-
-    if (res.data.length < 1) {
+  async function exec(filter = undefined) {
+    try {
+      const res = await COLION.where(filter).get();
+      if (res.data.length < 1) {
+        return {
+          code: '2003',
+          msg: 'there is no event for you',
+          data: null
+        }
+      }
       return {
-        code: '2003',
-        msg: 'there is no event for you',
+        code: '0000',
+        msg: res.errMsg,
+        data: res.data
+      }
+    } catch (e) {
+      return {
+        code: '3001',
+        msg: e,
         data: null
       }
     }
-
-    return {
-      code: '0000',
-      msg: res.errMsg,
-      data: res.data
-    }
-  } catch (e) {
-    return {
-      code: '3001',
-      msg: e,
-      data: null
-    }
   }
+
 }
 /**
  * power:
  * role:
+ * code:
  */
 // 云函数入口函数
 exports.main = async(event, context) => {

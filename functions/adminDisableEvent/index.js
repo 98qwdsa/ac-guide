@@ -65,7 +65,7 @@ async function checkPermision() {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
     })
-    if (curUserInfo.result.data.power.indexOf('admin') > -1) {
+    if (curUserInfo.result.data.power.indexOf('admin') < 0) {
       return {
         code: '2000',
         msg: 'permission denied',
@@ -175,9 +175,9 @@ async function disableCustomEventToEventList(data, _id) {
 }
 /**
  * {
- *  code = '',
- *  disabled = '',
- *  action = ''
+ *  code,
+ *  disabled,
+ *  action  [delete]
  * } 
  **/
 // 云函数入口函数

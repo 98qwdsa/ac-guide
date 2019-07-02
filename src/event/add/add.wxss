@@ -1,0 +1,5 @@
+/* src/event/add/add.wxss */
+
+.hide_checkbox checkbox {
+  display: none;
+}

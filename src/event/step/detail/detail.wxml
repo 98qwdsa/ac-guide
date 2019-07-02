@@ -1,0 +1,27 @@
+<!--src/event/step/detail/detail.wxml-->
+<view class='content'>
+  <form bindsubmit='submit'>
+    <label for='title'>title:
+      <input value='{{stepDetail.title}}' name="title"></input>
+    </label>
+    <label for='desc'>desc:
+      <input value='{{stepDetail.desc}}' name="desc"></input>
+    </label>
+    <checkbox-group name='tips'>
+      <text>tips:</text>
+      <block wx:for="{{stepDetail.tips}}">
+        <label class="checkbox">
+          <checkbox value="{{item}}" checked="{{true}}" />
+        </label>
+        <input bindblur='tipsChange' data-index="{{index}}" value='{{item}}'></input>
+        <icon type='clear' bindtap='removeTips' data-index="{{index}}"></icon>
+      </block>
+      <button bindtap='addTips'>添加</button>
+    </checkbox-group>
+    ----------------------------------------------
+    <view class='buttons'>
+      <button form-type='submit'>提交</button>
+      <button bindtap='deleteStep'>删除</button>
+    </view>
+  </form>
+</view>

@@ -1,0 +1,26 @@
+/* src/event/list/list.wxss */
+
+.event_list_warp {
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: row wrap;
+}
+
+.event_list_warp .event_item_warp {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40rpx 0;
+}
+
+.event_list_warp .event_item {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 5rpx;
+  border: 1px solid #abcdef;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

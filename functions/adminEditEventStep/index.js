@@ -44,7 +44,7 @@ function checkParamFormat(data) {
       res.code = '1001';
       res.msg.push('action:string')
     } else {
-      if (action != 'add' && action != 'delete' && action != 'edit') {
+      if (action != 'add' && action != 'remove' && action != 'edit') {
         res.code = '1001';
         res.msg.push('action:string')
       } else {
@@ -82,7 +82,7 @@ function checkParamFormat(data) {
           }
         }
 
-        if (action === 'edit' || action === 'delete') {
+        if (action === 'edit' || action === 'remove') {
           if (_id === undefined) {
             res.code = '1000';
             res.msg.push('_id:string')
@@ -103,9 +103,11 @@ function checkParamFormat(data) {
   if (res.code === '0000') {
     res.msg = 'param format ok';
     var newParam = {};
-    for (let i in defaultParam) {
-      if (param[i] !== undefined) {
-        newParam[i] = param[i]
+    if (param != undefined) {
+      for (let i in defaultParam) {
+        if (param[i] !== undefined) {
+          newParam[i] = param[i]
+        }
       }
     }
     if (action === 'add') {
@@ -133,7 +135,7 @@ async function checkPermision() {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
     })
-    if (curUserInfo.result.data.power.indexOf('admin') > -1) {
+    if (curUserInfo.result.data.power.indexOf('admin') < 0) {
       return {
         code: '2000',
         msg: 'permission denied',
@@ -308,14 +310,14 @@ async function updateStep(data) {
 /** 
  *  {
  *    code = '',
- *    action = '', [add|edit|delete]
+ *    action = '', [add|edit|remove]
  *    param = {
  *    title: '',
  *    desc: '',
  *    tips: [],
  *    verifiers:[]
- *  },
- *  _id=''
+ *    },
+ *    _id='',
  * }
  **/
 exports.main = async(event, context) => {

@@ -155,7 +155,7 @@ async function getEventUserOpenId(data) {
   }
   let count = {}
   try {
-    count = await COLION.where().count()
+    count = await COLION.count()
     if (count.errMsg === 'collection.count:ok') {
       count = {
         code: '0000',
