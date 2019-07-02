@@ -1,12 +1,12 @@
 {
   "pages": [
-    "event/list/list",
     "pages/login/login",
     "pages/index/index",
     "pages/index/user_event_steps/user_event_steps",
     "admins/login/login",
     "admins/user/detail/detail",
     "admins/user/list/list",
+    "event/list/list",
     "event/detail/detail",
     "event/add/add",
     "event/step/add/add",
