@@ -1,8 +1,8 @@
 {
   "pages": [
-    "pages/event_flow/user_steps/user_steps",
     "pages/login/login",
     "pages/event_flow/list/list",
+    "pages/event_flow/user_steps/user_steps",
     "pages/admins/login/login",
     "pages/admins/user/detail/detail",
     "pages/admins/user/list/list",
