@@ -1,16 +1,16 @@
 {
   "pages": [
+    "pages/event_flow/user_steps/user_steps",
     "pages/login/login",
-    "pages/index/index",
-    "pages/index/user_event_steps/user_event_steps",
-    "admins/login/login",
-    "admins/user/detail/detail",
-    "admins/user/list/list",
-    "event/list/list",
-    "event/detail/detail",
-    "event/add/add",
-    "event/step/add/add",
-    "event/step/detail/detail"
+    "pages/event_flow/list/list",
+    "pages/admins/login/login",
+    "pages/admins/user/detail/detail",
+    "pages/admins/user/list/list",
+    "pages/event_manage/list/list",
+    "pages/event_manage/detail/detail",
+    "pages/event_manage/add/add",
+    "pages/event_manage/step/add/add",
+    "pages/event_manage/step/detail/detail"
   ],
   "window": {
     "backgroundTextStyle": "light",

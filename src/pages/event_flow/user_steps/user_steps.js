@@ -11,19 +11,22 @@ Page({
     event_code: '',
     curStep: 0,
     swiperHeight: 100,
+    eventDetail: {}
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    this.loadData(options.code);
+    this.loadData(options.code || 'entry');
   },
   loadData(event_code) {
     wx.showLoading({
       mask: true,
     })
-    service.getSelfEventStep(event_code).then(stepList => {
+    service.getSelfEventStep(event_code).then(data => {
+      console.log(data);
+      const stepList = [...data.steps];
       let curStep = 0;
       stepList.forEach((e, k) => {
         if (e.user_step && e.user_step.status_code === 100) {
@@ -37,10 +40,11 @@ Page({
         stepList,
         curIndex: curStep,
         curStep,
-        event_code
+        event_code,
+        eventDetail: data.detail
       });
       this.initSwiperHeight();
-      console.log(stepList);
+
       wx.hideLoading();
     })
   },
@@ -85,12 +89,12 @@ Page({
     })
   },
   initSwiperHeight() {
-    const query = wx.createSelectorQuery()
-    query.select('#swip_item_warp' + this.data.curIndex).boundingClientRect().exec(res => {
-      this.setData({
-        swiperHeight: res[0].height + 20
-      })
-    })
+    // const query = wx.createSelectorQuery()
+    // query.select('#swip_item_warp' + this.data.curIndex).boundingClientRect().exec(res => {
+    //   this.setData({
+    //     swiperHeight: res[0].height + 20
+    //   })
+    // })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

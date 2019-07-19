@@ -1,4 +1,4 @@
-const cloud = require('../service/cloud.js');
+const cloud = require('../../service/cloud.js');
 
 module.exports = {
   addEvent(data) {

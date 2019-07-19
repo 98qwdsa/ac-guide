@@ -18,14 +18,14 @@
   </view>
   <view class='event_list_warp'>
     <view class='event_item_warp' wx:for="{{eventList}}" wx:key="unique">
-      <navigator url='./user_event_steps/user_event_steps?code={{item.code}}' open-type="navigate">
+      <navigator url='../user_steps/user_steps?code={{item.code}}' open-type="navigate">
         <view class='event_item'>
           <text>{{item.name}}</text>
         </view>
       </navigator>
     </view>
-    <view class='event_item_warp' bindtap='editEvent'>
-      <navigator url='../../event/list/list' open-type="navigate">
+    <view class='event_item_warp'>
+      <navigator url='../../event_manage/list/list' open-type="navigate">
         <view class='event_item'>
           <text>编辑</text>
         </view>

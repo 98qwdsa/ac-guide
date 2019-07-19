@@ -10,31 +10,38 @@ Page({
     loginBoxShow: false,
     data: {
       name: '',
-      phone: ''
+      //phone: ''
+    }
+  },
+  onGotUserInfo(e) {
+    if (e.detail.errMsg === 'getUserInfo:ok') {
+      this.register();
     }
   },
   // 注册
   register(e) {
-    // console.log(this.data.data);
+    console.log(this.data.data);
     wx.showLoading({
       mask: true,
       title: "登录中..."
     });
-    service.register(e.detail.value).then(res => {
+    service.register(
+      this.data.data
+    ).then(res => {
       console.log(res);
       APP.globalData.userInfo = res;
       wx.hideLoading();
       wx.redirectTo({
-        url: '../index/index',
+        url: '../event_flow/list/list',
       })
     }).catch(e => {
       wx.hideLoading();
     });
   },
   nameInput(e) {
-    // this.setData({
-    //   ['data.name']: e.detail.value
-    // })
+    this.setData({
+      ['data.name']: e.detail.value
+    })
   },
   phoneInput(e) {
     // this.setData({
@@ -46,7 +53,8 @@ Page({
    */
   onLoad: function(options) {
     wx.showLoading({
-      mask: true
+      mask: true,
+      title: "登录中..."
     });
     const userInfo = {}
     service.checkUserInfo().then(data => {
@@ -54,7 +62,7 @@ Page({
       APP.globalData.userInfo = data;
       wx.hideLoading();
       wx.redirectTo({
-        url: '../index/index',
+        url: '../event_flow/list/list',
       })
     }).catch(e => {
       wx.hideLoading();

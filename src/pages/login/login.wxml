@@ -1,11 +1,12 @@
-<view wx:if='{{loginBoxShow}}'>
-  <form bindsubmit="register">
+<view class="warp" wx:if='{{loginBoxShow}}'>
+  <image class="image" src="../../asset/login_img.svg"></image>
+  <form>
     <label for='name'>
-      <input type='text' placeholder='name' name='name' value='{{data.name}}' bindinput='nameInput'></input>
+      <input placeholder-class="placeholde" class="comm_box user_name" type='text' name='name' value='{{data.name}}' bindinput='nameInput' placeholder="中文姓名"></input>
     </label>
-    <label for='phone'>
+    <!-- <label for='phone'>
       <input type='text' placeholder='phone' name='phone' value='{{data.phone}}' bindinput='phoneInput'></input>
-    </label>
-    <button type="primary" form-type='submit'>注册</button>
+    </label> -->
+    <button class="comm_box background_gradient" type="primary" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo">Sign in</button>
   </form>
 </view>

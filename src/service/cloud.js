@@ -14,10 +14,11 @@ module.exports = {
             title: 'cloud internal error',
             duration: 1500
           });
-          console.log(res.result);
+          console.log(...arguments, res.result);
         } else {
           wx.hideLoading();
-          console.log(res.result);
+          console.log(...arguments, res.result);
+          reject(res.result);
         }
       }).catch(e => {
         console.log(e)

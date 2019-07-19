@@ -25,7 +25,6 @@
       <label for='role'>
         <text>role:</text>
         <checkbox-group name="role">
-
         </checkbox-group>
       </label>
       <label for='verifiers'>

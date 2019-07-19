@@ -1,5 +1,9 @@
 /* src/pages/index/user_event_steps/user_event_steps.wxss */
 
+.warp {
+  padding: 20rpx;
+}
+
 .swip_item {
   opacity: 0.3;
 }

@@ -1,1 +1,28 @@
 /* pages/login/login.wxss */
+@import '../../common/css/common.wxss';
+
+.warp {
+  text-align: center;
+}
+
+.image {
+  margin-bottom: 80rpx;
+}
+
+.placeholde {
+  text-align: center;
+}
+
+input.user_name {
+  border: 2rpx solid #ccc;
+  text-align: center;
+  margin-bottom: 20rpx !important;
+}
+
+.comm_box {
+  display: block;
+  width: 456rpx;
+  height: 88rpx;
+  border-radius: 44rpx;
+  margin: 0 auto;
+}

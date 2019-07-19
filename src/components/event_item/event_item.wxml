@@ -1,0 +1,20 @@
+<!--components/event_item/event_item.wxml-->
+<view class="warp">
+  <view class="item">
+    <view cclas="first">
+      <image src="../../asset/task_list_circle.svg">
+      </image>
+    </view>
+    <text class="seconed title">{{detail.name}}</text>
+    <view class="last ">
+      <button class="background_gradient pull-right">进行中</button>
+    </view>
+  </view>
+  <view class="item">
+    <view class="first"> </view>
+    <text class="seconed sub_title">{{detail.desc}}</text>
+    <view class="last">
+      <text class="sub_title pull-right">{{detail.endtime}}</text>
+    </view>
+  </view>
+</view>
