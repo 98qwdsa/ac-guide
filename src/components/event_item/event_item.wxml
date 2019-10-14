@@ -1,18 +1,18 @@
 <!--components/event_item/event_item.wxml-->
 <view class="warp">
   <view class="item">
-    <view cclas="first">
+    <view class="first">
       <image src="../../asset/task_list_circle.svg">
       </image>
     </view>
-    <text class="seconed title">{{detail.name}}</text>
-    <view class="last ">
-      <button class="background_gradient pull-right">进行中</button>
+    <text class="second title">{{detail.name}}</text>
+    <view class="last">
+      <button wx:if="{{finished != 'undefined'}}" class="background_gradient pull-right">{{finished? '已完成':'进行中'}}</button>
     </view>
   </view>
   <view class="item">
     <view class="first"> </view>
-    <text class="seconed sub_title">{{detail.desc}}</text>
+    <text class="second sub_title">{{detail.desc}}</text>
     <view class="last">
       <text class="sub_title pull-right">{{detail.endtime}}</text>
     </view>

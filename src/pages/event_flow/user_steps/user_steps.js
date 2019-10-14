@@ -7,10 +7,8 @@ Page({
    */
   data: {
     stepList: [],
-    curIndex: 0,
     event_code: '',
     curStep: 0,
-    swiperHeight: 100,
     eventDetail: {}
   },
 
@@ -18,7 +16,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    this.loadData(options.code);
+    this.loadData(options.code || 'entry');
   },
   loadData(event_code) {
     wx.showLoading({
@@ -28,61 +26,72 @@ Page({
       console.log(data);
       const stepList = [...data.steps];
       let curStep = 0;
+      let eventFinished = false;
       stepList.forEach((e, k) => {
         if (e.user_step && e.user_step.status_code === 100) {
           curStep = k + 1;
           if (curStep == stepList.length) {
+            eventFinished = true;
             curStep--;
           }
         }
       });
       this.setData({
         stepList,
-        curIndex: curStep,
         curStep,
+        eventFinished,
         event_code,
         eventDetail: data.detail
       });
-      this.initSwiperHeight();
+      //this.initSwiperHeight();
 
       wx.hideLoading();
     })
   },
-  swiperChange(e) {
-    this.setData({
-      curIndex: e.detail.current
-    })
-    this.initSwiperHeight();
-  },
-  uploadAttachment(e) {
-    const dataSet = e.currentTarget.dataset;
-    service.uploadAttachments(this.data.event_code, dataSet.uid).then(data => {
-      this.setData({
-        ['stepList[' + this.data.curIndex + '].user_step']: data
-      });
-      this.initSwiperHeight()
-    });
-  },
+  // swiperChange(e) {
+  //   this.setData({
+  //     curIndex: e.detail.current
+  //   })
+  //   this.initSwiperHeight();
+  // },
+  // uploadAttachment(e) {
+  //   const dataSet = e.currentTarget.dataset;
+  //   service.uploadAttachments(this.data.event_code, dataSet.uid).then(data => {
+  //     this.setData({
+  //       ['stepList[' + this.data.curIndex + '].user_step']: data
+  //     });
+  //     this.initSwiperHeight()
+  //   });
+  // },
   nextStep(e) {
     wx.showLoading({
       mask: true
     })
     const dataSet = e.currentTarget.dataset;
     service.nextStep(this.data.event_code, dataSet.uid).then(data => {
-      wx.hideLoading();
+      //wx.hideLoading();
+      wx.showToast({
+        icon: 'success',
+        duration: 1200
+      })
       if (data._id) {
         const stepList = [...this.data.stepList]
-        let curIndex = this.data.curIndex;
 
-        stepList[curIndex].user_step = data;
-        if (stepList[curIndex - 1]) {
-          stepList[curIndex - 1].user_step.currentStep = undefined;
+        let eventFinished = false;
+        let curStep = this.data.curStep;
+
+        stepList[curStep].user_step = data;
+        if (stepList[curStep - 1]) {
+          stepList[curStep - 1].user_step.currentStep = undefined;
         }
-        curIndex += 1;
-        curIndex = curIndex == stepList.length ? curIndex - 1 : curIndex
+        curStep += 1;
+        if (curStep == stepList.length) {
+          eventFinished = true;
+          curStep--;
+        }
         this.setData({
-          curIndex,
-          curStep: curIndex,
+          eventFinished,
+          curStep,
           stepList
         })
       }

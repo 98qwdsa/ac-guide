@@ -34,14 +34,22 @@ function checkParamFormat(data) {
     }
   }
 
-  return {
-    code: '0000',
-    msg: '',
-    data: {
+  if (res.code === '1000') {
+    res.msg = 'param ' + res.msg.join(',') + ' required';
+  }
+
+  if (res.code === '1001') {
+    res.msg = 'param ' + res.msg.join(',') + ' wrong';
+  }
+
+  if (res.code === '0000') {
+    res.msg = 'param format ok';
+    res.data = {
       open_id,
       code
     }
   }
+  return res;
 }
 
 // 获取用户步骤
@@ -148,8 +156,7 @@ async function mergeSteps(eventSteps, userSteps, eventDetail) {
     if (userSteps) {
       user_step = userSteps.filter((e, key) => {
         return i._id === e.step_Uid;
-      })[0] || null;
-
+      })
     }
     steps.push({
       ...i,

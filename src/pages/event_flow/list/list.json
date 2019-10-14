@@ -1,4 +1,6 @@
 {
-  "usingComponents": {},
-  "navigationBarTitleText":"首页"
+  "usingComponents": {
+    "event-detail": "../../../components/event_item/event_item"
+  },
+  "navigationBarTitleText": ""
 }

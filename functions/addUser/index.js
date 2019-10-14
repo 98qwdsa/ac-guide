@@ -54,11 +54,12 @@ exports.main = async(event, context) => {
   try {
     const res = await CLION.add({
       data: {
-        name: param.name,
+        name: param.data.name,
         event_attended: [],
         open_id: wxContext.OPENID,
         //phone: event.phone,
-        role: 'employee'
+        power: [],
+        role: ['employee']
       }
     });
 

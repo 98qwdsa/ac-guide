@@ -5,14 +5,44 @@ Page({
     eventList: [],
     name: '',
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    authButtonShow: true
+    authButtonShow: true,
+    checkingUser: false
   },
   onLoad() {
-    this.loadData();
-    this.setData({
-      name: APP.globalData.userInfo.name,
-      canEditEvent: APP.globalData.userInfo.power.indexOf('admin') > -1
+    this.checkoutUser().then(() => {
+      this.loadData();
     })
+  },
+  checkoutUser() {
+    wx.showLoading({
+      mask: true,
+      title: "加载中..."
+    });
+    return new Promise((reslove, reject) => {
+      const userInfo = {}
+      service.checkUserInfo().then(data => {
+        console.log(data);
+        APP.globalData.userInfo = data;
+        wx.hideLoading();
+        this.setData({
+          checkingUser: true,
+          name: data.name
+        });
+        wx.setNavigationBarTitle({
+          title: '首页',
+        })
+        if (data.power.indexOf('admin') > -1 || data.role.indexOf('HR') > -1) {
+          wx.showTabBar();
+        }
+        reslove();
+      }).catch(e => {
+        wx.hideLoading();
+        wx.redirectTo({
+          url: '../../login/login',
+        })
+      });
+    })
+
   },
   loadData() {
     wx.showLoading({

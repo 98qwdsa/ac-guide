@@ -7,6 +7,10 @@ Component({
     detail: {
       type: Object,
       value: {}
+    },
+    finished: {
+      type: Boolean,
+      value: 'undefined'
     }
   },
 
@@ -17,7 +21,7 @@ Component({
 
   },
   created() {
-    console.log(this.data);
+    //console.log(this.data);
   },
 
   /**

@@ -7,7 +7,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-    loginBoxShow: false,
     data: {
       name: '',
       //phone: ''
@@ -31,8 +30,8 @@ Page({
       console.log(res);
       APP.globalData.userInfo = res;
       wx.hideLoading();
-      wx.redirectTo({
-        url: '../event_flow/list/list',
+      wx.switchTab({
+        url: '../event_flow/list/list'
       })
     }).catch(e => {
       wx.hideLoading();
@@ -52,27 +51,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    wx.showLoading({
-      mask: true,
-      title: "登录中..."
-    });
-    const userInfo = {}
-    service.checkUserInfo().then(data => {
-      console.log(data);
-      APP.globalData.userInfo = data;
-      wx.hideLoading();
-      wx.redirectTo({
-        url: '../event_flow/list/list',
-      })
-    }).catch(e => {
-      wx.hideLoading();
-      if (e.code === '2000') {
-        this.setData({
-          loginBoxShow: true
-        })
-      }
-    });
-
     // console.log(userinfo)
   },
 

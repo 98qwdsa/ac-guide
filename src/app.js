@@ -1,6 +1,7 @@
 //app.js
 App({
-  onLaunch: function () {
+  onLaunch: function() {
+    wx.hideTabBar();
     // 登录
     wx.login({
       success: res => {
