@@ -22,7 +22,7 @@
     "list": [
       {
         "pagePath": "pages/home/event_list/event_list",
-        "text": "事件",
+        "text": "首页",
         "iconPath": "asset/hr_guide2.png",
         "selectedIconPath": "asset/hr_guide.png"
       },
