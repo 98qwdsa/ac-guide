@@ -1,16 +1,15 @@
 {
   "pages": [
-    "pages/event_flow/list/list",
-    "pages/event_flow/user_steps/user_steps",
+    "pages/home/event_list/event_list",
+    "pages/home/event_detail/event_detail",
     "pages/login/login",
-    "pages/admins/login/login",
-    "pages/admins/user/detail/detail",
     "pages/admins/user/list/list",
-    "pages/event_manage/list/list",
-    "pages/event_manage/detail/detail",
-    "pages/event_manage/add/add",
-    "pages/event_manage/step/add/add",
-    "pages/event_manage/step/detail/detail"
+    "pages/admins/user/detail/detail",
+    "pages/manage/list/list",
+    "pages/manage/detail/detail",
+    "pages/manage/add/add",
+    "pages/manage/step/add/add",
+    "pages/manage/step/detail/detail"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -22,13 +21,13 @@
     "selectedColor": "#000",
     "list": [
       {
-        "pagePath": "pages/event_flow/list/list",
+        "pagePath": "pages/home/event_list/event_list",
         "text": "事件",
         "iconPath": "asset/hr_guide2.png",
         "selectedIconPath": "asset/hr_guide.png"
       },
       {
-        "pagePath": "pages/admins/login/login",
+        "pagePath": "pages/manage/list/list",
         "text": "管理",
         "iconPath": "asset/hr_guide4.png",
         "selectedIconPath": "asset/hr_guide3.png"

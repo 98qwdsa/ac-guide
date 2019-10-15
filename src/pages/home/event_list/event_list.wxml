@@ -25,7 +25,7 @@
   <text class="list-title">任务列表</text>
   <view class='event_list_warp'>
     <view class='event_item_warp' wx:for="{{eventList}}" wx:key="unique">
-      <navigator url='../user_steps/user_steps?code={{item.code}}' open-type="navigate">
+      <navigator url='../event_detail/event_detail?code={{item.code}}' open-type="navigate">
         <event-detail detail='{{item}}'></event-detail>
       </navigator>
     </view>
