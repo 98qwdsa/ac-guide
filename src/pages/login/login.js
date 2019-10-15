@@ -31,7 +31,7 @@ Page({
       APP.globalData.userInfo = res;
       wx.hideLoading();
       wx.switchTab({
-        url: '../event_flow/list/list'
+        url: '../home/event_list/event_list'
       })
     }).catch(e => {
       wx.hideLoading();

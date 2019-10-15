@@ -31,7 +31,7 @@ Page({
         wx.setNavigationBarTitle({
           title: '首页',
         })
-        if (data.power.indexOf('admin') > -1 || data.role.indexOf('HR') > -1) {
+        if (data.power.indexOf('event_admin') > -1 || data.power.indexOf('account_admin') > -1) {
           wx.showTabBar();
         }
         reslove();

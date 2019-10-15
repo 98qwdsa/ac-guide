@@ -1,15 +1,30 @@
-<!--src/event/list/list.wxml-->
-<view class='content'>
-  <navigator url="../add/add" open-type="navigate">
-    <button>添加事件</button>
-  </navigator>
-  <view class='event_list_warp'>
-    <view class='event_item_warp' wx:for="{{eventList}}" wx:key="unique">
-      <navigator url="../detail/detail?code={{item.code}}" open-type="navigate">
-        <view class='event_item'>
-          <text>{{item.name}}</text>
+<view wx:if="{{checkingUser}}" class='content'>
+  <view class="user_info_warp">
+    <view class='user_info'>
+      <image mode="widthFix" class="bg" src="../../../asset/Home_bg.svg"></image>
+      <view class="info_warp">
+        <view class="avatarUrl">
+          <open-data type="userAvatarUrl"></open-data>
         </view>
+        <text class='name'>{{name}}</text>
+      </view>
+    </view>
+  </view>
+  
+  <view class='event_list_warp'>
+    <view class='event_item_warp' wx:for="{{eventList}}"  wx:key="{{index}}">
+      <navigator>
+        <event-detail 
+          detail='{{item}}' 
+        >
+        </event-detail>
       </navigator>
     </view>
   </view>
 </view>
+
+
+
+ 
+ <!-- <event-detail wx:if="{{data.power.indexOf('event_admin') > -1}}"></event-detail> -->
+

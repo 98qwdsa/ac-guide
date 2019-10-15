@@ -1,26 +1,61 @@
-/* src/event/list/list.wxss */
+/**index.wxss**/
 
-.event_list_warp {
-  display: flex;
-  justify-content: flex-start;
-  flex-flow: row wrap;
+.content {
+  padding: 0 20rpx;
 }
 
-.event_list_warp .event_item_warp {
-  width: 50%;
+.user_info_warp {
+  height: 300rpx;
+  width: 100%;
+}
+
+.user_info_warp .bg {
+  width: 100%;
+  height: 300rpx;
+  position: absolute;
+  z-index: 10;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.user_info {
+  position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 40rpx 0;
 }
 
-.event_list_warp .event_item {
-  width: 180rpx;
-  height: 180rpx;
-  border-radius: 5rpx;
-  border: 1px solid #abcdef;
-  vertical-align: middle;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.info_warp {
+  position: absolute;
+  z-index: 100;
+  top: 50rpx;
+  text-align: center;
 }
+
+.info_warp .buttons button {
+  font-size: 32rpx;
+}
+
+.info_warp .avatarUrl {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  border: #abcdef 1px solid;
+}
+
+.info_warp .name {
+  font-size: 32rpx;
+  color: #fff;
+  margin-top: 10rpx;
+}
+.event_list_warp{
+  margin-top: 32rpx;
+}
+.event_item_warp  {
+  margin-bottom: 16rpx;
+}
+.event_item_warp:last-child {
+  margin: 0;
+}
+
