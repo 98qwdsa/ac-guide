@@ -98,7 +98,7 @@ async function checkPermision() {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
     })
-    if (curUserInfo.result.data.power.indexOf('admin') < 0) {
+    if (!curUserInfo.result.data.power.includes('event_admin')) {
       return {
         code: '2000',
         msg: 'permission denied',

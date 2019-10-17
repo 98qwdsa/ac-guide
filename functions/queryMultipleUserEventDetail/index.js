@@ -95,7 +95,7 @@ async function checkRole() {
     if (curUserInfo.result.code != '0000') {
       return curUserInfo.result
     }
-    if (curUserInfo.result.data.role.indexOf('HR') > -1 && curUserInfo.result.data.role.indexOf('PM') > -1) {
+    if (curUserInfo.result.data.role.includes('HR') && curUserInfo.result.data.role.includes('PM')) {
       return {
         code: '2000',
         msg: 'role mismatch Function: queryMultipleUserEventDetail',

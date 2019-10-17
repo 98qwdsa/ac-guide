@@ -123,18 +123,22 @@ async function getEventList(user, param) {
   const DB = cloud.database();
   const COLION = DB.collection('event_list')
   const _ = DB.command;
+  // 根据_id查询
   if (param._id) {
     return await exec({
       _id: param._id
     });
   }
+  // 根据 code 查询
   if (param.code) {
     return await exec({
       code: param.code
     });
   }
+  // 根据权限查询
   if (param.power) {
-    if (user.power.indexOf(param.power) > -1) {
+    if (user.power.includes(param.power)) {
+      // 权限过滤暂时没有
       return await exec();
     } else {
       return {
@@ -145,8 +149,9 @@ async function getEventList(user, param) {
     }
 
   }
+  //根据角色查询
   if (param.role) {
-    if (user.role.indexOf(param.role) > -1) {
+    if (user.role.includes(param.role)) {
       return await exec({
         role: _.in(user.role),
         disabled: false

@@ -123,7 +123,7 @@ async function checkPermision(action) {
       name: 'checkUserInfo',
     })
     if (action === 'cancel') {
-      if (curUserInfo.result.data.role.indexOf('PM') > -1 && curUserInfo.result.data.role.indexOf('HR') > -1) {
+      if (!curUserInfo.result.data.role.includes('PM') && !curUserInfo.result.data.role.includes('HR')) {
         return {
           code: '2002',
           msg: 'permission denied',
@@ -132,7 +132,7 @@ async function checkPermision(action) {
       }
     }
     if (action === 'edit') {
-      if (curUserInfo.result.data.role.indexOf('HR') > -1) {
+      if (!curUserInfo.result.data.role.includes('HR')) {
         return {
           code: '2003',
           msg: 'permission denied',
@@ -179,7 +179,7 @@ async function checkObserverPermision(data) {
           open_id
         }
       })
-      if (curUserInfo.result.data === null || curUserInfo.result.data.role.indexOf('PM') < 0 || curUserInfo.result.data.role.indexOf('HR') < 0) {
+      if (curUserInfo.result.data === null || !curUserInfo.result.data.role.includes('PM') || !curUserInfo.result.data.role.includes('HR')) {
         return {
           code: '2004',
           msg: 'permission denied',
@@ -290,7 +290,7 @@ async function updateObserverRecord(data, observedRes) {
     }
   }
   if (data.action === 'observe') {
-    if (observedRes.observer_open_id.indexOf(data.observer_open_id) > -1) {
+    if (observedRes.observer_open_id.includes(data.observer_open_id)) {
       return {
         code: '2009',
         msg: 'observer has observed',
@@ -304,7 +304,7 @@ async function updateObserverRecord(data, observedRes) {
     }
   }
   if (data.action === 'cancel') {
-    if (observedRes.observer_open_id.indexOf(data.observer_open_id) < 0) {
+    if (!observedRes.observer_open_id.includes(data.observer_open_id)) {
       return {
         code: '2010',
         msg: 'observer doesn\'t observed',
