@@ -24,11 +24,12 @@
 }
 
 .warp .item .second {
-  width: calc(100% - 140rpx);
+  width: calc(100% - 230rpx);
+  
 }
 
 .warp .item .last {
-  width: 90rpx;
+  width: 180rpx;
 }
 
 .warp image {
@@ -57,3 +58,4 @@
   font-size: 14px;
   color: #999;
 }
+

@@ -12,19 +12,13 @@
   </view>
   
   <view class='event_list_warp'>
-    <view class='event_item_warp' wx:for="{{eventList}}"  wx:key="{{index}}">
-      <navigator>
-        <event-detail 
-          detail='{{item}}' 
-        >
-        </event-detail>
+    <view class='event_item_warp' wx:for="{{actionList}}"  wx:key="{{index}}">
+      <navigator url='../{{item.url}}/{{item.url}}' open-type="navigate">
+        <event-detail detail='{{item}}'> </event-detail>
       </navigator>
     </view>
   </view>
 </view>
 
 
-
- 
- <!-- <event-detail wx:if="{{data.power.indexOf('event_admin') > -1}}"></event-detail> -->
 

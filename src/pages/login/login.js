@@ -1,5 +1,5 @@
 // pages/login/login.js
-const service = require('../business.js');
+const service = require('service.js');
 const APP = getApp();
 Page({
 

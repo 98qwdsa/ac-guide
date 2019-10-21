@@ -1,5 +1,38 @@
-<!--src/event/detail/detail.wxml-->
 <view class='content'>
+  <view class='task_list_warp'>
+    <view class='task_item_warp' wx:for="{{taskDetailList}}"  wx:key="{{index}}">
+      <navigator url='' open-type="navigate">
+        <event-detail 
+          detail='{{item}}' 
+        >
+        </event-detail>
+      </navigator>
+    </view>
+  </view>
+ <view class="task_img">
+  <navigator url="../taskAdd/taskAdd">
+    <image class="bg" src="../../../asset/Task_add.svg"></image>
+  </navigator>
+ </view>
+  
+</view>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--src/event/detail/detail.wxml-->
+<!-- <view class='content'>
   <form bindsubmit='submit'>
     <view class='event_info'>
       <label>
@@ -34,4 +67,4 @@
       <button bindtap='eventTrigger' data-code='{{eventDetail.code}}' data-disabled='{{eventDetail.disabled}}'>{{eventDetail.disabled ? '激活' : '禁用'}}</button>
     </view>
   </form>
-</view>
+</view> -->

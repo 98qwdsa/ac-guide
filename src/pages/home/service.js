@@ -1,23 +1,16 @@
-const cloud = require('../service/cloud.js');
+const cloud = require('../../service/cloud.js');
 const cloudFileConf = {
   PATH: 'steps_attachments/'
 }
 module.exports = {
-  checkUserInfo() {
-    return cloud.call('checkUserInfo');
-  },
-  register(data) {
-    return cloud.call('addUser', data);
-  },
   getEventList() {
     return cloud.call('queryEventList');
+  },
+  getSelfEventStep(code) {
+    return cloud.call('queryUserEventDetail', {
+      code
+    });
   }
-  }
-  // getSelfEventStep(code) {
-  //   return cloud.call('queryUserEventDetail', {
-  //     code
-  //   });
-  // },
   // uploadAttachments(code, Uid) {
   //   return new Promise((reslove, reject) => {
   //     wx.chooseMessageFile({
@@ -89,17 +82,6 @@ module.exports = {
   //     return cloud.call('employeeAddAttachments', data)
   //   }
   // },
-  // nextStep(code, step_Uid) {
-  //   return cloud.call('employeeAddStep', {
-  //     code,
-  //     step_Uid,
-  //     status_code: 50
-  //   })
-  // },
-  // adminLogin(user, pwd) {
-  //   return cloud.call('adminLogin', {
-  //     user,
-  //     pwd
-  //   })
-  // }
-// }
+  
+  
+}

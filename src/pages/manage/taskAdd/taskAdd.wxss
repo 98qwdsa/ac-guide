@@ -1,0 +1,113 @@
+/* src/event/detail/detail.wxss */
+page{
+  height: 100%;
+  position: relative;
+  background-color: #F5F5F5;
+}
+form{
+  height: 100%;
+}
+.event_info{
+  padding: 0 35rpx;
+}
+.event_name{
+  width: 630rpx;
+  border: 1px solid #DCDCDC;
+  padding: 20rpx 30rpx;
+  margin-top: 20rpx;
+  background-color: #fff;
+}
+.event_placeholder{
+  color: #999;
+  font-size: 32rpx;
+}
+.event_desc{
+  width: 630rpx;
+  border: 1px solid #DCDCDC;
+  padding: 20rpx 30rpx;
+  margin-top:20rpx;
+  height: 135rpx;
+  background-color: #fff;
+}
+.event_view{
+  width: 690rpx;
+  height: 100rpx;
+  border: 1px solid #DCDCDC;
+  margin-top: 20rpx;
+  padding-left: 20rpx;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: #fff;
+}
+.event_view text{
+  line-height: 100rpx;
+  color: #999;
+  font-size: 32rpx;
+}
+.event_view switch{
+  float: right;
+  line-height: 85rpx;
+}
+.event_view.step{
+  height: 180rpx;
+  position: relative;
+}
+.step image{
+  position: absolute;
+  width:64rpx;
+  height:64rpx;
+  bottom: 20rpx;
+  right: 20rpx;
+}
+.event_buttons{
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+.event_buttons button{
+  display: inline-block;
+  font-family: SourceHanSansCN-Bold;
+  border-radius:0;
+  width: 50%;
+}
+.event_buttons .reset{
+  background-color: #EDEDED;
+}
+.event_buttons .submit{
+  background-image: linear-gradient(-90deg, #7E46DD 0%, #DD60B3 100%);
+  color: #fff;
+}
+
+
+
+
+.wx-switch-input {
+  width: 42px !important;
+  height: 20px !important;
+}
+.wx-switch-input::before {
+  width: 41px !important;
+  height: 20px !important;
+}
+.wx-switch-input::after {
+  width: 18px !important;
+  height: 18px !important;
+}
+.right-arrow {  
+  display :inline-block;
+  position: relative;
+  width: 28px;
+  height: 28px;
+}
+.right-arrow::after {
+  display: inline-block;
+  content: " ";
+  height: 10px;
+  width: 10px;
+  border-width: 2px 2px 0 0;
+  border-style: solid;
+  transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+  position: absolute;
+  top: 50%;
+  left: 450rpx;
+}

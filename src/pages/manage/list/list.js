@@ -2,7 +2,7 @@ const APP = getApp();
 const service = require('../../business.js');
 Page({
   data: {
-    eventList: [
+    actionList: [
     ],
     name: '',
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
@@ -11,7 +11,6 @@ Page({
   },
   onLoad() {
     this.checkoutUser().then(() => {
-      //this.loadData();
     })
   },
   checkoutUser() {
@@ -21,54 +20,36 @@ Page({
     });
     return new Promise((reslove, reject) => {
       const userInfo = {}
+      const _this = this;
       service.checkUserInfo().then(data => {
         console.log(data);
         APP.globalData.userInfo = data;
         wx.hideLoading();
+        
+        let list = _this.data.actionList;
+        if (data.power.includes('event_admin')) {
+          list.push({
+            name: "任务管理",
+            desc: '编辑发布任务',
+            url: 'taskManage'
+          });
+        }
+        if (data.power.includes('account_admin')) {
+          list.push({
+            name: "人员管理",
+            desc: "修改管理人员",
+            url: 'personManage'
+          }, {
+            name: "角色管理",
+            desc: "可通过角色管理人员",
+            url: 'roleManage'
+          });
+        }
         this.setData({
           checkingUser: true,
-          name: data.name
+          name: data.name,
+          actionList: list
         });
-        wx.setNavigationBarTitle({
-          title: '管理',
-        })
-        if (data.power.indexOf('event_admin') > -1 || data.power.indexOf('account_admin') > -1) {
-          wx.showTabBar();
-        }
-        if (data.power.indexOf('event_admin') > -1){
-          this.setData({
-            eventList: [{
-              name: "任务管理",
-              desc: '编辑发布任务'
-            }]
-          });
-        }
-        if (data.power.indexOf('account_admin') > -1){
-          this.setData({
-            eventList: [{
-              name: "人员管理",
-              desc: "修改管理人员"
-            }, {
-                name: "角色管理",
-                desc: "可通过角色管理人员"
-            }]
-          });
-        }
-        if (data.power.indexOf('event_admin') > -1 && data.power.indexOf('account_admin') > -1) {
-          this.setData({
-            eventList: [{
-              name: "任务管理",
-              desc: '编辑发布任务'
-            }, {
-              name: "人员管理",
-              desc: "修改管理人员"
-            }, {
-              name: "角色管理",
-              desc: "可通过角色管理人员"
-            }
-          ]
-          });
-        }
         reslove();
       }).catch(e => {
         wx.hideLoading();
@@ -76,39 +57,6 @@ Page({
           url: '../../login/login',
         })
       });
-    })
-
-  },
-  loadData() {
-    wx.showLoading({
-      mask: true
-    })
-    service.getEventList().then(eventList => {
-      this.setData({
-        eventList
-      })
-      wx.hideLoading();
-    });
-
-    // 查看是否授权
-    const _this = this;
-    wx.getSetting({
-      success(res) {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-          wx.getUserInfo({
-            success(res) {
-              _this.setData({
-                authButtonShow: false
-              })
-            }
-          })
-        } else {
-          _this.setData({
-            authButtonShow: true
-          });
-        }
-      }
     })
   },
   bindGetUserInfo(e) {

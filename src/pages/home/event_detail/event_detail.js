@@ -1,5 +1,5 @@
 // src/pages/index/user_event_steps/user_event_steps.js
-const service = require('../../business.js');
+const service = require('../service.js');
 Page({
 
   /**

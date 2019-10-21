@@ -6,10 +6,12 @@
     "pages/admins/user/list/list",
     "pages/admins/user/detail/detail",
     "pages/manage/list/list",
-    "pages/manage/detail/detail",
+    "pages/manage/taskManage/taskManage",
     "pages/manage/add/add",
     "pages/manage/step/add/add",
-    "pages/manage/step/detail/detail"
+    "pages/manage/step/taskAdd/taskAdd",
+    "pages/manage/personManage/personManage",
+    "pages/manage/roleManage/roleManage"
   ],
   "window": {
     "backgroundTextStyle": "light",

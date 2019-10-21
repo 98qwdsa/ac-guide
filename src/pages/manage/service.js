@@ -8,7 +8,7 @@ module.exports = {
   },
   getEventList() {
     return cloud.call('queryEventList', {
-      power: 'admin'
+      power: 'event_admin'
     });
   },
   getEventDetail(code) {

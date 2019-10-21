@@ -21,7 +21,7 @@ Component({
 
   },
   created() {
-    //console.log(this.data);
+    
   },
 
   /**
