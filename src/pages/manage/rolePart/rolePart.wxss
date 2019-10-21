@@ -1,0 +1,46 @@
+/* src/pages/manage/rolePart/rolePart.wxss */
+page{
+  height: 100%;
+  position: relative;
+  background-color: #F5F5F5;
+}
+.content{
+  width: 100%;
+  padding: 0 25rpx;
+}
+
+.checkbox-item{
+  display: inline-block;
+  width: 650rpx;
+  height: 120rpx;
+  border: 1px solid #DCDCDC;
+  background-color: #fff;
+  margin-top: 20rpx;
+  padding: 0 25rpx;
+}
+.checkbox-item checkbox{
+  line-height: 100rpx;
+}
+
+
+
+
+
+.event_buttons{
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+.event_buttons button{
+  display: inline-block;
+  font-family: SourceHanSansCN-Bold;
+  border-radius:0;
+  width: 50%;
+}
+.event_buttons .reset{
+  background-color: #EDEDED;
+}
+.event_buttons .submit{
+  background-image: linear-gradient(-90deg, #7E46DD 0%, #DD60B3 100%);
+  color: #fff;
+}

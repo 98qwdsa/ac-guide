@@ -2,50 +2,50 @@
 <view class='content'>
   <form bindsubmit='submit'>
     <view class='event_info'>
+      <input name="code" type="text" class="event_name" placeholder-class="event_placeholder"
+          value='{{eventDetail.code}}' placeholder="事件编码:只能填英文字母"></input>
       <input name="name" type="text" class="event_name" placeholder-class="event_placeholder"
           value='{{eventDetail.name}}' placeholder="事件名称"></input>
       <textarea name="desc" class="event_desc" placeholder-class="event_placeholder"
           value='{{eventDetail.desc}}' placeholder="事件描述"></textarea>
-     <navigator url=''>
-      <view class="event_view">
-          <text>可参与角色</text>
-          <label class="right-arrow"></label>
-      </view> 
-    </navigator>
-    <!-- <view wx:for="{{eventDetail.steps}}" wx:key="unique"> -->
-    <view class='event_view step' wx:for="{{[{title:'事件一'}]}}" wx:key="unique">
-      <!-- <label>步骤{{index + 1}}</label>
-      {{item.title}} -->
-      <text>步骤</text>
-      <navigator url=''>
-        <image src="../../../asset/Task_add.svg"></image>
+      <navigator class="nav_role" url="../rolePart/rolePart">
+        <input name="role" type="text" placeholder-class="event_placeholder" disabled="true"
+        class="event_name" value='{{eventDetail.role}}' placeholder="可参与角色"></input>
+        <label class="right-arrow"></label>
       </navigator>
-    </view>
-    <view class="event_view">
+    <!-- <view wx:for="{{eventDetail.steps}}" wx:key="unique"> -->
+      <view class='event_view step'  wx:key="unique">
+        <text>步骤</text>
+        <!-- <checkbox-group bindchange="checkboxChange">
+          <label class="checkbox" wx:for="{{items}}">
+            <checkbox value="{{item.name}}" checked="{{item.checked}}"/>{{item.value}}
+          </label>
+        </checkbox-group> -->
+        <navigator>
+          <image src="../../../asset/Task_add.svg"></image>
+        </navigator>
+      </view>
+      <view class="event_view">
         <text>是否启用事件</text>
-        <switch checked="{{switch1Checked}}" color="#46DFA2" class="switch"/> 
-    </view>  
-    
-      
+        <switch name="disabled" checked="{{eventDetail.disabled}}" class="switch"
+        color="#46DFA2" /> 
+      </view>  
+    </view>
 
-      
 
-      
-      <!-- <button 
+    <view class='event_buttons'>
+      <button form-type='reset' class="reset">取消</button>
+      <button form-type='submit' class="submit" >确定</button>
+    </view>
+  </form>
+</view>
+
+
+
+<!-- <button 
         bindtap='eventTrigger' 
-        data-code='{{eventDetail.code}}' 
+         
         data-disabled='{{eventDetail.disabled}}'
       >
         {{eventDetail.disabled ? '激活' : '禁用'}}
       </button> -->
-
-    </view>
-    
-
-    
-    <view class='event_buttons'>
-    <button form-type='reset' class="reset">取消</button>
-    <button form-type='submit' class="submit" >确定</button>
-    </view>
-  </form>
-</view>

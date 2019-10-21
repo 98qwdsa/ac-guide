@@ -1,27 +1,35 @@
 const service = require('../service.js');
-
+let detail = {role:[]};
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    switch1Checked: true,
-    eventDetail: {},
-    code: ''
+    eventDetail: {
+      role:[]
+    }
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    // code = options.code;
-    // this.submit();
+    this.setData({
+      eventDetail:detail
+    });
   },
-  // submit: function(e){
-  //   console.log('form发生了submit事件，携带的数据:',e);
-  // }
+  submit: function(e){
+    console.log('form发生了submit事件，携带的数据:', e.detail.value);
+    let eventDetail = e.detail.value;
 
+    // service.addEvent(eventDetail).then(()=>{
+    //   wx.navigateTo("../taskManage/taskManage");
+    // });
+  },
+  changeRole: function (roles){
+    detail.role = roles;
+  }
 
 
 

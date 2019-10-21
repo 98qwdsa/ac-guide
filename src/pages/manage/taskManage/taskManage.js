@@ -21,7 +21,6 @@ Page({
       mask: true,
     })
     service.getEventList().then(taskDetailList => {
-      console.log("taskDetail", taskDetailList);
       this.setData({
         taskDetailList
       })

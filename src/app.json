@@ -11,7 +11,8 @@
     "pages/manage/step/add/add",
     "pages/manage/step/taskAdd/taskAdd",
     "pages/manage/personManage/personManage",
-    "pages/manage/roleManage/roleManage"
+    "pages/manage/roleManage/roleManage",
+    "pages/manage/rolePart/rolePart"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -48,6 +48,9 @@ form{
   float: right;
   line-height: 85rpx;
 }
+.nav_role{
+  height: 100rpx;
+}
 .event_view.step{
   height: 180rpx;
   position: relative;
@@ -98,6 +101,7 @@ form{
   position: relative;
   width: 28px;
   height: 28px;
+  z-index: 10;
 }
 .right-arrow::after {
   display: inline-block;
@@ -108,6 +112,7 @@ form{
   border-style: solid;
   transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
   position: absolute;
-  top: 50%;
-  left: 450rpx;
+  top: -90%;
+  left: 630rpx;
+  z-index: 10;
 }
