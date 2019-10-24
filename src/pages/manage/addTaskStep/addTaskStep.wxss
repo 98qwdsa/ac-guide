@@ -1,32 +1,25 @@
-/* src/pages/manage/rolePart/rolePart.wxss */
 page{
   height: 100%;
   position: relative;
   background-color: #F5F5F5;
 }
+form{
+  height: 100%;
+  margin-left: 10rpx;
+}
 .content{
-  width: 100%;
-  padding: 0 25rpx;
+  padding: 30rpx;
 }
-
-.checkbox-item{
-  position: relative;
-  display: inline-block;
-  width: 650rpx;
-  height: 120rpx;
+.event_name{
+  width: 620rpx;
   border: 1px solid #DCDCDC;
+  padding: 20rpx 30rpx;
+  margin-top: 30rpx;
   background-color: #fff;
-  margin-top: 20rpx;
-  padding: 0 25rpx;
 }
-.checkbox-item checkbox{
-  line-height: 100rpx;
-}
-.checkbox-item text{
-  position: absolute;
-  right: 30rpx;
+.event_placeholder{
   color: #999;
-  line-height: 120rpx;
+  font-size: 32rpx;
 }
 .event_buttons{
   width: 100%;

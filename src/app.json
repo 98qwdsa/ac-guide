@@ -5,14 +5,13 @@
     "pages/login/login",
     "pages/admins/user/list/list",
     "pages/admins/user/detail/detail",
-    "pages/manage/list/list",
+    "pages/manage/home/home",
     "pages/manage/taskManage/taskManage",
-    "pages/manage/add/add",
-    "pages/manage/step/add/add",
-    "pages/manage/step/taskAdd/taskAdd",
     "pages/manage/personManage/personManage",
     "pages/manage/roleManage/roleManage",
-    "pages/manage/rolePart/rolePart"
+    "pages/manage/rolePart/rolePart",
+    "pages/manage/addTaskStep/addTaskStep",
+    "pages/manage/taskAdd/taskAdd"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -30,7 +29,7 @@
         "selectedIconPath": "asset/hr_guide.png"
       },
       {
-        "pagePath": "pages/manage/list/list",
+        "pagePath": "pages/manage/home/home",
         "text": "管理",
         "iconPath": "asset/hr_guide4.png",
         "selectedIconPath": "asset/hr_guide3.png"
@@ -38,4 +37,5 @@
     ]
   },
   "sitemapLocation": "sitemap.json"
+  
 }

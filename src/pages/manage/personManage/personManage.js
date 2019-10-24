@@ -1,4 +1,3 @@
-// src/pages/manage/personDetail/personDetail.js
 Page({
 
   /**

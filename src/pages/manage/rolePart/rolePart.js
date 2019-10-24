@@ -1,4 +1,4 @@
-// src/pages/manage/rolePart/rolePart.js
+const app = getApp();
 Page({
 
   /**
@@ -6,90 +6,32 @@ Page({
    */
   data: {
     items: [
-      { name: 'F19', value: 'F19', checked: false },
-      { name: 'F20', value: 'F20', checked: false },
-      { name: 'PM', value: 'PM', checked: false }
-    ],
-    selectItem:[]
-    
+      { name: 'F19', value: 'F19', number:'22', checked: false },
+      { name: 'F20', value: 'F20', number: '17', checked: false },
+      { name: 'PM', value: 'PM', number: '3', checked: false }
+    ]
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // let _items = this.items;
-    // _items.forEach(function (val) {
-    //   if (this.selectItem.includes(val.name)) {
-    //     val.checked = "true";
-    //   } else {
-    //     val.checked = "false";
-    //   }
-    // });
-
-    // this.setData({
-    //   items: _items
-    // });
-  },
-  checkboxChange: function (e) {
-    this.selectItem = e.detail.value;
-  },
-  submit: function(e){
-    let pages = getCurrentPages();
-    if (pages.length > 1){
-      var prePage = pages[pages.length - 2];
-      prePage.changeRole(this.selectItem);
-    }
-    wx.navigateTo({
-      url: "../taskAdd/taskAdd"
+    this.data.items.forEach(function (val) {
+      if (options.role.includes(val.value)) {
+        val.checked = true;
+      } else {
+        val.checked = false; 
+      }
+    });
+    this.setData({
+      items: this.data.items
     });
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  checkboxChange: function (e) {
+    app.globalData.roles = e.detail.value;
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  submit: function(e){
+    wx.navigateBack({
+      delta: 1
+    });
   }
 })

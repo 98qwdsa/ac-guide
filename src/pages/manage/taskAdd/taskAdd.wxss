@@ -50,21 +50,73 @@ form{
 }
 .nav_role{
   height: 100rpx;
+  position: relative;
+  margin-left: -20rpx;
+}
+.nav_role text{
+  margin-left: 20rpx;
+}
+.nav_role .text_role{
+  position: absolute;
+  top: 0;
+  color: black;
+  font-style: bord;
+}
+.nav_role checkbox-group{
+  line-height: 90rpx;
 }
 .event_view.step{
-  height: 180rpx;
-  position: relative;
+  height: auto;
 }
-.step image{
+.step label{
+  font-size: 30rpx;
+  color: #666;
+}
+.step .checkbox-item{
+  position: relative;
+  display: inline-block;
+  width: 600rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  background-color: #f8f8f8;
+  margin-top: 15rpx;
+  padding: 0 30rpx;
+}
+.step .checkbox-item .edit{
   position: absolute;
+  right: 65rpx;
+  margin-top: 19rpx;
+  width: 64rpx;
+  height: 64rpx;
+}
+
+.step .checkbox-item .delete{
+  position: absolute;
+  right: 20rpx;
+  width: 55rpx;
+  height: 55rpx;
+  margin-top: 20rpx;
+}
+.step .addStep{
+  position: relative;
+  height:64rpx;
+  margin-top: 40rpx;
+}
+.step .addStep image{
+  position: absolute;
+  right: 20rpx;
+  bottom: 20rpx;
   width:64rpx;
   height:64rpx;
-  bottom: 20rpx;
-  right: 20rpx;
+}
+checkbox{
+  visibility: hidden;
+  width: 0;
 }
 .event_buttons{
   width: 100%;
-  position: absolute;
+  position: fixed;
+  height: 100rpx;
   bottom: 0;
 }
 .event_buttons button{
@@ -72,6 +124,7 @@ form{
   font-family: SourceHanSansCN-Bold;
   border-radius:0;
   width: 50%;
+  height: 100rpx;
 }
 .event_buttons .reset{
   background-color: #EDEDED;
@@ -80,6 +133,7 @@ form{
   background-image: linear-gradient(-90deg, #7E46DD 0%, #DD60B3 100%);
   color: #fff;
 }
+
 
 
 
@@ -96,23 +150,15 @@ form{
   width: 18px !important;
   height: 18px !important;
 }
-.right-arrow {  
-  display :inline-block;
-  position: relative;
-  width: 28px;
-  height: 28px;
-  z-index: 10;
-}
-.right-arrow::after {
+.right-arrow { 
   display: inline-block;
-  content: " ";
-  height: 10px;
   width: 10px;
+  height: 10px;
+  z-index: 10;
+  position: absolute;
+  top: 35rpx;
   border-width: 2px 2px 0 0;
   border-style: solid;
-  transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
-  position: absolute;
-  top: -90%;
-  left: 630rpx;
-  z-index: 10;
+  transform: matrix(0.71,0.71,-0.71,0.71,0,0);
+  left: 620rpx;
 }
