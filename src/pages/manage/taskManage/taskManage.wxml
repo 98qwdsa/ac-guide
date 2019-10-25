@@ -1,11 +1,8 @@
 <view class='content'>
   <view class='task_list_warp'>
     <view class='task_item_warp' wx:for="{{taskDetailList}}"  wx:key="{{index}}">
-      <navigator url='' open-type="navigate">
-        <event-detail 
-          detail='{{item}}' 
-        >
-        </event-detail>
+      <navigator url='../taskProgress/taskProgress' open-type="navigate">
+        <event-detail detail='{{item}}'> </event-detail>
       </navigator>
     </view>
   </view>

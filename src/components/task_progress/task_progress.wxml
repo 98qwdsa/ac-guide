@@ -1,0 +1,26 @@
+<!--components/task_progress/task_progress.wxml-->
+<view class="wrap">
+  <view class="first">
+    <image src="../../asset/hr_guide3.png"></image>
+    <text>张瑶Andy(25%)</text>
+  </view>
+  <view class="second">
+    <label></label>
+    <label></label>
+    <label></label>
+    <label></label>
+  </view>
+  <view class="third">
+    <view class="left">
+      <text>关注者：</text>
+      <image src="../../asset/hr_guide3.png"></image>
+      <image src="../../asset/hr_guide3.png"></image>
+    </view>
+    <view class="right">
+      <label>
+        <text>添加</text>
+      </label>
+    </view>
+    
+  </view>
+</view>

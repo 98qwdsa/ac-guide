@@ -11,7 +11,8 @@
     "pages/manage/roleManage/roleManage",
     "pages/manage/rolePart/rolePart",
     "pages/manage/addTaskStep/addTaskStep",
-    "pages/manage/taskAdd/taskAdd"
+    "pages/manage/taskAdd/taskAdd",
+    "pages/manage/taskProgress/taskProgress"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -37,5 +38,4 @@
     ]
   },
   "sitemapLocation": "sitemap.json"
-  
 }

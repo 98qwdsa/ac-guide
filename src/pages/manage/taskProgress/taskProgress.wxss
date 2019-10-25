@@ -1,0 +1,66 @@
+/* src/pages/manage/taskProgress/taskProgress.wxss */
+page{
+  height: 100%;
+  background-color: #F5F5F5;
+}
+.container{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tab-wrapper{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100rpx;
+  background: #fff;
+  border-top: 1px solid #e8e8e8;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.tab-left,.tab-middle, .tab-right{
+  flex: 1;
+  font-size: 32rpx;
+  color: #000;
+  line-height: 100rpx;
+  text-align: center;
+}
+
+.tab-active{
+  border-bottom: 2px solid  rgb(221, 70, 209);
+}
+
+.content-wrapper{
+  width: 95%;
+  flex: 1;
+}
+
+.task_progress_item{
+  margin-top: 20rpx;
+}
+
+.task_buttons{
+  width: 100%;
+  position: fixed;
+  height: 100rpx;
+  bottom: 0;
+}
+.task_buttons button{
+  display: inline-block;
+  font-family: SourceHanSansCN-Bold;
+  border-radius:0;
+  width: 50%;
+  height: 100rpx;
+}
+.task_buttons .edit{
+  background-color: #EDEDED;
+}
+.task_buttons .submit{
+  background-image: linear-gradient(-90deg, #7E46DD 0%, #DD60B3 100%);
+  color: #fff;
+}

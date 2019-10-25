@@ -57,10 +57,10 @@ Page({
   },
   submit: function(e) {
     console.log('form发生了submit事件，携带的数据:', e.detail.value);
-    if (e.detail.value.code == "" || e.detail.value.name == "" || e.detail.value.desc == "") {
+    if (e.detail.value.code == "" || e.detail.value.name == "" ) {
       wx.showModal({
         title: '提示',
-        content: '事件编码、名称和描述都不能为空',
+        content: '事件编码和事件名称都不能为空',
         success(res) {
           if (res.confirm) {
             console.log('用户点击确定')
@@ -72,7 +72,7 @@ Page({
       return;
     }
     service.addEvent(e.detail.value).then(() => {
-      wx.navigateTo("../taskManage/taskManage");
+      wx.navigateTo('../taskManage/taskManage');
       detail = {
         code: '',
         name: '',
@@ -104,13 +104,13 @@ Page({
       duration: 2000
     })
   },
-  bindCodeInput: function(e) {
+  codeBindblur: function(e) {
     detail.code = e.detail.value;
   },
-  bindNameInput: function(e) {
+  nameBindblur: function(e) {
     detail.name = e.detail.value;
   },
-  bindDescInput: function(e) {
+  descBindblur: function(e) {
     detail.desc = e.detail.value;
   },
   switchChange: function(e) {
@@ -130,8 +130,5 @@ Page({
         e.currentTarget.dataset.steptask +
         '&&stepindex=' + e.currentTarget.dataset.stepindex
     })
-  },
-  checkboxTwoChange: function(e) {
-    // detail.steps = e.detail.value;
   }
 })

@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "taskProgress": "../../../components/task_progress/task_progress"
+  },
+  "navigationBarTitleText": "任务进度"
+  
+  
+}

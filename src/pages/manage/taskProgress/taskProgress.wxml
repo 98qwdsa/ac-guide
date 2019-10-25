@@ -1,0 +1,27 @@
+<view class='container'>
+
+  <view class='tab-wrapper'>
+    <view id='tableft' class='tab-left {{currentTab === 0 ? "tab-active":""}}' bindtap='switchTab'>我的</view>
+    <view id='tabmiddle' class='tab-middle {{currentTab === 1 ? "tab-active" : ""}}' bindtap='switchTab'>我关注的</view>
+    <view id='tabright' class='tab-right {{currentTab === 2 ? "tab-active" : ""}}' bindtap='switchTab'>所有参与者</view>
+  </view>
+
+  <view class='content-wrapper' wx:if='{{currentTab === 0}}'>
+    <view class="task_progress_item" wx:for="{{list}}"  wx:key="{{index}}">
+      <taskProgress></taskProgress>
+    </view>
+  </view>
+  <view class='content-wrapper' wx:if='{{currentTab === 1}}'>
+    <text>我关注的页面</text>
+  </view>
+  <view class='content-wrapper' wx:if='{{currentTab === 2}}'>
+    <text>所有参与者的页面</text>
+  </view>
+
+
+  <view class='task_buttons'>
+    <button form-type='edit' class="reset">编辑任务</button>
+    <button form-type='submit' class="submit" >确定</button>
+  </view>
+
+</view>
