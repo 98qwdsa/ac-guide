@@ -7,15 +7,17 @@
   </view>
 
   <view class='content-wrapper' wx:if='{{currentTab === 0}}'>
-    <view class="task_progress_item" wx:for="{{list}}"  wx:key="{{index}}">
-      <taskProgress></taskProgress>
-    </view>
+    <text>我的页面</text>
   </view>
   <view class='content-wrapper' wx:if='{{currentTab === 1}}'>
-    <text>我关注的页面</text>
+    <view class="task_progress_item" wx:for="{{attenUserList}}"  wx:key="{{index}}">
+      <taskProgress detail='{{item}}' cancel = '{{item.cancel}}'></taskProgress>
+    </view>
   </view>
   <view class='content-wrapper' wx:if='{{currentTab === 2}}'>
-    <text>所有参与者的页面</text>
+    <view class="task_progress_item" wx:for="{{allUserList}}"  wx:key="{{index}}">
+      <taskProgress detail='{{item}}' add = '{{item.add}}'></taskProgress>
+    </view>
   </view>
 
 

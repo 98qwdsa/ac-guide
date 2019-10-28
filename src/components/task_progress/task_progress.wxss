@@ -7,32 +7,69 @@
   padding: 20rpx;
   font-family: SourceHanSansCN-Regular;
 }
-.first{
+.item{
   margin-top: 10rpx;
+  overflow: hidden;
 }
-.first image{
+.item .left{
+  float: left;
+}
+.item .left image{
   width: 70rpx;
   height: 70rpx;
   vertical-align: middle;
 }
-.first text{
+.item .left .sub image{
+  width: 65rpx;
+  height:65rpx;
+}
+.item .left .sub{
+  font-family: SourceHanSansCN-Regular;
+  font-size: 34rpx;
+  color: #999;
+}
+.item .left text{
   font-size: 36rpx;
 }
-.second{
+.item .right{
+  float: right;
+}
+.item .right label{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150rpx;
+  height: 40rpx;
+  border-radius: 18rpx;
+  background: #efefef;
+  margin-top: 15rpx;
+}
+.item .right .sub{
+  width: 90rpx;
+  height: 38rpx;
+}
+.item .right label text{
+  color: #666;
+  font-size: 30rpx;
+  font-family: SourceHanSansCN-Regular;
+}
+.progress{
   display: flex;
   flex-direction: row;
   margin: 20rpx 6rpx 20rpx 0;
 }
-.second label{
+.progress label{
   flex: 1;
   height: 6rpx;
-  margin-right: 6rpx;
+  margin-right: 8rpx;
   background: #e8e8e8;
 }
-.second label:nth-child(1){
+.progress .label-active{
   background: #46DFA2;
 }
-.third{
+
+
+/* .third{
   overflow: hidden;
   margin-bottom: 10rpx;
 }
@@ -67,4 +104,4 @@
   color: #666;
   font-size: 30rpx;
   font-family: SourceHanSansCN-Regular;
-}
+} */

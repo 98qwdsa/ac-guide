@@ -4,7 +4,18 @@ Component({
    * 组件的属性列表
    */
   properties: {
-
+    detail:{
+      type: Object,
+      value: {}
+    },
+    cancel:{
+      type: Boolean,
+      value: 'undefined'
+    },
+    add:{
+      type: Boolean,
+      value: 'undefined'
+    }
   },
 
   /**

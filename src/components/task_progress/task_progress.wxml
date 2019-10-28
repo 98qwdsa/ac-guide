@@ -1,26 +1,34 @@
 <!--components/task_progress/task_progress.wxml-->
 <view class="wrap">
-  <view class="first">
-    <image src="../../asset/hr_guide3.png"></image>
-    <text>张瑶Andy(25%)</text>
-  </view>
-  <view class="second">
-    <label></label>
-    <label></label>
-    <label></label>
-    <label></label>
-  </view>
-  <view class="third">
+  <view class="item">
     <view class="left">
-      <text>关注者：</text>
-      <image src="../../asset/hr_guide3.png"></image>
-      <image src="../../asset/hr_guide3.png"></image>
+      <image src="{{detail.userImg}}"></image>
+      <text>{{detail.user}}</text>
+      <text>({{detail.progress}}%)</text>
     </view>
     <view class="right">
-      <label>
+     <label wx:if="{{cancel != 'undefined'}}">
+        <text>取消关注</text>
+      </label>
+    </view>
+  </view>
+  <view class="progress">
+    <label class='{{detail.progress >= 25 ? "label-active":""}}'></label>
+    <label class='{{detail.progress >= 50 ? "label-active":""}}'></label>
+    <label class='{{detail.progress >= 75 ? "label-active":""}}'></label>
+    <label class='{{detail.progress >= 100 ? "label-active":""}}'></label>
+  </view>
+  <view class="item">
+    <view class="left">
+      <text class="sub">{{add == 'undefined' ? '关注者：':'关注：'}}</text>
+      <block wx:for="{{detail.followerImg}}"  wx:key="unique">
+        <image src="{{item}}"></image>
+      </block>
+    </view>
+    <view class="right">
+      <label wx:if="{{add != 'undefined'}}" class="sub">
         <text>添加</text>
       </label>
     </view>
-    
   </view>
 </view>

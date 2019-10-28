@@ -6,7 +6,54 @@ Page({
    */
   data: {
     currentTab: 0,
-    list: ['a','b']
+    allUserList: [
+      {
+        userImg:'../../asset/hr_guide3.png',
+        user: '张瑶Andy',
+        progress: 25,
+        cancel: true,
+        add: true,
+        followerImg: ['../../asset/hr_guide3.png',
+        '../../asset/hr_guide3.png']
+      },
+      {
+        userImg: '../../asset/hr_guide3.png',
+        user: '颜文妆',
+        progress: 50,
+        cancel: true,
+        add: true,
+        followerImg: ['../../asset/hr_guide3.png',
+         '../../asset/hr_guide3.png', '../../asset/hr_guide3.png']
+      },
+      {
+        userImg: '../../asset/hr_guide3.png',
+        user: '张瑶Andy',
+        progress: 100,
+        cancel: true,
+        add: true,
+        followerImg: ['../../asset/hr_guide3.png']
+      }
+    ],
+    attenUserList: [
+      {
+        userImg: '../../asset/hr_guide3.png',
+        user: '张瑶Andy',
+        progress: 75,
+        cancel: true,
+        add: true,
+        followerImg: ['../../asset/hr_guide3.png',
+          '../../asset/hr_guide3.png']
+      },
+      {
+        userImg: '../../asset/hr_guide3.png',
+        user: '颜文妆',
+        progress: 25,
+        cancel: true,
+        add: true,
+        followerImg: ['../../asset/hr_guide3.png',
+          '../../asset/hr_guide3.png', '../../asset/hr_guide3.png']
+      }
+    ]
   },
 
   /**
