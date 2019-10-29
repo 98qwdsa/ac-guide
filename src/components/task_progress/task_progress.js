@@ -12,7 +12,7 @@ Component({
       type: Boolean,
       value: 'undefined'
     },
-    add:{
+    addFollower:{
       type: Boolean,
       value: 'undefined'
     }
@@ -22,7 +22,7 @@ Component({
    * 组件的初始数据
    */
   data: {
-
+    
   },
 
   /**

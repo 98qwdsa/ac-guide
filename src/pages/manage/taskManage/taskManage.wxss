@@ -15,6 +15,7 @@ height: 100%;
   margin: 0;
 }
 .content .task_img{
+  z-index: 10;
   position: absolute;
   bottom: 40rpx;
   right: 20rpx;

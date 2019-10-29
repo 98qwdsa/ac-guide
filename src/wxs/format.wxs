@@ -1,0 +1,20 @@
+var getRoles = function (array) {
+  if (array == undefined) {
+    return;
+  }
+  var roles = array.join(",");
+  return roles;
+}
+
+var getProgress = function (array){
+  if(array == undefined){
+    return;
+  }
+  var progress = array.filter(function (item) {
+    return (item.user_step.status_code === 100);
+  }).length / array.length * 100
+  return progress;
+}
+
+module.exports.getRoles = getRoles;
+module.exports.getProgress = getProgress;

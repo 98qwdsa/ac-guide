@@ -12,8 +12,9 @@ page{
   margin: 0;
   padding: 0;
 }
-
 .tab-wrapper{
+  position: fixed;
+  z-index: 10;
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -38,29 +39,9 @@ page{
 .content-wrapper{
   width: 95%;
   flex: 1;
+  margin-top: 100rpx;
 }
 
 .task_progress_item{
   margin-top: 20rpx;
-}
-
-.task_buttons{
-  width: 100%;
-  position: fixed;
-  height: 100rpx;
-  bottom: 0;
-}
-.task_buttons button{
-  display: inline-block;
-  font-family: SourceHanSansCN-Bold;
-  border-radius:0;
-  width: 50%;
-  height: 100rpx;
-}
-.task_buttons .edit{
-  background-color: #EDEDED;
-}
-.task_buttons .submit{
-  background-image: linear-gradient(-90deg, #7E46DD 0%, #DD60B3 100%);
-  color: #fff;
 }

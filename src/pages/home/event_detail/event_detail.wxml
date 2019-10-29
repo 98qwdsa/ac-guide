@@ -1,24 +1,12 @@
 <!--src/pages/index/user_event_steps/user_event_steps.wxml-->
 <view class="warp">
   <event-detail detail="{{eventDetail}}" finished="{{eventFinished}}"></event-detail>
-  <view class="step_warp">
-    <view wx:for="{{stepList}}" wx:key="unique" class="step">
-      <view class="first image">
-        <image class="pull-left" wx:if="{{item.user_step.status_code === 100}}" src="../../../asset/task_dtl_icon.svg"></image>
-        <image class="pull-left" wx:else src="../../../asset/task_list_circle.svg"></image>
-      </view>
-      <view class="second desc">
-        <text class="title">{{index+1}}.{{item.title}}</text>
-        <view class="tips">
-          <text wx:for="{{item.tips}}" wx:key="unique" wx:for-item="tip" class="tip">{{tip}}</text>
-        </view>
-      </view>
-      <view class="last button" wx:if="{{item.user_step.status_code != 100 && index == curStep}}">
-        <button bindtap='nextStep' data-Uid="{{item._id}}" class="pull-right">完成</button>
-      </view>
-    </view>
-  </view>
+  <step-warp stepList="{{stepList}}" curStep="{{curStep}}"></step-warp>
 </view>
+
+
+
+
 <!--<swiper style='height:{{swiperHeight}}px' previous-margin="50rpx " next-margin='50rpx' easing-function="easeInOutCubic " bindchange="swiperChange " current="{{curIndex}} ">
 
 <block wx:for="{{stepList}} " wx:key="unique ">

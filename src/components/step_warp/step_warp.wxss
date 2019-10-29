@@ -1,0 +1,96 @@
+/* components/step_warp/step_warp.wxss */
+@import "../../common/css/common.wxss";
+
+.step_warp {
+  margin-top: 20rpx;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 8rpx;
+  background: #fff;
+  box-shadow: 0 0 10rpx 0 rgba(0, 0, 0, 0.15);
+  padding: 26rpx;
+}
+
+.step_warp .step {
+  display: flex;
+}
+
+.step_warp .step .desc {
+  padding-bottom: 80rpx;
+}
+
+.step_warp .step:last-child .desc {
+  padding: 0;
+}
+
+.step_warp .step .image image {
+  width: 38rpx;
+  height: 38rpx;
+  position: relative;
+  z-index: 100;
+}
+
+.step_warp .step .image {
+  position: relative;
+  z-index: 100;
+}
+
+.step_warp .step .image:before {
+  height: 100%;
+  width: 4rpx;
+  background: #8a00ca;
+  content: " ";
+  display: inline-block;
+  position: absolute;
+  left: 16rpx;
+  top: 4rpx;
+  z-index: 10;
+}
+
+.step_warp .step:last-child .image::before {
+  display: none;
+}
+
+.step_warp .step .title {
+  font-size: 16px;
+  color: #222;
+}
+
+.step_warp .step .tip {
+  font-size: 14px;
+  color: #999;
+}
+
+.step_warp .step .button button {
+  border-radius: 9px;
+  width: 90rpx;
+  height: 36rpx;
+  font-size: 24rpx;
+  padding: 0;
+  color: #666;
+  text-align: center;
+  line-height: 36rpx;
+  margin: 0;
+  border: 1px solid #d25db8;
+  background: #fff;
+}
+
+.step_warp .step .button button::after {
+  border: none;
+}
+
+.step_warp .step .first {
+  width: 80rpx;
+}
+
+.step_warp .step .second {
+  width: calc(100% - 170rpx);
+}
+
+.step_warp .step .last {
+  width: 90rpx;
+}
+
+.step_warp .tips .tip {
+  display: inline-block;
+}
+
