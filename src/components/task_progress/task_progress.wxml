@@ -1,10 +1,10 @@
 <!--components/task_progress/task_progress.wxml-->
+<wxs src='../../wxs/format.wxs' module="m1"/>
 <view class="wrap">
   <view class="item">
     <view class="left">
-      <image src="{{detail.userImg}}"></image>
-      <text>{{detail.user}}</text>
-      <text>({{detail.progress}}%)</text>
+      <text>{{detail.name}}</text>
+      <text>({{m1.getProgress(detail.event_steps.steps)}}%)</text>
     </view>
     <view class="right">
      <label wx:if="{{cancel != 'undefined'}}">
@@ -13,22 +13,23 @@
     </view>
   </view>
   <view class="progress">
-    <label class='{{detail.progress >= 25 ? "label-active":""}}'></label>
-    <label class='{{detail.progress >= 50 ? "label-active":""}}'></label>
-    <label class='{{detail.progress >= 75 ? "label-active":""}}'></label>
-    <label class='{{detail.progress >= 100 ? "label-active":""}}'></label>
+    <block wx:for="{{detail.event_steps.steps}}" wx:key="index">
+      <label class='{{item.user_step.status_code===100 ? "label-active":""}}'></label>
+    </block>
   </view>
   <view class="item">
     <view class="left">
-      <text class="sub">{{add == 'undefined' ? '关注者：':'关注：'}}</text>
-      <block wx:for="{{detail.followerImg}}"  wx:key="unique">
-        <image src="{{item}}"></image>
-      </block>
+      <text class="sub">{{addFollower == 'undefined' ? '关注者：':'关注：'}}</text>
+      <text class="sub">{{m1.getRoles(detail.followerName)}}</text>
     </view>
     <view class="right">
-      <label wx:if="{{add != 'undefined'}}" class="sub">
+      <label wx:if="{{addFollower != 'undefined'}}" class="sub">
         <text>添加</text>
       </label>
     </view>
   </view>
 </view>
+
+
+
+

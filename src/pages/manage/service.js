@@ -11,6 +11,21 @@ module.exports = {
       power: 'event_admin'
     });
   },
+  getSelfEventStep(code) {
+    return cloud.call('queryUserEventDetail', {
+      code
+    });
+  },
+  getQueryAllUserEventDetail(data){
+    return cloud.call('queryAllUserEventDetail',{
+      ...data
+    });
+  },
+  getQueryObserverEventDetail(data){
+    return cloud.call('queryObserverEventDetail', {
+      ...data
+    });
+  }
   // getEventDetail(code) {
   //   return cloud.call('queryEventList', {
   //     code

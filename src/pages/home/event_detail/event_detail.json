@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "event-detail": "../../../components/event_item/event_item"
+    "event-detail": "../../../components/event_item/event_item",
+    "step-warp": "../../../components/step_warp/step_warp"
   },
   "navigationBarTitleText": "步骤"
 }

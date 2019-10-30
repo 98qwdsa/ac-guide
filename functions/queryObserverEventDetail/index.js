@@ -39,7 +39,7 @@ function checkParamFormat(data) {
     }
   }
   if (page === undefined) {
-    page = defaultPage;
+    page = defaultPageConf;
   } else {
     if (typeof(page) === 'object') {
       if (page['size'] === undefined) {
@@ -100,7 +100,7 @@ async function getObserverUserOpenId(data) {
     if (res.data.length < 1) {
       return {
         code: '2000',
-        msg: '',
+        msg: 'not records',
         data: null
       }
     }

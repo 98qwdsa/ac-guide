@@ -48,21 +48,7 @@ Page({
       wx.hideLoading();
     })
   },
-  // swiperChange(e) {
-  //   this.setData({
-  //     curIndex: e.detail.current
-  //   })
-  //   this.initSwiperHeight();
-  // },
-  // uploadAttachment(e) {
-  //   const dataSet = e.currentTarget.dataset;
-  //   service.uploadAttachments(this.data.event_code, dataSet.uid).then(data => {
-  //     this.setData({
-  //       ['stepList[' + this.data.curIndex + '].user_step']: data
-  //     });
-  //     this.initSwiperHeight()
-  //   });
-  // },
+ 
   nextStep(e) {
     wx.showLoading({
       mask: true

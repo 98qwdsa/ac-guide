@@ -2,5 +2,5 @@
   "usingComponents": {
     "event-detail": "../../../components/event_item/event_item"
   },
-  "navigationBarTitleText": "任务详情"
+  "navigationBarTitleText": "任务列表"
 }

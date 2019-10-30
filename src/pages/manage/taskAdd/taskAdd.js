@@ -56,7 +56,7 @@ Page({
     })
   },
   submit: function(e) {
-    console.log('form发生了submit事件，携带的数据:', e.detail.value);
+    // console.log('form发生了submit事件，携带的数据:', e.detail.value);
     if (e.detail.value.code == "" || e.detail.value.name == "" ) {
       wx.showModal({
         title: '提示',
@@ -71,20 +71,20 @@ Page({
       })
       return;
     }
-    service.addEvent(e.detail.value).then(() => {
-      wx.navigateTo('../taskManage/taskManage');
-      detail = {
-        code: '',
-        name: '',
-        desc: '',
-        disabled: true,
-        role: [],
-        steps: []
-      };
-      this.setData({
-        eventDetail: detail
-      });
-    });
+    // service.addEvent(e.detail.value).then(() => {
+    //   wx.navigateTo('../taskManage/taskManage');
+    //   detail = {
+    //     code: '',
+    //     name: '',
+    //     desc: '',
+    //     disabled: true,
+    //     role: [],
+    //     steps: []
+    //   };
+    //   this.setData({
+    //     eventDetail: detail
+    //   });
+    // });
   },
   formReset: function() {
     detail = {

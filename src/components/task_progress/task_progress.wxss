@@ -14,18 +14,9 @@
 .item .left{
   float: left;
 }
-.item .left image{
-  width: 70rpx;
-  height: 70rpx;
-  vertical-align: middle;
-}
-.item .left .sub image{
-  width: 65rpx;
-  height:65rpx;
-}
 .item .left .sub{
   font-family: SourceHanSansCN-Regular;
-  font-size: 34rpx;
+  font-size: 32rpx;
   color: #999;
 }
 .item .left text{
@@ -47,11 +38,15 @@
 .item .right .sub{
   width: 90rpx;
   height: 38rpx;
+  background-image: linear-gradient(-90deg, #7E46DD 0%, #DD60B3 100%);
 }
 .item .right label text{
   color: #666;
   font-size: 30rpx;
   font-family: SourceHanSansCN-Regular;
+}
+.item .right .sub text{
+  color: #fff;
 }
 .progress{
   display: flex;
@@ -68,40 +63,3 @@
   background: #46DFA2;
 }
 
-
-/* .third{
-  overflow: hidden;
-  margin-bottom: 10rpx;
-}
-.third .left{
-  float: left;
-}
-.third .left text{
-  font-family: SourceHanSansCN-Regular;
-  font-size: 34rpx;
-  color: #999;
-}
-.third .left image{
-  width: 65rpx;
-  height:65rpx;
-  vertical-align: middle;
-}
-
-.third .right{
-  float: right;
-}
-.third .right label{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 90rpx;
-  height: 38rpx;
-  border-radius: 18rpx;
-  background: #efefef;
-  margin-top: 15rpx;
-}
-.third .right label text{
-  color: #666;
-  font-size: 30rpx;
-  font-family: SourceHanSansCN-Regular;
-} */

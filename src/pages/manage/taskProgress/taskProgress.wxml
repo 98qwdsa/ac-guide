@@ -1,29 +1,27 @@
 <view class='container'>
 
   <view class='tab-wrapper'>
-    <view id='tableft' class='tab-left {{currentTab === 0 ? "tab-active":""}}' bindtap='switchTab'>我的</view>
-    <view id='tabmiddle' class='tab-middle {{currentTab === 1 ? "tab-active" : ""}}' bindtap='switchTab'>我关注的</view>
-    <view id='tabright' class='tab-right {{currentTab === 2 ? "tab-active" : ""}}' bindtap='switchTab'>所有参与者</view>
+    <view id='tableft' class='tab-left {{currentTab === "tableft" ? "tab-active":""}}' bindtap='switchTab'>我的</view>
+    <view id='tabmiddle' class='tab-middle {{currentTab === "tabmiddle" ? "tab-active" : ""}}' bindtap='switchTab'>我关注的</view>
+    <view id='tabright' class='tab-right {{currentTab === "tabright" ? "tab-active" : ""}}' bindtap='switchTab'>所有参与者</view>
   </view>
 
-  <view class='content-wrapper' wx:if='{{currentTab === 0}}'>
-    <text>我的页面</text>
+  <view class='content-wrapper' wx:if='{{currentTab === "tableft"}}'>
+    <view class="task_progress_item">
+      <event-detail detail="{{eventDetail}}" finished="{{eventFinished}}"></event-detail>
+      <step-warp stepList="{{stepList}}" curStep="{{curStep}}"></step-warp>
+    </view>
   </view>
-  <view class='content-wrapper' wx:if='{{currentTab === 1}}'>
+  <view class='content-wrapper' wx:if='{{currentTab === "tabmiddle"}}'>
     <view class="task_progress_item" wx:for="{{attenUserList}}"  wx:key="{{index}}">
       <taskProgress detail='{{item}}' cancel = '{{item.cancel}}'></taskProgress>
     </view>
   </view>
-  <view class='content-wrapper' wx:if='{{currentTab === 2}}'>
-    <view class="task_progress_item" wx:for="{{allUserList}}"  wx:key="{{index}}">
-      <taskProgress detail='{{item}}' add = '{{item.add}}'></taskProgress>
-    </view>
+  <view class='content-wrapper' wx:if='{{currentTab === "tabright"}}'>
+    <block wx:if="{{allUserList.length}}">
+      <view class="task_progress_item" wx:for="{{allUserList}}"  wx:key="{{index}}">
+        <taskProgress detail='{{item}}' addFollower='{{addFollower}}'></taskProgress>
+      </view>
+    </block>
   </view>
-
-
-  <view class='task_buttons'>
-    <button form-type='edit' class="reset">编辑任务</button>
-    <button form-type='submit' class="submit" >确定</button>
-  </view>
-
 </view>
