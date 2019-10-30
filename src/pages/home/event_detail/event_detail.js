@@ -74,20 +74,16 @@ Page({
         icon: 'success',
         duration: 1200
       })
-      if (data._id) {
+      if (data) {
         const stepList = [...this.data.stepList]
 
         let eventFinished = false;
         let curStep = this.data.curStep;
 
         stepList[curStep].user_step = data;
-        if (stepList[curStep - 1]) {
-          stepList[curStep - 1].user_step.currentStep = undefined;
-        }
         curStep += 1;
         if (curStep == stepList.length) {
           eventFinished = true;
-          curStep--;
         }
         this.setData({
           eventFinished,

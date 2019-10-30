@@ -153,14 +153,16 @@ async function mergeSteps(eventSteps, userSteps, eventDetail) {
   let steps = [];
   for (i of eventSteps) {
     let user_step = null
-    if (userSteps) {
-      user_step = userSteps.filter((e, key) => {
+    if (userSteps.length && userSteps[0].steps) {
+      user_step = userSteps[0].steps.filter((e, key) => {
         return i._id === e.step_Uid;
-      })
+      })[0]
     }
     steps.push({
       ...i,
-      user_step
+      user_step: {
+        ...user_step
+      }
     })
   }
   return {

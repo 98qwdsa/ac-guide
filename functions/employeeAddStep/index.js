@@ -9,7 +9,7 @@ function checkParams(data) {
     user_open_id,
     step_Uid,
     status_code,
-    attachments_Uid
+    // attachments_Uid
   } = data;
   let res = {
     code: '0000',
@@ -53,14 +53,14 @@ function checkParams(data) {
     }
   }
 
-  if (attachments_Uid === undefined) {
-    attachments_Uid = ''
-  } else {
-    if (typeof(attachments_Uid) != 'string') {
-      res.code = '1001';
-      res.msg.push('attachments_Uid:string');
-    }
-  }
+  // if (attachments_Uid === undefined) {
+  //   attachments_Uid = ''
+  // } else {
+  //   if (typeof(attachments_Uid) != 'string') {
+  //     res.code = '1001';
+  //     res.msg.push('attachments_Uid:string');
+  //   }
+  // }
 
   if (res.code === '1000') {
     res.msg = 'param ' + res.msg.join(' ') + ' is required';
@@ -75,7 +75,7 @@ function checkParams(data) {
       user_open_id,
       step_Uid,
       status_code,
-      attachments_Uid
+      // attachments_Uid
     }
   }
   return res;
@@ -98,7 +98,7 @@ async function recordStep(data) {
 
   const res = await writeStep(step, data)
 
-  if (res && res._id) {
+  if (res) {
     return {
       code: '0000',
       msg: 'success',
@@ -106,35 +106,57 @@ async function recordStep(data) {
     }
   }
   //添加一步到事件的用户表
-  async function writeStep(step, data) {
-    data.status_code = await checkVerify(data, step.step_Uid);
-    if (step && step._id) {
-      return await editStep(step, data);
-    } else {
-      return await addStep(data);;
+  async function writeStep(userStep, data) {
+    data.status_code = await checkVerify(data, userStep.step_Uid);
+    if (step.action === 'new') {
+      return await newStep(data);
+    } else if (step.action === 'add') {
+      return await addStep(data, userStep);
+    } else if (step.action === 'edit') {
+      return await editStep(data, userStep);
     }
-    //添加步骤
-    async function addStep(data) {
+    //新建步骤
+    async function newStep(data) {
       try {
         const res = await COLTION.add({
           data: {
             user_open_id: data.user_open_id,
-            step: data.step,
-            step_Uid: data.step_Uid,
-            status_code: data.status_code,
-            attachments_Uid: data.attachments_Uid
+            steps: [{
+              step_Uid: data.step_Uid,
+              status_code: data.status_code
+            }]
           }
         })
 
         if (res._id) {
-          let record = await COLTION.doc(res._id).get();
-          const attachments = await getAttachment(data.code, [record.data.attachments_Uid]);
-          record.data = {
-            ...record.data,
-            attachments,
-            currentStep: true
-          };
-          return record.data;
+          return {
+            step_Uid: data.step_Uid,
+            status_code: data.status_code
+          }
+        }
+        return false;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    async function addStep(data, userStep) {
+      const _ = DB.command
+      try {
+        const res = await COLTION.update({
+          data: {
+            steps: _.push({
+              step_Uid: data.step_Uid,
+              status_code: data.status_code
+            })
+          }
+        })
+
+        if (!!res.stats.updated) {
+          return {
+            step_Uid: data.step_Uid,
+            status_code: data.status_code
+          }
         }
         return false;
       } catch (e) {
@@ -142,17 +164,28 @@ async function recordStep(data) {
       }
     }
     //编辑改步骤
-    async function editStep(step, data) {
+    async function editStep(data, userStep) {
       try {
-        const res = await COLTION.doc(step._id).update({
+        steps = userStep.data.steps.map(e => {
+          let item = { ...e
+          }
+          if (e.step_Uid === data.step_Uid) {
+            item = {
+              ...item,
+              status_code: data.status_code
+            }
+          }
+          return item
+        })
+        const res = await COLTION.doc(userStep._id).update({
           data: {
-            status_code: data.status_code
+            steps
           }
         });
 
-        if (res.stats.updated != undefined) {
+        if (!!res.stats.updated) {
           return {
-            ...step,
+            step_Uid: data.step_Uid,
             status_code: data.status_code
           }
         }
@@ -167,7 +200,7 @@ async function recordStep(data) {
           const res = DB.collection(data.code + '_event_steps').doc(_id).get();
           if (res.data && res.data.verifiers && res.data.verifiers.length > 0) {
             return 50;
-          } 
+          }
           return 100
         } catch (e) {
           console.log(e);
@@ -178,31 +211,52 @@ async function recordStep(data) {
     }
   }
   //获取附件
-  async function getAttachment(code, _id = []) {
-    const DB = cloud.database();
-    const _ = DB.command;
-    if (!_id.length) {
-      return [];
-    }
-    const res = await DB.collection(code + '_event_attachments').where({
-      _id: _.in(_id)
-    }).get()
-    if (res.data.length) {
-      return res.data[0].files;
-    }
-    return undefined;
-  }
+  // async function getAttachment(code, _id = []) {
+  //   const DB = cloud.database();
+  //   const _ = DB.command;
+  //   if (!_id.length) {
+  //     return [];
+  //   }
+  //   const res = await DB.collection(code + '_event_attachments').where({
+  //     _id: _.in(_id)
+  //   }).get()
+  //   if (res.data.length) {
+  //     return res.data[0].files;
+  //   }
+  //   return undefined;
+  // }
 
   async function checkStep(data) {
     const res = await COLTION.where({
-      user_open_id: data.user_open_id,
-      step_Uid: data.step_Uid
+      user_open_id: data.user_open_id
     }).get();
 
-    if (res.data.length > 0) {
-      return res.data[0]
+    let msg = {
+      action: 'new',
+      data: null
+    };
+
+    if (res.data.length) {
+      try {
+        res.data[0].steps.forEach(e => {
+          if (e.step_Uid === data.step_Uid) {
+            msg = {
+              action: 'edit',
+              data: res.data[0]
+            }
+            throw new Error();
+          } else {
+            msg = {
+              action: 'add',
+              data: res.data[0]
+            }
+          }
+        })
+      } catch (e) {
+
+      }
     }
-    return false;
+    return msg;
   }
 }
 

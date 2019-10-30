@@ -10,5 +10,12 @@ module.exports = {
     return cloud.call('queryUserEventDetail', {
       code
     });
-  } 
+  },
+  nextStep(code, step_Uid) {
+    return cloud.call('employeeAddStep', {
+      code,
+      step_Uid,
+      status_code: 50
+    })
+  }
 }
