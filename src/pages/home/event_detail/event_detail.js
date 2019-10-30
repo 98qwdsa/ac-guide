@@ -48,14 +48,13 @@ Page({
       wx.hideLoading();
     })
   },
- 
-  nextStep(e) {
+  nextStep: function (e) {
     wx.showLoading({
       mask: true
     })
-    const dataSet = e.currentTarget.dataset;
+    const dataSet = e.detail.currentTarget.dataset;
     service.nextStep(this.data.event_code, dataSet.uid).then(data => {
-      //wx.hideLoading();
+      wx.hideLoading();
       wx.showToast({
         icon: 'success',
         duration: 1200

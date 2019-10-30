@@ -1,0 +1,7 @@
+<!--src/pages/manage/addObserver/addObserver.wxml-->
+<view>
+  <text>已关注人的列表</text>
+</view>
+<view>
+  <text>未关注人的列表</text>
+</view>

@@ -107,7 +107,7 @@ async function recordStep(data) {
   }
   //添加一步到事件的用户表
   async function writeStep(userStep, data) {
-    data.status_code = await checkVerify(data, userStep.step_Uid);
+    data.status_code = await checkVerify(data, data.step_Uid);
     if (step.action === 'new') {
       return await newStep(data);
     } else if (step.action === 'add') {
@@ -177,7 +177,7 @@ async function recordStep(data) {
           }
           return item
         })
-        const res = await COLTION.doc(userStep._id).update({
+        const res = await COLTION.doc(userStep.data._id).update({
           data: {
             steps
           }

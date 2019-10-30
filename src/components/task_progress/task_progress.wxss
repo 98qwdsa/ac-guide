@@ -45,9 +45,7 @@
   font-size: 30rpx;
   font-family: SourceHanSansCN-Regular;
 }
-.item .right .sub text{
-  color: #fff;
-}
+
 .progress{
   display: flex;
   flex-direction: row;

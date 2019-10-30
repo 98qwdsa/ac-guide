@@ -19,14 +19,10 @@
   </view>
   <view class="item">
     <view class="left">
-      <text class="sub">{{addFollower == 'undefined' ? '关注者：':'关注：'}}</text>
+      <text class="sub">关注</text>
       <text class="sub">{{m1.getRoles(detail.followerName)}}</text>
     </view>
-    <view class="right">
-      <label wx:if="{{addFollower != 'undefined'}}" class="sub">
-        <text>添加</text>
-      </label>
-    </view>
+    <slot></slot>
   </view>
 </view>
 

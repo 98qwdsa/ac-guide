@@ -12,10 +12,10 @@ Component({
       type: Boolean,
       value: 'undefined'
     },
-    addFollower:{
-      type: Boolean,
-      value: 'undefined'
-    }
+    // addFollower:{
+    //   type: Boolean,
+    //   value: 'undefined'
+    // }
   },
 
   /**

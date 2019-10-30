@@ -15,9 +15,10 @@
         </view>
       </view>
 
-      <view class="last button" wx:if="{{item.user_step.status_code != 100 && index == curStep}}">
-        <button bindtap='nextStep' data-Uid="{{item._id}}" class="pull-right">完成</button>
+      <view class="last button" 
+        wx:if="{{item.user_step.status_code != 100 && index == curStep}}">
+        <button bindtap="onTap" bindcustomevent="myEventListener"
+         data-uid="{{item._id}}" class="pull-right">完成</button>
       </view>
-
     </view>
   </view>

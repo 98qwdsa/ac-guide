@@ -1,7 +1,8 @@
 <!--src/pages/index/user_event_steps/user_event_steps.wxml-->
 <view class="warp">
   <event-detail detail="{{eventDetail}}" finished="{{eventFinished}}"></event-detail>
-  <step-warp stepList="{{stepList}}" curStep="{{curStep}}"></step-warp>
+  <step-warp stepList="{{stepList}}" bindcustomevent="nextStep" curStep="{{curStep}}">
+ </step-warp>
 </view>
 
 

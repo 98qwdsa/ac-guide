@@ -25,7 +25,19 @@ module.exports = {
     return cloud.call('queryObserverEventDetail', {
       ...data
     });
-  }
+  },
+  editObserverEventDetail(data){
+    return cloud.call('editObserver',{
+      ...data
+    })
+  },
+  nextStep(code, step_Uid) {
+    return cloud.call('employeeAddStep', {
+      code,
+      step_Uid,
+      status_code: 50
+    })
+  },
   // getEventDetail(code) {
   //   return cloud.call('queryEventList', {
   //     code
@@ -36,12 +48,7 @@ module.exports = {
   //     code
   //   });
   // },
-  // getEventStepDetail(code, _id) {
-  //   return cloud.call('adminQueryEventSteps', {
-  //     code,
-  //     _id
-  //   });
-  // },
+
   // eventTrigger(data) {
   //   return cloud.call('adminDisableEvent', {
   //     code: data.code,

@@ -7,28 +7,15 @@ Page({
    */
   data: {
     currentTab: "tableft",
-    allUserList:[{
-    }],
-    addFollower: true,
-    attenUserList: [{
-        user: '张瑶Andy',
-        progress: 75,
-        cancel: true,
-        add: true,
-        followerName: ['杰尼龟', '皮卡丘', '哆啦A梦']
-      },
-      {
-        user: '颜文妆',
-        progress: 25,
-        cancel: true,
-        add: true,
-        followerName: ['大白', '皮卡丘']
-      }
-    ],
+    allUserList: [],
+    attenUserList: [],
     stepList: [],
     event_code: '',
     curStep: 0,
-    eventDetail: {}
+    eventDetail: {},
+    myGuide: true,
+    myAtten: true,
+    allUser: true
   },
 
   /**
@@ -44,25 +31,19 @@ Page({
   switchTab(e) {
     let currentTab = e.currentTarget.id;
     let event_code = this.data.event_code;
+    
     this.setData({
       currentTab
     });
-    if (currentTab == "tableft"){
-      this.setData({
-        stepList: [],
-        eventDetail:{}
-      });
+    if (currentTab == "tableft" && this.data.myGuide) {
       this.loadMyData(event_code || 'entry');
-    } else if (currentTab == "tabmiddle"){
-      this.setData({
-        attenUserList: []
-      });
-      this.loadObserver(event_code);
-    } else if (currentTab == "tabright"){
-      this.setData({
-        allUserList: []
-      });
+      this.data.myGuide = false;
+    } else if (currentTab == "tabmiddle" && this.data.myAtten) {
+      this.loadMyObserver(event_code);
+      this.data.myAtten = false;
+    } else if (currentTab == "tabright" && this.data.allUser) {
       this.loadAllUser(event_code);
+      this.data.allUser = false;
     }
   },
   loadMyData(event_code) {
@@ -101,6 +82,36 @@ Page({
       })
     })
   },
+  nextStep: function (e) {
+    wx.showLoading({
+      mask: true
+    })
+    const dataSet = e.detail.currentTarget.dataset;
+    service.nextStep(this.data.event_code, dataSet.uid).then(data => {
+      wx.hideLoading();
+      wx.showToast({
+        icon: 'success',
+        duration: 1200
+      })
+      if (data) {
+        const stepList = [...this.data.stepList]
+
+        let eventFinished = false;
+        let curStep = this.data.curStep;
+
+        stepList[curStep].user_step = data;
+        curStep += 1;
+        if (curStep == stepList.length) {
+          eventFinished = true;
+        }
+        this.setData({
+          eventFinished,
+          curStep,
+          stepList
+        })
+      }
+    })
+  },
   loadAllUser(event_code) {
     let data = {
       code: event_code
@@ -115,14 +126,9 @@ Page({
       });
       wx.hideLoading();
     }, (e) => {
-      wx.showToast({
-        title: e,
-        icon: 'success',
-        duration: 2000
-      })
     })
   },
-  loadObserver(event_code) {
+  loadMyObserver(event_code) {
     let data = {
       code: event_code
     };
@@ -131,6 +137,9 @@ Page({
     })
     service.getQueryObserverEventDetail(data).then(observer => {
       console.log("我关注的", observer);
+      this.setData({
+        attenUserList: observer.data
+      });
       wx.hideLoading();
     }, (e) => {
       wx.showToast({
@@ -140,7 +149,18 @@ Page({
       })
     })
   },
-
+  addObserver(e){
+    wx.navigateTo({
+      url: '../addObserver/addObserver',
+    })
+    let data = {
+    };
+    
+    // service.editObserverEventDetail(data).then(()=>{
+    //   console.log("已经添加了关注者",data);
+    // });
+    this.data.myAtten = true;
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

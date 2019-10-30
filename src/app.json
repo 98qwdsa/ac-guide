@@ -12,7 +12,8 @@
     "pages/manage/rolePart/rolePart",
     "pages/manage/addTaskStep/addTaskStep",
     "pages/manage/taskAdd/taskAdd",
-    "pages/manage/taskProgress/taskProgress"
+    "pages/manage/taskProgress/taskProgress",
+    "pages/manage/addObserver/addObserver"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -7,20 +7,31 @@
   </view>
 
   <view class='content-wrapper' wx:if='{{currentTab === "tableft"}}'>
-    <view class="task_progress_item">
-      <event-detail detail="{{eventDetail}}" finished="{{eventFinished}}"></event-detail>
-      <step-warp stepList="{{stepList}}" curStep="{{curStep}}"></step-warp>
-    </view>
+    <block wx:if="{{stepList.length}}">
+      <view class="task_progress_item">
+        <event-detail detail="{{eventDetail}}" finished="{{eventFinished}}"></event-detail>
+        <step-warp stepList="{{stepList}}" curStep="{{curStep}}"
+         bindcustomevent="nextStep"></step-warp>
+      </view>
+    </block>
   </view>
   <view class='content-wrapper' wx:if='{{currentTab === "tabmiddle"}}'>
-    <view class="task_progress_item" wx:for="{{attenUserList}}"  wx:key="{{index}}">
-      <taskProgress detail='{{item}}' cancel = '{{item.cancel}}'></taskProgress>
-    </view>
+    <block wx:if="{{attenUserList.length}}">
+      <view class="task_progress_item" wx:for="{{attenUserList}}"  wx:key="{{index}}">
+        <taskProgress detail='{{item}}' cancel = '{{item.cancel}}'></taskProgress>
+      </view>
+    </block>
   </view>
   <view class='content-wrapper' wx:if='{{currentTab === "tabright"}}'>
     <block wx:if="{{allUserList.length}}">
       <view class="task_progress_item" wx:for="{{allUserList}}"  wx:key="{{index}}">
-        <taskProgress detail='{{item}}' addFollower='{{addFollower}}'></taskProgress>
+        <taskProgress detail='{{item}}'>
+          <view class="add" bindtap="addObserver">
+            <label>
+              <text>添加</text>
+            </label>
+          </view>
+        </taskProgress>
       </view>
     </block>
   </view>
