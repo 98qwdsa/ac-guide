@@ -95,18 +95,19 @@ async function checkRole() {
     if (curUserInfo.result.code != '0000') {
       return curUserInfo.result
     }
-    if (curUserInfo.result.data.role.includes('HR') && curUserInfo.result.data.role.includes('PM')) {
+    if (curUserInfo.result.data.role.includes('HR') || curUserInfo.result.data.role.includes('PM')) {
       return {
-        code: '2000',
-        msg: 'role mismatch Function: queryMultipleUserEventDetail',
+        code: '0000',
+        msg: '',
         data: null
       }
     }
     return {
-      code: '0000',
-      msg: '',
+      code: '2000',
+      msg: 'role mismatch Function: queryMultipleUserEventDetail',
       data: null
     }
+
   } catch (e) {
     return {
       code: '3002',

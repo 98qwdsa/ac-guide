@@ -98,19 +98,20 @@ async function checkRole() {
     })
     if (curUserInfo.result.data.role.includes('HR')) {
       return {
-        msg: 'role mismatch Function: queryObserverEventDetail',
-        code: '2000',
+        msg: '',
+        code: '0000',
         data: null
       }
     }
     return {
-      msg: '',
-      code: '0000',
+      msg: 'role mismatch Function: queryObserverEventDetail',
+      code: '2000',
       data: null
     }
+
   } catch (e) {
     return {
-      cpde: '3000',
+      code: '3000',
       msg: e,
       daa: null
     }

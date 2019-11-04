@@ -169,7 +169,7 @@ async function checkObserverPermision(data) {
     msg: '',
     data: null
   }
-
+  //检查观察者是否为 观察者或者发布者
   async function checkPermision(open_id) {
     //角色验证
     try {
@@ -179,19 +179,21 @@ async function checkObserverPermision(data) {
           open_id
         }
       })
-      if (curUserInfo.result.data === null || !curUserInfo.result.data.role.includes('PM') || !curUserInfo.result.data.role.includes('HR')) {
+      if (curUserInfo.result.data && (curUserInfo.result.data.role.includes('PM') || curUserInfo.result.data.role.includes('HR'))) {
         return {
-          code: '2004',
-          msg: 'permission denied',
+          code: '0000',
+          msg: '',
           data: null
         }
       }
 
       return {
-        code: '0000',
-        msg: '',
+        code: '2004',
+        msg: 'permission denied',
         data: null
       }
+
+
     } catch (e) {
       return {
         code: '3003',
@@ -249,11 +251,11 @@ async function createObserverRecord(data) {
     };
   }
   try {
-    const newObserverOpenIds = data.action === 'observe' ? [data.observer_open_i] : data.observer_open_i;
+    const newObserverOpenIds = data.action === 'observe' ? [data.observer_open_id] : data.observer_open_id;
     const res = await DB.collection(data.code + '_event_observeds').add({
       data: {
         observed_open_id: data.observed_open_id,
-        observer_open_i: newObserverOpenIds
+        observer_open_id: newObserverOpenIds
       }
     });
     if (!res._id) {

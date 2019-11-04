@@ -4,7 +4,5 @@
     "step-warp": "../../../components/step_warp/step_warp",
     "event-detail": "../../../components/event_item/event_item"
   },
-  "navigationBarTitleText": "任务进度"
-  
-  
+  "navigationBarTitleText": ""
 }

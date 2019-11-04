@@ -26,11 +26,12 @@ module.exports = {
       ...data
     });
   },
-  editObserverEventDetail(data){
+  editObserverForUser(data){
     return cloud.call('editObserver',{
       ...data
     })
   },
+
   nextStep(code, step_Uid) {
     return cloud.call('employeeAddStep', {
       code,
@@ -38,6 +39,16 @@ module.exports = {
       status_code: 50
     })
   },
+  getAllObserver(){
+    return cloud.call('queryAllObserver', {
+    })
+  },
+  getUserObserver(data){
+    return cloud.call('queryUserObserver',{
+      ...data
+    })
+  }
+  
   // getEventDetail(code) {
   //   return cloud.call('queryEventList', {
   //     code

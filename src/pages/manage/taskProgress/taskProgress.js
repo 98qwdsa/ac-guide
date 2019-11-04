@@ -13,10 +13,11 @@ Page({
     event_code: '',
     curStep: 0,
     eventDetail: {},
-    myGuide: true,
-    myAtten: true,
-    allUser: true
+    observerList: []
   },
+  entryLoad: true,
+  myAttenLoad: true,
+  allUserLoad: true,
 
   /**
    * 生命周期函数--监听页面加载
@@ -31,19 +32,19 @@ Page({
   switchTab(e) {
     let currentTab = e.currentTarget.id;
     let event_code = this.data.event_code;
-    
+
     this.setData({
       currentTab
     });
-    if (currentTab == "tableft" && this.data.myGuide) {
+    if (currentTab == "tableft" && this.entryLoad) {
       this.loadMyData(event_code || 'entry');
-      this.data.myGuide = false;
-    } else if (currentTab == "tabmiddle" && this.data.myAtten) {
+      this.entryLoad = false;
+    } else if (currentTab == "tabmiddle" && this.myAttenLoad) {
       this.loadMyObserver(event_code);
-      this.data.myAtten = false;
-    } else if (currentTab == "tabright" && this.data.allUser) {
-      this.loadAllUser(event_code);
-      this.data.allUser = false;
+      this.myAttenLoad = false;
+    } else if (currentTab == "tabright" && this.allUserLoad) {
+      this.loadAllUserForEvent(event_code);
+      this.allUserLoad = false;
     }
   },
   loadMyData(event_code) {
@@ -71,10 +72,8 @@ Page({
         event_code,
         eventDetail: data.detail
       });
-      //this.initSwiperHeight();
-
       wx.hideLoading();
-    },(e) => {
+    }, (e) => {
       wx.showToast({
         title: e,
         icon: 'success',
@@ -82,7 +81,7 @@ Page({
       })
     })
   },
-  nextStep: function (e) {
+  nextStep: function(e) {
     wx.showLoading({
       mask: true
     })
@@ -111,22 +110,57 @@ Page({
         })
       }
     })
+    this.allUserLoad = true;
   },
-  loadAllUser(event_code) {
-    let data = {
-      code: event_code
-    };
+  loadAllUserForEvent(event_code) {
     wx.showLoading({
       mask: true,
     })
-    service.getQueryAllUserEventDetail(data).then(allUser => {
-      console.log("所有参与者", allUser);
-      this.setData({
+    service.getQueryAllUserEventDetail({
+      code: event_code
+    }).then(allUser => {
+      const _this = this;
+      //this.loadUserObserver(allUser.data[0].open_id);
+      wx.hideLoading();
+      _this.setData({
         allUserList: allUser.data
       });
-      wx.hideLoading();
-    }, (e) => {
-    })
+      allUser.data.forEach((e, key) => {
+        this.loadUserObserver(e.open_id).then(followerList => {
+          let newallUserList = [...allUser.data]
+
+          newallUserList.splice(key, 1, {
+            ...newallUserList[key],
+            followerList: followerList.map(e => e.name)
+          })
+          this.setData({
+            allUserList: newallUserList
+          })
+        })
+      })
+      // let newallUserList = [];
+      // let i = 0;
+      // function getObserver(i, newallUserList) {
+      //   let user = allUser.data[i]
+      //   if (user) {
+      //     _this.loadUserObserver(user.open_id).then(followerList => {
+      //       newallUserList.push({
+      //         ...user,
+      //         followerList: followerList.map(e => e.name)
+      //       })
+      //       i++;
+      //       getObserver(i, newallUserList);
+      //     })
+      //   } else {
+      //     i = 0;
+      //     _this.setData({
+      //       allUserList: newallUserList
+      //     });
+      //   }
+      // }
+      // getObserver(i, newallUserList);
+
+    }, (e) => {})
   },
   loadMyObserver(event_code) {
     let data = {
@@ -149,18 +183,28 @@ Page({
       })
     })
   },
-  addObserver(e){
+  addObserverForUser(e) {
     wx.navigateTo({
-      url: '../addObserver/addObserver',
+      url: '../addObserver/addObserver?code=' + this.data.event_code +
+        '&&observed=' + e.currentTarget.dataset.observed,
     })
-    let data = {
-    };
-    
-    // service.editObserverEventDetail(data).then(()=>{
-    //   console.log("已经添加了关注者",data);
-    // });
-    this.data.myAtten = true;
+
+    this.myAttenLoad = true;
   },
+  loadUserObserver(observed_open_id) {
+    return new Promise((reslove, reject) => {
+      service.getUserObserver({
+        code: this.data.event_code,
+        observered_open_id: observed_open_id
+      }).then(observerList => {
+        reslove(observerList);
+        // this.setData({
+        //   observerList
+        // });
+      });
+    })
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

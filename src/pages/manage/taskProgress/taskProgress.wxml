@@ -26,7 +26,7 @@
     <block wx:if="{{allUserList.length}}">
       <view class="task_progress_item" wx:for="{{allUserList}}"  wx:key="{{index}}">
         <taskProgress detail='{{item}}'>
-          <view class="add" bindtap="addObserver">
+          <view class="add" bindtap="addObserverForUser" data-observed="{{item.open_id}}">
             <label>
               <text>添加</text>
             </label>
@@ -34,5 +34,10 @@
         </taskProgress>
       </view>
     </block>
+
+    <view wx:for='{{observerList}}'>
+      <text>{{item.name}}</text>
+    </view>
+
   </view>
 </view>

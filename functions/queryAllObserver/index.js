@@ -1,12 +1,11 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
 
-cloud.init();
+cloud.init()
 
 function checkParamFormat(data) {
   const wxContext = cloud.getWXContext();
   let {
-    code,
     open_id,
     page
   } = data
@@ -20,16 +19,6 @@ function checkParamFormat(data) {
     msg: [],
     data: null
   }
-  if (code === undefined) {
-    res.code = '1000';
-    res.msg.push('code:string')
-  } else {
-    if (typeof(code) != 'string') {
-      res.code = '1001';
-      res.msg.push('code:string')
-    }
-  }
-
   if (open_id === undefined) {
     open_id = wxContext.OPENID;
   } else {
@@ -77,12 +66,11 @@ function checkParamFormat(data) {
     res.msg = 'param format ok';
     let newPage = {};
     for (let i in defaultPageConf) {
-      if (page[i]) {
+      if (page[i] != undefined) {
         newPage[i] = page[i]
       }
     }
     res.data = {
-      code,
       open_id,
       page: newPage
     }
@@ -90,52 +78,60 @@ function checkParamFormat(data) {
   return res;
 }
 
-async function getObserverUserOpenId(data) {
-  try {
-    const DB = cloud.database();
-    const _ = DB.command;
-    const res = await DB.collection(data.code + '_event_observeds').where({
-      observer_open_id: _.eq(data.open_id)
-    }).get()
-    // if (res.data.length < 1) {
-    //   return {
-    //     code: '2000',
-    //     msg: 'not records',
-    //     data: null
-    //   }
-    // }
-    return {
-      code: '0000',
-      msg: res.errMsg,
-      data: res.data[0]
-    }
-  } catch (e) {
-    return {
-      code: '3000',
-      msg: e,
-      data: null
-    }
-  }
-}
 //角色验证
 async function checkRole() {
   try {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
     })
-    if (!curUserInfo.result.data.role.includes('PM')) {
+    if (curUserInfo.result.data.role.includes('HR')) {
       return {
-        msg: 'role mismatch Function: queryObserverEventDetail',
+        msg: '',
+        code: '0000',
+        data: null
+      }
+    }
+    return {
+      msg: 'role mismatch Function: queryAllObserver',
+      code: '2000',
+      data: null
+    }
+  } catch (e) {
+    return {
+      code: '3000',
+      msg: e,
+      daa: null
+    }
+  }
+}
+
+// 获取所有的观察者
+async function getUserOpenId(data) {
+  const DB = cloud.database();
+  const _ = DB.command;
+  const COLION = DB.collection('user');
+
+  const limit = data.page.size > 20 ? 20 : data.page.size;
+  const skip = data.page.current_num * limit;
+  let records = {}
+  try {
+    const res = await COLION.skip(skip).limit(limit).where({
+      role: _.in(['HR', 'PM'])
+    }).get();
+    if (res.data.length > 0) {
+      records = {
+        code: '0000',
+        msg: '',
+        data: res.data
+      }
+    } else {
+      return {
+        msg: 'there is no records of this event',
         code: '2001',
         data: null
       }
     }
 
-    return {
-      code: '0000',
-      msg: '',
-      data: null
-    }
   } catch (e) {
     return {
       code: '3001',
@@ -143,49 +139,21 @@ async function checkRole() {
       data: null
     }
   }
-}
 
-async function getObserverEventDetail(param, openIdList) {
-  const pageStart = param.page.current_num * param.page.size;
-  const qyeryOpenIdList = openIdList.slice(pageStart, pageStart + param.page.size);
-  try {
-    const res = await cloud.callFunction({
-      name: 'queryMultipleUserEventDetail',
-      data: {
-        code: param.code,
-        user_open_id_list: qyeryOpenIdList,
-      }
-    });
-    if (res.result.length < 1) {
-      return {
-        code: '2002',
-        msg: '',
-        data: null
-      }
-    }
+  if (records.code === '0000') {
     return {
       code: '0000',
       msg: '',
-      data: {
-        data: res.result,
-        page_info: {
-          ...param.page,
-          count: openIdList.length
-        }
-      }
-    };
-  } catch (e) {
-    return {
-      code: '3002',
-      msg: e,
-      data: null
+      data: records.data
     }
   }
 }
+
+
+
 // 云函数入口函数
 /**
  *  {
- *    code:'',// 事件code
  *    open_id:'', //用户open_id  默认为当前访问用的open_id
  *    page:{
  *      size:'', 每页数据量
@@ -194,20 +162,14 @@ async function getObserverEventDetail(param, openIdList) {
  *  }
  **/
 exports.main = async(event, context) => {
-
-  const param = await checkParamFormat(event);
+  const param = checkParamFormat(event);
   if (param.code !== '0000') {
-    return param
+    return param;
   }
-  //角色验证
+  // 角色验证
   const role = await checkRole();
   if (role.code !== '0000') {
     return role
   }
-
-  const observerUserOpenId = await getObserverUserOpenId(param.data);
-  if (observerUserOpenId.code !== '0000') {
-    return observerUserOpenId;
-  }
-  return await getObserverEventDetail(param.data, observerUserOpenId.data.observed_open_id)
+  return await getUserOpenId(param.data)
 }
