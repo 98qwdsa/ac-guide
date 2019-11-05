@@ -6,11 +6,11 @@
       <text>{{detail.name}}</text>
       <text>({{m1.getProgress(detail.event_steps.steps)}}%)</text>
     </view>
-    <view class="right">
+    <!-- <view class="right">
      <label wx:if="{{cancel != 'undefined'}}">
         <text>取消关注</text>
       </label>
-    </view>
+    </view> -->
   </view>
   <view class="progress">
     <block wx:for="{{detail.event_steps.steps}}" wx:key="index">

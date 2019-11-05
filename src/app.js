@@ -37,8 +37,13 @@ App({
   },
   globalData: {
     userInfo: null,
-    roles:'', // 可参与角色页面的角色数组
+    roles: '', // 可参与角色页面的角色数组
     stepIndex: 0, //新增、修改任务步骤的下标
-    stepName: '' //新增、修改任务步骤的名字
+    stepName: '', //新增、修改任务步骤的名字
+    'managerHomeTaskManagerTaskProgess': {
+      left: true,
+      mid: true,
+      right: true
+    }
   }
 })

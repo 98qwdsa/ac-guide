@@ -1,5 +1,6 @@
 // src/pages/manage/taskProgress/taskProgress.js
 const service = require('../service.js');
+const reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
 Page({
 
   /**
@@ -15,9 +16,6 @@ Page({
     eventDetail: {},
     observerList: []
   },
-  entryLoad: true,
-  myAttenLoad: true,
-  allUserLoad: true,
 
   /**
    * 生命周期函数--监听页面加载
@@ -27,7 +25,7 @@ Page({
       title: options.eventname
     });
     this.data.event_code = options.code;
-    this.loadMyData(options.code || 'entry');
+    this.loadMyData(options.code);
   },
   switchTab(e) {
     let currentTab = e.currentTarget.id;
@@ -36,18 +34,18 @@ Page({
     this.setData({
       currentTab
     });
-    if (currentTab == "tableft" && this.entryLoad) {
-      this.loadMyData(event_code || 'entry');
-      this.entryLoad = false;
-    } else if (currentTab == "tabmiddle" && this.myAttenLoad) {
+    if (currentTab == "tableft") {
+      this.loadMyData(event_code);
+    } else if (currentTab == "tabmiddle") {
       this.loadMyObserver(event_code);
-      this.myAttenLoad = false;
-    } else if (currentTab == "tabright" && this.allUserLoad) {
+    } else if (currentTab == "tabright") {
       this.loadAllUserForEvent(event_code);
-      this.allUserLoad = false;
     }
   },
   loadMyData(event_code) {
+    if (reloadTrigger.left === false) {
+      return;
+    }
     wx.showLoading({
       mask: true,
     })
@@ -73,12 +71,9 @@ Page({
         eventDetail: data.detail
       });
       wx.hideLoading();
+      reloadTrigger.left = false;
     }, (e) => {
-      wx.showToast({
-        title: e,
-        icon: 'success',
-        duration: 2000
-      })
+
     })
   },
   nextStep: function(e) {
@@ -110,24 +105,25 @@ Page({
         })
       }
     })
-    this.allUserLoad = true;
   },
   loadAllUserForEvent(event_code) {
+    if (reloadTrigger.mid === false) {
+      return;
+    }
     wx.showLoading({
       mask: true,
     })
     service.getQueryAllUserEventDetail({
       code: event_code
     }).then(allUser => {
-      const _this = this;
-      //this.loadUserObserver(allUser.data[0].open_id);
       wx.hideLoading();
-      _this.setData({
+      reloadTrigger.mid = false
+      this.setData({
         allUserList: allUser.data
       });
       allUser.data.forEach((e, key) => {
         this.loadUserObserver(e.open_id).then(followerList => {
-          let newallUserList = [...allUser.data]
+          let newallUserList = [...this.data.allUserList]
 
           newallUserList.splice(key, 1, {
             ...newallUserList[key],
@@ -163,30 +159,52 @@ Page({
     }, (e) => {})
   },
   loadMyObserver(event_code) {
-    let data = {
-      code: event_code
-    };
+    if (reloadTrigger.right === false) {
+      return;
+    }
     wx.showLoading({
       mask: true,
     })
-    service.getQueryObserverEventDetail(data).then(observer => {
-      console.log("我关注的", observer);
+    service.getQueryObserverEventDetail({
+      code: event_code
+    }).then(observer => {
       this.setData({
         attenUserList: observer.data
       });
       wx.hideLoading();
+      reloadTrigger.right = false;
+      let _this = this;
+      let newAttenUserList = [];
+      let i = 0;
+
+      function getObserver(i, newAttenUserList) {
+        let user = observer.data[i]
+        if (user) {
+          _this.loadUserObserver(user.open_id).then(followerList => {
+            newAttenUserList.push({
+              ...user,
+              followerList: followerList.map(e => e.name)
+            })
+            i++;
+            getObserver(i, newAttenUserList);
+          })
+        } else {
+          i = 0;
+          _this.setData({
+            attenUserList: newAttenUserList
+          })
+        }
+      }
+      getObserver(i, newAttenUserList);
+
     }, (e) => {
-      wx.showToast({
-        title: e,
-        icon: 'success',
-        duration: 2000
-      })
+      console.log(e);
     })
   },
   addObserverForUser(e) {
     wx.navigateTo({
       url: '../addObserver/addObserver?code=' + this.data.event_code +
-        '&&observed=' + e.currentTarget.dataset.observed,
+        '&observed=' + e.currentTarget.dataset.observed,
     })
 
     this.myAttenLoad = true;
@@ -198,12 +216,41 @@ Page({
         observered_open_id: observed_open_id
       }).then(observerList => {
         reslove(observerList);
-        // this.setData({
-        //   observerList
-        // });
       });
     })
   },
+  // cancelObserverForMyself(e) {
+  //   wx.showLoading({
+  //     title: '取消关注中...',
+  //     mask: true
+  //   })
+  //   let data = {
+  //     code: this.data.event_code,
+  //     observer_open_id: 'OPENID',
+  //     observed_open_id: e.currentTarget.dataset.observed,
+  //     action: 'cancel'
+  //   };
+  //   service.editObserverForUser(data).then(() => {
+  //     wx.hideLoading();
+  //     let index = undefined;
+  //     let newAttenUserList = this.data.attenUserList;
+  //     try {
+  //       newAttenUserList.forEach((item, key) => {
+  //         if (item.open_id === e.currentTarget.dataSet.item.open_id) {
+  //           index = key;
+  //           throw new Error(key)
+  //         }
+  //       })
+  //     } catch (e) {}
+  //     if (index != undefined) {
+  //       newAttenUserList.splice(index, 1);
+  //       this.setData({
+  //         attenUserList: newAttenUserList
+  //       })
+  //     }
+  //   })
+  //   this.allUserLoad = true;
+  // },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -216,6 +263,13 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
+    if (reloadTrigger.mid === true && this.data.currentTab === 'tabmiddle') {
+      this.loadMyObserver(this.data.event_code);
+    }
+    if (reloadTrigger.right === true && this.data.currentTab === 'tabright') {
+      this.loadAllUserForEvent(this.data.event_code);
+    }
+
 
   },
 

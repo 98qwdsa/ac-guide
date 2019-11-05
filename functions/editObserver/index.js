@@ -5,6 +5,7 @@ cloud.init();
 const DB = cloud.database();
 //检查参数
 function checkParamFormat(data) {
+  const wxContext = cloud.getWXContext();
   let {
     code,
     observer_open_id,
@@ -42,6 +43,8 @@ function checkParamFormat(data) {
   if (observer_open_id === undefined) {
     res.code = '1000';
     res.msg.push('observer_open_id:' + action === 'manage' ? 'array' : 'string');
+  } else if (observer_open_id === 'OPENID'){
+    observer_open_id = wxContext.OPENID;
   } else {
     if (action === 'cancel' || action === 'observe') {
       if (typeof(observer_open_id) != 'string' || observer_open_id === '') {

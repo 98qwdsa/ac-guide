@@ -64,15 +64,12 @@ function checkParamFormat(data) {
 
   if (res.code === '0000') {
     res.msg = 'param format ok';
-    let newPage = {};
-    for (let i in defaultPageConf) {
-      if (page[i] != undefined) {
-        newPage[i] = page[i]
-      }
-    }
     res.data = {
       open_id,
-      page: newPage
+      page: {
+        ...defaultPageConf,
+        ...page
+      }
     }
   }
   return res;

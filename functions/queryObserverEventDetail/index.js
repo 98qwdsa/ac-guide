@@ -75,16 +75,13 @@ function checkParamFormat(data) {
 
   if (res.code === '0000') {
     res.msg = 'param format ok';
-    let newPage = {};
-    for (let i in defaultPageConf) {
-      if (page[i]) {
-        newPage[i] = page[i]
-      }
-    }
     res.data = {
       code,
       open_id,
-      page: newPage
+      page: {
+        ...defaultPageConf,
+        ...page
+      }
     }
   }
   return res;
@@ -95,7 +92,7 @@ async function getObserverUserOpenId(data) {
     const DB = cloud.database();
     const _ = DB.command;
     const res = await DB.collection(data.code + '_event_observeds').where({
-      observer_open_id: _.eq(data.open_id)
+      observer_open_id: _.in([data.open_id])
     }).get()
     // if (res.data.length < 1) {
     //   return {
@@ -107,7 +104,7 @@ async function getObserverUserOpenId(data) {
     return {
       code: '0000',
       msg: res.errMsg,
-      data: res.data[0]
+      data: res.data.map(e => e.observed_open_id)
     }
   } catch (e) {
     return {
@@ -209,5 +206,5 @@ exports.main = async(event, context) => {
   if (observerUserOpenId.code !== '0000') {
     return observerUserOpenId;
   }
-  return await getObserverEventDetail(param.data, observerUserOpenId.data.observed_open_id)
+  return await getObserverEventDetail(param.data, observerUserOpenId.data)
 }

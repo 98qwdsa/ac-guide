@@ -75,16 +75,13 @@ function checkParamFormat(data) {
 
   if (res.code === '0000') {
     res.msg = 'param format ok';
-    let newPage = {};
-    for (let i in defaultPageConf) {
-      if (page[i] != undefined) {
-        newPage[i] = page[i]
-      }
-    }
     res.data = {
       code,
       open_id,
-      page: newPage
+      page: {
+        ...defaultPageConf,
+        ...page
+      }
     }
   }
   return res;
@@ -104,7 +101,7 @@ async function checkRole() {
       }
     }
     return {
-      msg: 'role mismatch Function: queryObserverEventDetail',
+      msg: 'role mismatch Function: queryAllUserEventDetail',
       code: '2000',
       data: null
     }
@@ -146,7 +143,6 @@ async function getEventUserOpenId(data) {
         data: null
       }
     }
-
   } catch (e) {
     return {
       code: '3001',

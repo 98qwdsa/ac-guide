@@ -1,17 +1,19 @@
 <!--src/pages/manage/addObserver/addObserver.wxml-->
-<view>
-  <text>已关注人的列表</text>
-  <view wx:for="{{observerList}}" wx:key="{{index}}">
-    <text>{{item.name}}</text>
-    <button bindtap="cancleObserve" data-item="{{item}}" >取消关注</button>
+<view wx:if="{{userList.length}}">
+  <view>
+    <text>已关注人的列表</text>
+    <view wx:for="{{observerList}}" wx:key="{{index}}">
+      <text>{{item.name}}</text>
+      <button bindtap="cancleObserve" data-item="{{item}}" >取消关注</button>
+    </view>
   </view>
-</view>
 
-<view>
-  <text>所有用户的列表</text>
-  <view wx:for="{{userList}}" wx:key="{{index}}">
-    <text>{{item.name}}</text>
-    <button bindtap="addObserve" data-observer="{{item}}" wx:if="{{ass.fn(observerList,item.open_id)}}">添加</button>
+  <view>
+    <text>所有用户的列表</text>
+    <view wx:for="{{userList}}" wx:key="{{index}}">
+      <text>{{item.name}}</text>
+      <button bindtap="addObserve" data-observer="{{item}}" wx:if="{{ass.fn(observerList,item.open_id)}}">添加</button>
+    </view>
   </view>
 </view>
 

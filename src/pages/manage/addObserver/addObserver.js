@@ -1,5 +1,6 @@
 // src/pages/manage/addObserver/addObserver.js
 const service = require('../service.js');
+const reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
 
 Page({
 
@@ -24,10 +25,15 @@ Page({
     this.loadUserObserver();
   },
   loadAllObserver() {
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
     service.getAllObserver().then(res => {
       this.setData({
         userList: res
       });
+      wx.hideLoading();
     });
   },
   addObserve(e) {
@@ -38,6 +44,10 @@ Page({
       observed_open_id: this.observed_open_id,
       action: 'observe'
     };
+    wx.showLoading({
+      title: '添加关注中...',
+      mask: true
+    })
     service.editObserverForUser(data).then(() => {
       this.setData({
         observerList: [...this.data.observerList, {
@@ -45,6 +55,9 @@ Page({
           open_id: observer.open_id
         }]
       })
+      reloadTrigger.mid = true;
+      reloadTrigger.right = true;
+      wx.hideLoading();
     });
   },
   cancleObserve(e) {
@@ -54,6 +67,10 @@ Page({
       observed_open_id: this.observed_open_id,
       action: 'cancel'
     };
+    wx.showLoading({
+      title: '取消关注中...',
+      mask: true
+    })
     service.editObserverForUser(data).then(() => {
       let index = undefined;
       let newObserverList = [...this.data.observerList];
@@ -71,6 +88,9 @@ Page({
           observerList: newObserverList
         })
       }
+      reloadTrigger.mid = true;
+      reloadTrigger.right = true;
+      wx.hideLoading();
     });
   },
   loadUserObserver() {
@@ -81,6 +101,7 @@ Page({
       this.setData({
         observerList
       });
+      wx.hideLoading();
     });
   },
 

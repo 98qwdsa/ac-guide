@@ -1,9 +1,11 @@
 /* src/pages/manage/taskProgress/taskProgress.wxss */
-page{
+
+page {
   height: 100%;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
-.container{
+
+.container {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -12,7 +14,8 @@ page{
   margin: 0;
   padding: 0;
 }
-.tab-wrapper{
+
+.tab-wrapper {
   position: fixed;
   z-index: 10;
   display: flex;
@@ -24,7 +27,7 @@ page{
   border-bottom: 1px solid #e8e8e8;
 }
 
-.tab-left,.tab-middle, .tab-right{
+.tab-left, .tab-middle, .tab-right {
   flex: 1;
   font-size: 32rpx;
   color: #000;
@@ -32,30 +35,47 @@ page{
   text-align: center;
 }
 
-.tab-active{
-  border-bottom: 2px solid  rgb(221, 70, 209);
+.tab-active {
+  border-bottom: 2px solid rgb(221, 70, 209);
 }
 
-.content-wrapper{
+.content-wrapper {
   width: 95%;
   flex: 1;
   margin-top: 100rpx;
 }
 
-.task_progress_item{
+.task_progress_item {
   margin-top: 20rpx;
 }
-.content-wrapper .add{
+
+.content-wrapper .add {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 90rpx;
   height: 38rpx;
   border-radius: 18rpx;
-  background-image: linear-gradient(-90deg, #7E46DD 0%, #DD60B3 100%);
+  background-image: linear-gradient(-90deg, #7e46dd 0%, #dd60b3 100%);
   margin-top: 10rpx;
   margin-left: 560rpx;
   color: #fff;
   font-size: 25rpx;
   font-family: SourceHanSansCN-Regular;
+}
+
+.content-wrapper .cancel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150rpx;
+  height: 40rpx;
+  border-radius: 18rpx;
+  background-image: linear-gradient(-90deg, #7e46dd 0%, #dd60b3 100%);
+  margin-top: 10rpx;
+  margin-left: 520rpx;
+  color: #fff;
+  font-size: 25rpx;
+  font-family: SourceHanSansCN-Regular;
+  z-index: 10;
 }

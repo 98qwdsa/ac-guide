@@ -10,10 +10,10 @@ function checkParamFormat(data) {
     observered_open_id
   } = data
   //初始化页面信息
-  const defaultPageConf = {
-    size: 10,
-    current_num: 0
-  }
+  // const defaultPageConf = {
+  //   size: 10,
+  //   current_num: 0
+  // }
   const res = {
     code: '0000',
     msg: [],
