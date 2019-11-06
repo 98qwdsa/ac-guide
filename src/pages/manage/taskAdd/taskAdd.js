@@ -35,20 +35,21 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    if (app.globalData.roles.length) {
-      detail.role = app.globalData.roles;
-      app.globalData.roles = [];
+    let taskAdd = getApp().globalData.managerHomeTaskManagerTaskAdd;
+    if (taskAdd.roles.length) {
+      detail.role = taskAdd.roles;
+      taskAdd.roles = [];
     }
-    if (app.globalData.stepIndex) {
-      if (app.globalData.stepName) {
-        detail.steps[app.globalData.stepIndex] = app.globalData.stepName;
-        app.globalData.stepName = '';
-        app.globalData.stepIndex = 0;
+    if (taskAdd.stepIndex) {
+      if (taskAdd.stepName) {
+        detail.steps[taskAdd.stepIndex] = taskAdd.stepName;
+        taskAdd.stepName = '';
+        taskAdd.stepIndex = 0;
       }
     } else {
-      if (app.globalData.stepName) {
-        detail.steps.push(app.globalData.stepName);
-        app.globalData.stepName = '';
+      if (taskAdd.stepName) {
+        detail.steps.push(taskAdd.stepName);
+        taskAdd.stepName = '';
       }
     }
     this.setData({
@@ -56,7 +57,7 @@ Page({
     })
   },
   submit: function(e) {
-    // console.log('form发生了submit事件，携带的数据:', e.detail.value);
+    console.log('form发生了submit事件，携带的数据:', e.detail.value);
     if (e.detail.value.code == "" || e.detail.value.name == "" ) {
       wx.showModal({
         title: '提示',

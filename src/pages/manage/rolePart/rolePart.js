@@ -1,4 +1,4 @@
-const app = getApp();
+let taskAdd = getApp().globalData.managerHomeTaskManagerTaskAdd;
 Page({
 
   /**
@@ -27,7 +27,7 @@ Page({
     });
   },
   checkboxChange: function (e) {
-    app.globalData.roles = e.detail.value;
+    taskAdd.roles = e.detail.value;
   },
   submit: function(e){
     wx.navigateBack({

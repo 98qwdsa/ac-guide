@@ -19,8 +19,8 @@
               <checkbox value="{{item}}" checked="{{true}}" />
             </label>
           </checkbox-group>
-          <block wx:if="{{m1.getRoles(eventDetail.role)}}">
-            <text class="text_role">{{m1.getRoles(eventDetail.role)}}</text>
+          <block wx:if="{{m1.formatArray(eventDetail.role)}}">
+            <text class="text_role">{{m1.formatArray(eventDetail.role)}}</text>
           </block>
           <block wx:else>
             <text>可参与角色</text>

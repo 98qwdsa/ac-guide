@@ -16,8 +16,8 @@
     </block>
   </view>
   <view class='content-wrapper' wx:if='{{currentTab === "tabmiddle"}}'>
-    <block wx:if="{{attenUserList.length}}">
-      <view class="task_progress_item" wx:for="{{attenUserList}}"  wx:key="{{index}}">
+    <block wx:if="{{myObserverList.length}}">
+      <view class="task_progress_item" wx:for="{{myObserverList}}"  wx:key="{{index}}">
         <taskProgress detail='{{item}}' cancel = '{{item.cancel}}'>
           <view class="cancel" bindtap="cancelObserverForMyself" data-observed="{{item.open_id}}">
             <label>

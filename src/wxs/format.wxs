@@ -1,4 +1,4 @@
-var getRoles = function (array) {
+var formatArray = function (array) {
   if (array == undefined) {
     return;
   }
@@ -16,5 +16,5 @@ var getProgress = function (array){
   return progress;
 }
 
-module.exports.getRoles = getRoles;
+module.exports.formatArray = formatArray;
 module.exports.getProgress = getProgress;

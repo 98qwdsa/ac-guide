@@ -41,9 +41,8 @@ function checkParamFormat(data) {
     }
   }
   if (observer_open_id === undefined) {
-    res.code = '1000';
-    res.msg.push('observer_open_id:' + action === 'manage' ? 'array' : 'string');
-  } else if (observer_open_id === 'OPENID'){
+    // res.code = '1000';
+    // res.msg.push('observer_open_id:' + action === 'manage' ? 'array' : 'string');
     observer_open_id = wxContext.OPENID;
   } else {
     if (action === 'cancel' || action === 'observe') {

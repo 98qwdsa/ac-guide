@@ -20,7 +20,7 @@
   <view class="item">
     <view class="left">
       <text class="sub">关注：</text>
-      <text class="sub">{{m1.getRoles(detail.followerList)}}</text>
+      <text class="sub">{{m1.formatArray(detail.followerList)}}</text>
     </view>
     <slot></slot>
   </view>

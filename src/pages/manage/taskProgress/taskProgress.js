@@ -1,6 +1,5 @@
 // src/pages/manage/taskProgress/taskProgress.js
 const service = require('../service.js');
-const reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
 Page({
 
   /**
@@ -9,14 +8,14 @@ Page({
   data: {
     currentTab: "tableft",
     allUserList: [],
-    attenUserList: [],
+    myObserverList: [],
     stepList: [],
     event_code: '',
     curStep: 0,
     eventDetail: {},
     observerList: []
   },
-
+  userList: [],
   /**
    * 生命周期函数--监听页面加载
    */
@@ -43,6 +42,7 @@ Page({
     }
   },
   loadMyData(event_code) {
+    let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
     if (reloadTrigger.left === false) {
       return;
     }
@@ -50,7 +50,6 @@ Page({
       mask: true,
     })
     service.getSelfEventStep(event_code).then(data => {
-      console.log(data);
       const stepList = [...data.steps];
       let curStep = 0;
       let eventFinished = false;
@@ -105,9 +104,13 @@ Page({
         })
       }
     })
+    let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
+    reloadTrigger.right === true;
+    reloadTrigger.mid = true;
   },
   loadAllUserForEvent(event_code) {
-    if (reloadTrigger.mid === false) {
+    let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
+    if (reloadTrigger.right === false) {
       return;
     }
     wx.showLoading({
@@ -117,49 +120,18 @@ Page({
       code: event_code
     }).then(allUser => {
       wx.hideLoading();
-      reloadTrigger.mid = false
+      reloadTrigger.right = false
       this.setData({
         allUserList: allUser.data
       });
-      allUser.data.forEach((e, key) => {
-        this.loadUserObserver(e.open_id).then(followerList => {
-          let newallUserList = [...this.data.allUserList]
-
-          newallUserList.splice(key, 1, {
-            ...newallUserList[key],
-            followerList: followerList.map(e => e.name)
-          })
-          this.setData({
-            allUserList: newallUserList
-          })
-        })
-      })
-      // let newallUserList = [];
-      // let i = 0;
-      // function getObserver(i, newallUserList) {
-      //   let user = allUser.data[i]
-      //   if (user) {
-      //     _this.loadUserObserver(user.open_id).then(followerList => {
-      //       newallUserList.push({
-      //         ...user,
-      //         followerList: followerList.map(e => e.name)
-      //       })
-      //       i++;
-      //       getObserver(i, newallUserList);
-      //     })
-      //   } else {
-      //     i = 0;
-      //     _this.setData({
-      //       allUserList: newallUserList
-      //     });
-      //   }
-      // }
-      // getObserver(i, newallUserList);
-
+      if(this.data.allUserList.length){
+        this.loadfollowerList('allUserList');
+      }
     }, (e) => {})
   },
   loadMyObserver(event_code) {
-    if (reloadTrigger.right === false) {
+    let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
+    if (reloadTrigger.mid === false) {
       return;
     }
     wx.showLoading({
@@ -169,34 +141,13 @@ Page({
       code: event_code
     }).then(observer => {
       this.setData({
-        attenUserList: observer.data
+        myObserverList: observer.data
       });
       wx.hideLoading();
-      reloadTrigger.right = false;
-      let _this = this;
-      let newAttenUserList = [];
-      let i = 0;
-
-      function getObserver(i, newAttenUserList) {
-        let user = observer.data[i]
-        if (user) {
-          _this.loadUserObserver(user.open_id).then(followerList => {
-            newAttenUserList.push({
-              ...user,
-              followerList: followerList.map(e => e.name)
-            })
-            i++;
-            getObserver(i, newAttenUserList);
-          })
-        } else {
-          i = 0;
-          _this.setData({
-            attenUserList: newAttenUserList
-          })
-        }
+      reloadTrigger.mid = false;
+      if(this.data.myObserverList.length){
+        this.loadfollowerList('myObserverList');
       }
-      getObserver(i, newAttenUserList);
-
     }, (e) => {
       console.log(e);
     })
@@ -206,8 +157,6 @@ Page({
       url: '../addObserver/addObserver?code=' + this.data.event_code +
         '&observed=' + e.currentTarget.dataset.observed,
     })
-
-    this.myAttenLoad = true;
   },
   loadUserObserver(observed_open_id) {
     return new Promise((reslove, reject) => {
@@ -219,38 +168,48 @@ Page({
       });
     })
   },
-  // cancelObserverForMyself(e) {
-  //   wx.showLoading({
-  //     title: '取消关注中...',
-  //     mask: true
-  //   })
-  //   let data = {
-  //     code: this.data.event_code,
-  //     observer_open_id: 'OPENID',
-  //     observed_open_id: e.currentTarget.dataset.observed,
-  //     action: 'cancel'
-  //   };
-  //   service.editObserverForUser(data).then(() => {
-  //     wx.hideLoading();
-  //     let index = undefined;
-  //     let newAttenUserList = this.data.attenUserList;
-  //     try {
-  //       newAttenUserList.forEach((item, key) => {
-  //         if (item.open_id === e.currentTarget.dataSet.item.open_id) {
-  //           index = key;
-  //           throw new Error(key)
-  //         }
-  //       })
-  //     } catch (e) {}
-  //     if (index != undefined) {
-  //       newAttenUserList.splice(index, 1);
-  //       this.setData({
-  //         attenUserList: newAttenUserList
-  //       })
-  //     }
-  //   })
-  //   this.allUserLoad = true;
-  // },
+  loadfollowerList(userListType) {
+    const userList = [...this.data[userListType]]
+      userList.forEach((e, key) => {
+        this.loadUserObserver(e.open_id).then(followerList => {
+          let newUserList = [...this.data[userListType]]
+          newUserList.splice(key, 1, {
+            ...newUserList[key],
+            followerList: followerList.map(e => e.name)
+          })
+          this.setData({
+            [userListType]: newUserList
+          })
+        })
+      });
+  },
+  cancelObserverForMyself(e) {
+    wx.showLoading({
+      title: '取消关注中...',
+      mask: true
+    })
+    let data = {
+      code: this.data.event_code,
+      observed_open_id: e.currentTarget.dataset.observed,
+      action: 'cancel'
+    };
+    service.editObserverForUser(data).then(() => {
+      wx.hideLoading();
+      let newObserverList = this.data.myObserverList;
+      for (let i in newObserverList) {
+        if (e.currentTarget.dataset.observed === newObserverList[i]['open_id']) {
+          newObserverList.splice(i, 1)
+        }
+      }
+      this.setData({
+        myObserverList: newObserverList
+      })
+    })
+    let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
+    reloadTrigger.right = true;
+    reloadTrigger.mid = true;
+    
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -263,11 +222,14 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    if (reloadTrigger.mid === true && this.data.currentTab === 'tabmiddle') {
-      this.loadMyObserver(this.data.event_code);
+    let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
+    if (reloadTrigger.mid === true && this.data.currentTab === 'tabmiddle'
+        && this.data.myObserverList.length) {
+      this.loadfollowerList('myObserverList');
     }
-    if (reloadTrigger.right === true && this.data.currentTab === 'tabright') {
-      this.loadAllUserForEvent(this.data.event_code);
+    if (reloadTrigger.right === true && this.data.currentTab === 'tabright'
+        && this.data.allUserList.length) {
+      this.loadfollowerList('allUserList');
     }
 
 
@@ -284,7 +246,10 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function() {
-
+    let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
+    reloadTrigger.left = true;
+    reloadTrigger.mid = true;
+    reloadTrigger.right = true;
   },
 
   /**

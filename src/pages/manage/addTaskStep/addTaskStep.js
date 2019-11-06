@@ -1,4 +1,4 @@
-const app = getApp();
+let taskAdd = getApp().globalData.managerHomeTaskManagerTaskAdd;
 Page({
 
   /**
@@ -13,15 +13,15 @@ Page({
    */
   onLoad: function (options) {
     if (options.stepindex && options.stepname){
-      app.globalData.stepName = options.stepname;
-      app.globalData.stepIndex = options.stepindex;
+      taskAdd.stepName = options.stepname;
+      taskAdd.stepIndex = options.stepindex;
       this.setData({
         stepName: options.stepname
       });
     }
   },
   bindNameInput: function(e){
-    app.globalData.stepName = e.detail.value;
+    taskAdd.stepName = e.detail.value;
   },
   formSubmit: function(e){
     wx.navigateBack({
