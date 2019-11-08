@@ -1,6 +1,6 @@
 const service = require('../service.js');
 let num = 0;
-let delay = 500;
+let delay = 300;
 let timer = {};
 Page({
 
@@ -14,26 +14,23 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
-    this.loadData();
-  },
-  loadData() {
-    let reloadTrigger = getApp().globalData.managerHomePersonManage;
-    if (reloadTrigger.mid === false) {
-      return;
-    }
-    wx.showLoading({
-      title: '加载中...',
-      mask: true
-    })
-    service.getUserList().then(userList => {
-      this.setData({
-        userList: userList.data
+  onLoad: function(options) {},
+  loadData(name) {
+    return new Promise((reslove, reject) => {
+      wx.showLoading({
+        title: '加载中...',
+        mask: true
       })
-      wx.hideLoading();
-      reloadTrigger.mid = false;
+      service.getUserList({
+        name
+      }).then(userList => {
+        reslove();
+        this.setData({
+          userList: userList.data
+        })
+        wx.hideLoading();
+      })
     })
-
   },
   addUser() {
     wx.navigateTo({
@@ -49,7 +46,7 @@ Page({
       content: '是否删除用户',
       success(res) {
         if (res.confirm) {
-          wx:wx.showLoading({
+          wx.showLoading({
             title: '删除用户中...',
             mask: true
           })
@@ -73,17 +70,15 @@ Page({
     })
   },
   bindKeyInput: function(e) {
-    let userName = '';
+    let _this = this;
     num = 0;
     clearInterval(timer);
     timer = setInterval(() => {
       num += 100
-      console.log(num)
       if (num >= delay) {
         num = 0
         clearInterval(timer);
-        console.log('start query');
-        userName = e.detail.value;
+        _this.loadData(e.detail.value);
       }
     }, 100)
   },
@@ -98,7 +93,14 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    this.loadData();
+    let reloadTrigger = getApp().globalData.managerHomePersonManage;
+    if (reloadTrigger.mid === false) {
+      return;
+    }
+    this.loadData().then(() => {
+      reloadTrigger.mid = false;
+    });
+
   },
 
   /**

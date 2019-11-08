@@ -120,7 +120,7 @@ async function checkRole() {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
     })
-    if (!curUserInfo.result.data.role.includes('PM')) {
+    if (!curUserInfo.result.data.role.includes('Observer')) {
       return {
         msg: 'role mismatch Function: queryObserverEventDetail',
         code: '2001',

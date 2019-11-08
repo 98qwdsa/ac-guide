@@ -49,6 +49,11 @@ App({
     },
     'managerHomePersonManage':{
       mid: true
+    },
+    'managerHomeRoleManage':{
+      left: true,
+      mid: true,
+      right: true
     }
   }
 })

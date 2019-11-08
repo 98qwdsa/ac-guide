@@ -23,7 +23,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-
     this.setData({
       eventDetail: {
         ...detail,
@@ -72,20 +71,20 @@ Page({
       })
       return;
     }
-    // service.addEvent(e.detail.value).then(() => {
-    //   wx.navigateTo('../taskManage/taskManage');
-    //   detail = {
-    //     code: '',
-    //     name: '',
-    //     desc: '',
-    //     disabled: true,
-    //     role: [],
-    //     steps: []
-    //   };
-    //   this.setData({
-    //     eventDetail: detail
-    //   });
-    // });
+    service.addEvent(e.detail.value).then(() => {
+      wx.navigateTo('../taskManage/taskManage');
+      detail = {
+        code: '',
+        name: '',
+        desc: '',
+        disabled: true,
+        role: [],
+        steps: []
+      };
+      this.setData({
+        eventDetail: detail
+      });
+    });
   },
   formReset: function() {
     detail = {

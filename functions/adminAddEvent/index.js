@@ -73,7 +73,7 @@ function checkParamFormat(data) {
     }
   }
   if (role === undefined) {
-    role = ['employee'];
+    role = ['Participant'];
   } else {
     if (!(role instanceof Array)) {
       res.code = '1001';
@@ -155,7 +155,7 @@ async function addCustomEventToEventList(data) {
       icon = '',
       disabled = false,
       verifiers = [],
-      role = ['employee']
+      role = ['Participant']
   } = data;
   try {
     const res = await COLION.add({
@@ -263,7 +263,7 @@ async function createCustomEventCollection(code) {
  *  icon = '',
  *  disabled = false,
  *  verifiers = [],
- *  role = ['employee']
+ *  role = ['Participant']
  * }
  */
 

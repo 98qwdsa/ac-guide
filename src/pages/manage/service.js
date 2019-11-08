@@ -48,7 +48,7 @@ module.exports = {
       ...data
     })
   },
-  getUserList(data= {}){
+  getUserList(data){
     return cloud.call('adminQueryUser',{
       ...data
     })

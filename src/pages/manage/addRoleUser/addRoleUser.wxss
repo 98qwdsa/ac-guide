@@ -1,0 +1,24 @@
+/* src/pages/manage/addRole/addRole.wxss */
+.input{
+  background: #f5f5f5;
+  margin: 10rpx 30rpx 20rpx 30rpx;
+  padding: 15rpx 0 10rpx 20rpx;
+  border-radius: 10rpx;
+}
+.search_name_placeholder{
+  color: #999;
+  font-size: 34rpx;
+}
+.user-list{
+  margin-top: 30rpx;
+}
+.user-list .user-delete{
+  position: relative;
+}
+.user-list .user-delete image{
+  position: absolute;
+  right: 0;
+  top: -50rpx;
+  width: 64rpx;
+  height: 64rpx;
+}

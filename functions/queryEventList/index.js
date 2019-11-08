@@ -8,7 +8,7 @@ function checkParam(data) {
     _id,
     code,
     power,
-    role = 'employee'
+    role = "Participant"
   } = data;
 
   const res = {
@@ -18,7 +18,7 @@ function checkParam(data) {
   }
 
   // if (Object.keys(data).length === 0) {
-  //   role = 'employee';
+  //   role = 'Participant';
   // }
   if (_id === undefined) {
 
@@ -60,7 +60,7 @@ function checkParam(data) {
   }
 
   if (role === undefined) {
-    role = 'employee';
+    role = 'Participant';
   } else {
     if (typeof(role) != 'string' || role === '') {
       res.code = '1001';
@@ -164,7 +164,7 @@ async function getEventList(user, param) {
       }
     }
   }
-  async function exec(filter = undefined) {
+  async function exec(filter = {}) {
     try {
       const res = await COLION.where(filter).get();
       if (res.data.length < 1) {

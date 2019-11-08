@@ -95,7 +95,7 @@ async function checkRole() {
     if (curUserInfo.result.code != '0000') {
       return curUserInfo.result
     }
-    if (curUserInfo.result.data.role.includes('HR') || curUserInfo.result.data.role.includes('PM')) {
+    if (curUserInfo.result.data.role.includes('Publisher') || curUserInfo.result.data.role.includes('Observer')) {
       return {
         code: '0000',
         msg: '',

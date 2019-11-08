@@ -81,7 +81,7 @@ async function checkRole() {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
     })
-    if (curUserInfo.result.data.role.includes('HR')) {
+    if (curUserInfo.result.data.role.includes('Publisher')) {
       return {
         msg: '',
         code: '0000',
@@ -113,7 +113,7 @@ async function getUserOpenId(data) {
   let records = {}
   try {
     const res = await COLION.skip(skip).limit(limit).where({
-      role: _.in(['HR', 'PM'])
+      role: _.in(['Publisher', 'Observer'])
     }).get();
     if (res.data.length > 0) {
       records = {

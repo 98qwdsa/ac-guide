@@ -1,0 +1,87 @@
+// src/pages/manage/addRole/addRole.js
+let num = 0;
+let delay = 500;
+let timer = {};
+Page({
+
+  /**
+   * 页面的初始数据
+   */
+  data: {
+    userList:[{
+      name:'张三'
+    },{
+      name:'李四'
+    }]
+  },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+
+  },
+  bindKeyInput: function(e){
+    let userName = '';
+    num = 0;
+    clearInterval(timer);
+    timer = setInterval(() =>{
+      num += 100
+      console.log(num)
+      if(num > delay){
+        num = 0
+        clearInterval(timer)
+        console.log('start query')
+      }
+    },100)
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function () {
+
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function () {
+
+  },
+
+  /**
+   * 页面上拉触底事件的处理函数
+   */
+  onReachBottom: function () {
+
+  },
+
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function () {
+
+  }
+})

@@ -93,7 +93,7 @@ async function checkRole() {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
     })
-    if (curUserInfo.result.data.role.includes('HR')) {
+    if (curUserInfo.result.data.role.includes('Publisher')) {
       return {
         msg: '',
         code: '0000',

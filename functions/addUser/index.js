@@ -58,7 +58,7 @@ exports.main = async(event, context) => {
         open_id: wxContext.OPENID,
         //phone: event.phone,
         power: [],
-        role: ['employee']
+        role: ['Participant']
       }
     });
 

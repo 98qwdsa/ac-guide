@@ -14,7 +14,9 @@
     "pages/manage/taskAdd/taskAdd",
     "pages/manage/taskProgress/taskProgress",
     "pages/manage/addObserver/addObserver",
-    "pages/manage/addUser/addUser"
+    "pages/manage/addUser/addUser",
+    "pages/manage/addRole/addRole",
+    "pages/manage/addRoleUser/addRoleUser"
   ],
   "window": {
     "backgroundTextStyle": "light",

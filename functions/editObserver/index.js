@@ -125,7 +125,7 @@ async function checkPermision(action) {
       name: 'checkUserInfo',
     })
     if (action === 'cancel') {
-      if (!curUserInfo.result.data.role.includes('PM') && !curUserInfo.result.data.role.includes('HR')) {
+      if (!curUserInfo.result.data.role.includes('Observer') && !curUserInfo.result.data.role.includes('Publisher')) {
         return {
           code: '2002',
           msg: 'permission denied',
@@ -134,7 +134,7 @@ async function checkPermision(action) {
       }
     }
     if (action === 'edit') {
-      if (!curUserInfo.result.data.role.includes('HR')) {
+      if (!curUserInfo.result.data.role.includes('Publisher')) {
         return {
           code: '2003',
           msg: 'permission denied',
@@ -156,7 +156,7 @@ async function checkPermision(action) {
     }
   }
 }
-//检查observer_open_id是PM或者HR
+//检查observer_open_id是Observer或者Publisher
 async function checkObserverPermision(data) {
   const open_ids = data.action != 'manage' ? [data.observer_open_id] : data.observer_open_id
   for (let i of open_ids) {
@@ -181,7 +181,7 @@ async function checkObserverPermision(data) {
           open_id
         }
       })
-      if (curUserInfo.result.data && (curUserInfo.result.data.role.includes('PM') || curUserInfo.result.data.role.includes('HR'))) {
+      if (curUserInfo.result.data && (curUserInfo.result.data.role.includes('Observer') || curUserInfo.result.data.role.includes('Publisher'))) {
         return {
           code: '0000',
           msg: '',
@@ -350,7 +350,7 @@ async function updateObserverRecord(data, observedRes) {
 /**
  * {
  *  code = '',   // 事件code,
- *  action = 'edit',  //[manage|observe|cancel]  manage主要实现HR批量编辑关注者，  observe实现单个关注, cancel实现单个取消关注
+ *  action = 'edit',  //[manage|observe|cancel]  manage主要实现Publisher批量编辑关注者，  observe实现单个关注, cancel实现单个取消关注
  *  observer_open_id = ''|[], //观察者open_id
  *  observed_open_id = ''  // 被观察者open_id
  * }
@@ -373,7 +373,7 @@ exports.main = async(event, context) => {
   if (permission.code !== '0000') {
     return permission;
   }
-  //检查observer_open_id是PM或者HR
+  //检查observer_open_id是Observer或者Publisher
   const observerPermission = await checkObserverPermision(param.data);
   if (observerPermission.code !== '0000') {
     return observerPermission;

@@ -105,10 +105,12 @@ async function checkPermission() {
 
 //获取用户列表
 async function getUserList(data) {
-  const param = data.name === null ? null : data.name;
+  const param = data.name ? {
+    name: data.name
+  } : {};
   let records = {}
   const DB = cloud.database();
-  const COLION = DB.collection('user').where({name:param});
+  const COLION = DB.collection('user').where(param);
   
   const limit = data.page.size > 20 ? 20 : data.page.size;
   const skip = data.page.current_num * limit;
