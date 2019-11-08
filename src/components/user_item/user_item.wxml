@@ -1,0 +1,6 @@
+<!--components/user_item/user_item.wxml-->
+<view class="user_item">
+  <text>{{userName}}</text>
+  <slot></slot>
+</view>
+

@@ -3,28 +3,77 @@ const cloud = require('wx-server-sdk')
 
 cloud.init();
 
-const DB = cloud.database();
-
 function checkParamFormat(data) {
   let {
-    name
+    name,
+    page
   } = data;
 
+  //初始化页面信息
+  const defaultPageConf = {
+    size: 10,
+    current_num: 0
+  }
+
+  const res = {
+    code: '0000',
+    msg: [],
+    data: null
+  }
+
   if (name !== undefined && typeof (name) != 'string') {
-    return {
-      code: '1001',
-      msg: 'param name:string wrong',
-      data: null
+    res.code = '1001';
+    res.msg.push('param name:string wrong');
+  }
+
+  if (page === undefined) {
+    page = defaultPageConf;
+  } else {
+    if (typeof (page) === 'object') {
+      if (page['size'] === undefined) {
+        page.size = defaultPageConf.size
+      } else {
+        if(typeof(page.size) != 'number'){
+          res.code = '1001';
+          res.msg.push('page.size:string');
+        }else if(page.size > 20){
+          page.size = 20;
+        }
+      }
+      if (page['current_num'] === undefined) {
+        page.current_num = defaultPageConf.current_num
+      } else {
+        if(typeof(page.current_num) != 'number'){
+          res.code = '1001';
+          res.msg.push('page.current_num:string');
+        }
+      }
+    } else {
+      res.code = '1001';
+      res.msg.push('page.object');
     }
   }
 
-  return {
-    code: '0000',
-    msg: 'param format ok',
-    data: {
-      name
+  if (res.code === '1000') {
+    res.msg = 'param ' + res.msg.join(' ') + ' is required';
+  }
+
+  if (res.code === '1001') {
+    res.msg = 'param ' + res.msg.join(' ') + ' is wrong';
+  }
+
+  if(res.code === '0000'){
+    res.msg = 'param format ok';
+    res.data = {
+      name,
+      page:{
+        ...defaultPageConf,
+        ...page
+      }
     }
   }
+
+  return res;
 }
 // 权限验证
 async function checkPermission() {
@@ -55,23 +104,32 @@ async function checkPermission() {
 }
 
 //获取用户列表
-async function getUserList(name = null) {
-  const param = name === null ? null : {
-    name
-  }
+async function getUserList(data) {
+  const param = data.name === null ? null : data.name;
+  let records = {}
+  const DB = cloud.database();
+  const COLION = DB.collection('user').where({name:param});
+  
+  const limit = data.page.size > 20 ? 20 : data.page.size;
+  const skip = data.page.current_num * limit;
   try {
-    const res = await DB.collection('user').where(param).get();
-    if (res.data.length < 1) {
-      return {
+    records = await COLION.skip(skip).limit(limit).get();
+    if(records.data.length > 0){
+      const userList = [];
+      records.data.forEach(e =>{
+        userList.push(e);
+      })
+      records = {
+        code: '0000',
+        msg: '',
+        data: userList
+      }
+    }else{
+      return{
+        msg: 'there is no records of this event',
         code: '2001',
-        msg: 'there is no user',
         data: null
       }
-    }
-    return {
-      code: '0000',
-      msg: '',
-      data: res.data
     }
   } catch (e) {
     return {
@@ -80,6 +138,42 @@ async function getUserList(name = null) {
       data: null
     }
   }
+  let count = {}
+  try {
+    count = await COLION.count()
+    if (count.errMsg === 'collection.count:ok') {
+      count = {
+        code: '0000',
+        msg: '',
+        data: count.total
+      }
+    } else {
+      return {
+        msg: 'there is no records of this event',
+        code: '2002',
+        data: null
+      }
+    }
+  } catch (e) {
+    return {
+      code: '3002',
+      msg: e,
+      data: null
+    }
+  }
+
+  if (records.code === '0000' && count.code === '0000') {
+    return {
+      code: '0000',
+      msg: '',
+      data: {
+        data: records.data,
+        count: count.data
+      }
+    }
+  }
+
+
 }
 /**
  * {
@@ -99,5 +193,5 @@ exports.main = async (event, context) => {
     return param;
   }
 
-  return await getUserList(param.data.name);
+  return await getUserList(param.data);
 }

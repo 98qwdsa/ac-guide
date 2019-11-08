@@ -6,7 +6,7 @@ module.exports = {
       pwd
     })
   },
-  getUserList(name = undefined) {
+  getUserList(name) {
     return cloud.call('adminQueryUser', {
       name
     })

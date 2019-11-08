@@ -46,6 +46,9 @@ App({
       left: true,
       mid: true,
       right: true
+    },
+    'managerHomePersonManage':{
+      mid: true
     }
   }
 })

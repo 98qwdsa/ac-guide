@@ -19,7 +19,8 @@
     <block wx:if="{{myObserverList.length}}">
       <view class="task_progress_item" wx:for="{{myObserverList}}"  wx:key="{{index}}">
         <taskProgress detail='{{item}}' cancel = '{{item.cancel}}'>
-          <view class="cancel" bindtap="cancelObserverForMyself" data-observed="{{item.open_id}}">
+          <view class="cancel" bindtap="cancelObserverForMyself" 
+          data-observed="{{item.open_id}}">
             <label>
               <text>取消关注</text>
             </label>

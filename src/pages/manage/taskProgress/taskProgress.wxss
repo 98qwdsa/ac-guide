@@ -79,3 +79,7 @@ page {
   font-family: SourceHanSansCN-Regular;
   z-index: 10;
 }
+.content-wrapper .cancelColor{
+  background: #EFEFEF;
+  color: #666;
+}

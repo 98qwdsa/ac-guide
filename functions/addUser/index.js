@@ -12,7 +12,6 @@ function checkParamFormat(data) {
     code: '0000',
     msg: [],
     data: {
-
     }
   }
   if (name === undefined) {

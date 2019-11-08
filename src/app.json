@@ -13,7 +13,8 @@
     "pages/manage/addTaskStep/addTaskStep",
     "pages/manage/taskAdd/taskAdd",
     "pages/manage/taskProgress/taskProgress",
-    "pages/manage/addObserver/addObserver"
+    "pages/manage/addObserver/addObserver",
+    "pages/manage/addUser/addUser"
   ],
   "window": {
     "backgroundTextStyle": "light",

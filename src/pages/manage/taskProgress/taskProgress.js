@@ -105,7 +105,7 @@ Page({
       }
     })
     let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
-    reloadTrigger.right === true;
+    reloadTrigger.right = true;
     reloadTrigger.mid = true;
   },
   loadAllUserForEvent(event_code) {
@@ -184,30 +184,44 @@ Page({
       });
   },
   cancelObserverForMyself(e) {
-    wx.showLoading({
-      title: '取消关注中...',
-      mask: true
-    })
-    let data = {
-      code: this.data.event_code,
-      observed_open_id: e.currentTarget.dataset.observed,
-      action: 'cancel'
-    };
-    service.editObserverForUser(data).then(() => {
-      wx.hideLoading();
-      let newObserverList = this.data.myObserverList;
-      for (let i in newObserverList) {
-        if (e.currentTarget.dataset.observed === newObserverList[i]['open_id']) {
-          newObserverList.splice(i, 1)
+    let _this = this;
+    wx.showModal({
+      title: '提示',
+      content: '是否取消关注',
+      success(res) {
+        if (res.confirm) {
+          wx.showLoading({
+            title: '取消关注中...',
+            mask: true
+          })
+          let data = {
+            code: _this.data.event_code,
+            observed_open_id: e.currentTarget.dataset.observed,
+            action: 'cancel'
+          };
+          service.editObserverForUser(data).then(() => {
+            wx.hideLoading();
+            let newObserverList = _this.data.myObserverList;
+            for (let i in newObserverList) {
+              if (e.currentTarget.dataset.observed === newObserverList[i]['open_id']) {
+                newObserverList.splice(i, 1)
+              }
+            }
+            _this.setData({
+              myObserverList: newObserverList,
+            })
+          })
+          let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
+          reloadTrigger.right = true;
+          reloadTrigger.mid = true;
+        } else if (res.cancel) {
+      
         }
       }
-      this.setData({
-        myObserverList: newObserverList
-      })
     })
-    let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
-    reloadTrigger.right = true;
-    reloadTrigger.mid = true;
+
+
+   
     
   },
 

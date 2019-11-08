@@ -47,6 +47,21 @@ module.exports = {
     return cloud.call('queryUserObserver',{
       ...data
     })
+  },
+  getUserList(data= {}){
+    return cloud.call('adminQueryUser',{
+      ...data
+    })
+  },
+  addUser(name){
+    return cloud.call('addUser',{
+      name
+    })
+  },
+  deleteUser(data) {
+    return cloud.call('adminEditUser', {
+      ...data
+    })
   }
   
   // getEventDetail(code) {

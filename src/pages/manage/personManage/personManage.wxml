@@ -1,2 +1,15 @@
 <!--src/pages/manage/personDetail/personDetail.wxml-->
-<text>人员管理详情页面</text>
+<input class="input" placeholder-class="search_name_placeholder"
+  bindinput="bindKeyInput" placeholder="搜索"/>
+<view class="user_add" bindtap="addUser">
+  <text>添加</text>
+</view>
+<view class="user-list">
+  <block wx:for="{{userList}}" wx:key="{{index}}">
+    <user-item userName="{{item.name}}">
+      <view class="user-delete" bindtap="deleteUser" data-deleteid="{{item._id}}">
+        <image src="../../../asset/task_step_delete.png"></image>
+      </view>
+    </user-item>
+  </block>
+</view>

@@ -24,24 +24,26 @@ function checkParamFormat(param) {
       res.msg.push('_id:string')
     }
   }
+  // if(action === undefined){
+  //   action = 'delete'
+  // }else{
+  //   if (action != 'delete' && action != 'update'){
+  //     res.code = '1001';
+  //     res.msg.push('action:string')
+  //   }
+  // }
   if (data === undefined) {
-    res.code = '1000';
-    res.msg.push('data:object')
+    // res.code = '1000';
+    // res.msg.push('data:object')
   } else {
-    if (data['name'] === undefined && data['phone'] === undefined && data['role'] === undefined && data['power'] === undefined) {
+    if (data['name'] === undefined && data['role'] === undefined && data['power'] === undefined) {
       res.code = '1002';
-      res.msg = 'should set one of them:data.name:string, data.phone:strig, data.role:array ,data.power:arraye';
+      res.msg = 'should set one of them:data.name:string,data.role:array,data.power:arraye';
     } else {
       if (data.name && typeof(data.name) != 'string') {
         res.code = '1001';
         res.msg.push('data.name:string')
       }
-
-      // if (data.phone && typeof(data.phone) != 'string') {
-      //   res.code = '1001';
-      //   res.msg.push('data.phone:string')
-      // }
-
       if (data.role && (!(data.role instanceof Array))) {
         res.code = '1001';
         res.msg.push('data.role:array')
@@ -102,10 +104,15 @@ async function checkPermission() {
 
 // 跟新用户信息
 async function updateUserInfo(data) {
+  let res = undefined;
   try {
-    const res = await cloud.database().collection('user').doc(data._id).update({
-      data: data.data
-    });
+    if (data.data === undefined){
+      res = await cloud.database().collection('user').doc(data._id).remove();
+    }else{
+      res = await cloud.database().collection('user').doc(data._id).update({
+        data: data.data
+      });
+    }
     if (res.stats.updated < 1) {
       return {
         code: '2001',
