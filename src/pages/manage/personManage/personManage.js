@@ -18,6 +18,10 @@ Page({
     this.loadData();
   },
   loadData() {
+    let reloadTrigger = getApp().globalData.managerHomePersonManage;
+    if (reloadTrigger.mid === false) {
+      return;
+    }
     wx.showLoading({
       title: '加载中...',
       mask: true
@@ -27,6 +31,7 @@ Page({
         userList: userList.data
       })
       wx.hideLoading();
+      reloadTrigger.mid = false;
     })
 
   },
@@ -93,6 +98,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
+    this.loadData();
   },
 
   /**

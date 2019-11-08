@@ -107,7 +107,7 @@ async function checkPermission() {
 async function getUserList(data) {
   const param = data.name ? {
     name: data.name
-  } : null;
+  } : {};
   let records = {}
   const DB = cloud.database();
   const COLION = DB.collection('user').where(param);
