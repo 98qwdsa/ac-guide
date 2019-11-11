@@ -1,5 +1,5 @@
 // src/pages/manage/addObserver/addObserver.js
-const service = require('../service.js');
+const service = require('../../../service.js');
 const reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
 
 Page({

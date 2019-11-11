@@ -21,7 +21,7 @@ function checkParamFormat(data) {
     data: null
   }
 
-  if (name !== undefined && typeof (name) != 'string') {
+  if (name !== undefined && typeof(name) != 'string') {
     res.code = '1001';
     res.msg.push('param name:string wrong');
   }
@@ -29,21 +29,21 @@ function checkParamFormat(data) {
   if (page === undefined) {
     page = defaultPageConf;
   } else {
-    if (typeof (page) === 'object') {
+    if (typeof(page) === 'object') {
       if (page['size'] === undefined) {
         page.size = defaultPageConf.size
       } else {
-        if(typeof(page.size) != 'number'){
+        if (typeof(page.size) != 'number') {
           res.code = '1001';
           res.msg.push('page.size:string');
-        }else if(page.size > 20){
+        } else if (page.size > 20) {
           page.size = 20;
         }
       }
       if (page['current_num'] === undefined) {
         page.current_num = defaultPageConf.current_num
       } else {
-        if(typeof(page.current_num) != 'number'){
+        if (typeof(page.current_num) != 'number') {
           res.code = '1001';
           res.msg.push('page.current_num:string');
         }
@@ -62,11 +62,11 @@ function checkParamFormat(data) {
     res.msg = 'param ' + res.msg.join(' ') + ' is wrong';
   }
 
-  if(res.code === '0000'){
+  if (res.code === '0000') {
     res.msg = 'param format ok';
     res.data = {
       name,
-      page:{
+      page: {
         ...defaultPageConf,
         ...page
       }
@@ -111,14 +111,18 @@ async function getUserList(data) {
   let records = {}
   const DB = cloud.database();
   const COLION = DB.collection('user').where(param);
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 9b262834bc1502562212142367e400476af88362
   const limit = data.page.size > 20 ? 20 : data.page.size;
   const skip = data.page.current_num * limit;
   try {
     records = await COLION.skip(skip).limit(limit).get();
-    if(records.data.length > 0){
+    if (records.data.length > 0) {
       const userList = [];
-      records.data.forEach(e =>{
+      records.data.forEach(e => {
         userList.push(e);
       })
       records = {
@@ -126,8 +130,8 @@ async function getUserList(data) {
         msg: '',
         data: userList
       }
-    }else{
-      return{
+    } else {
+      return {
         msg: 'there is no records of this event',
         code: '2001',
         data: null
@@ -184,7 +188,7 @@ async function getUserList(data) {
  * 
  */
 // 云函数入口函数
-exports.main = async (event, context) => {
+exports.main = async(event, context) => {
   const param = checkParamFormat(event);
   if (param.code != '0000') {
     return param;

@@ -1,4 +1,4 @@
-const service = require('../service.js');
+const service = require('../../service.js');
 let num = 0;
 let delay = 300;
 let timer = {};

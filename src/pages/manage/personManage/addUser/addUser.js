@@ -1,11 +1,13 @@
-// pages/manage/addRole/addRole.js
+// src/pages/manage/addUser/addUser.js
+const service = require('../../service.js');
+let reloadTrigger = getApp().globalData.managerHomePersonManage;
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    userName:''
   },
 
   /**
@@ -14,7 +16,34 @@ Page({
   onLoad: function (options) {
 
   },
-
+  formSubmit: function(e){
+    if (e.detail.value.userName == "") {
+      wx.showModal({
+        title: '提示',
+        content: '名字不能为空',
+        success(res) {
+          if (res.confirm) {
+          } else if (res.cancel) {
+          }
+        }
+      })
+      return;
+    }
+    service.addUser(e.detail.value.userName).then(()=>{
+      reloadTrigger.mid = true;
+      wx.navigateBack();
+    })
+  },
+  formReset:function(){
+    this.setData({
+      userName: []
+    });
+    wx.showToast({
+      title: '姓名已重置成功',
+      icon: 'success',
+      duration: 2000
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

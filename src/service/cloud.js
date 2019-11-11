@@ -15,14 +15,20 @@ module.exports = {
             title: 'cloud internal error',
             duration: 1500
           });
-          console.log(...arguments, res.result);
+          console.group(`[${name}] cloud internal error`)
+          console.error(...arguments, res.result)
+          console.groupEnd()
         } else {
           wx.hideLoading();
-          console.log(...arguments, res.result);
+          console.group(`[${name}] error`)
+          console.error(...arguments, res.result)
+          console.groupEnd()
           reject(res.result);
         }
       }).catch(e => {
-        console.log(e)
+        console.group(`[${name}] error`)
+        console.error(e)
+        console.groupEnd()
         wx.showToast({
           mask: true,
           icon: 'none',

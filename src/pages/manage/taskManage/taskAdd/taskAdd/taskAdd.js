@@ -1,4 +1,4 @@
-const service = require('../service.js');
+const service = require('../../../service.js');
 const app = getApp();
 let detail = {
   code: '',

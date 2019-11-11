@@ -1,5 +1,5 @@
 // src/pages/manage/taskProgress/taskProgress.js
-const service = require('../service.js');
+const service = require('../../../service.js');
 Page({
 
   /**

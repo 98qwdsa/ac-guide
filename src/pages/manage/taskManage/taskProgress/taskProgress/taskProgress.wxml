@@ -35,7 +35,7 @@
         <taskProgress detail='{{item}}'>
           <view class="add" bindtap="addObserverForUser" data-observed="{{item.open_id}}">
             <label>
-              <text>添加</text>
+              <text>编辑</text>
             </label>
           </view>
         </taskProgress>

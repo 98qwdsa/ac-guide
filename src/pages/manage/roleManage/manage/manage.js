@@ -1,5 +1,5 @@
 // src/pages/manage/roleDetail/roleDetail.js
-const service = require('../service.js');
+const service = require('../../service.js');
 Page({
 
   /**
