@@ -8,8 +8,7 @@ Page({
   data: {
     currentTab: 'Publisher',
     userList:[],
-    role:[],
-    visibility: 'hidden'
+    role:[]
   },
 
   /**
@@ -17,28 +16,26 @@ Page({
    */
   onLoad: function (options) {
     this.loadRole();
-    this.loadData();
+    this.loadData(['Publisher']);
   },
   switchTab(e){
     let currentTab = e.currentTarget.id;
     this.setData({
       currentTab
     });
-    this.loadData();
+    this.loadData(currentTab.split(" "));
     
   },
-  loadData(){
+  loadData(roles){
     wx.showLoading({
       title: '加载中...',
       mask: true
     })
-    service.getUserList().then(userList => {
+    service.getUserList({role:roles}).then(userList => {
       this.setData({
-        userList: userList.data,
-        visibility: 'visible'
+        userList: userList.data
       })
       wx.hideLoading();
-      // reloadTrigger.left = false;
     })
   },
   addRoleUser(){

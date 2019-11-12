@@ -47,13 +47,14 @@ App({
       mid: true,
       right: true
     },
-    'managerHomePersonManage':{
-      mid: true
-    },
     'managerHomeRoleManage':{
       left: true,
       mid: true,
       right: true
+    },
+    'managerHomePersonManageAddUser':{
+      userName:''
     }
   }
 })
+

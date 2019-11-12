@@ -7,7 +7,7 @@
     </block>
   </view>
 
-  <view class='content-wrapper' style="visibility:{{visibility}}">
+  <view class='content-wrapper'>
     <view class="user_add" bindtap="addRoleUser">
       <text>添加</text>
     </view>

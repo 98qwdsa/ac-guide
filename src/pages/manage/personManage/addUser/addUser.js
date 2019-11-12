@@ -1,6 +1,7 @@
 // src/pages/manage/addUser/addUser.js
 const service = require('../../service.js');
-let reloadTrigger = getApp().globalData.managerHomePersonManage;
+// let reloadTrigger = getApp().globalData.managerHomePersonManage;
+let trigger = getApp().globalData.managerHomePersonManageAddUser;
 Page({
 
   /**
@@ -29,10 +30,8 @@ Page({
       })
       return;
     }
-    service.addUser(e.detail.value.userName).then(()=>{
-      reloadTrigger.mid = true;
-      wx.navigateBack();
-    })
+    trigger.userName = e.detail.value.userName;
+    wx.navigateBack();
   },
   formReset:function(){
     this.setData({

@@ -15,7 +15,9 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {},
+  onLoad: function(options) {
+    this.loadData();
+  },
   loadData(name) {
     return new Promise((reslove, reject) => {
       wx.showLoading({
@@ -103,13 +105,26 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    let reloadTrigger = getApp().globalData.managerHomePersonManage;
-    if (reloadTrigger.mid === false) {
+    // let reloadTrigger = getApp().globalData.managerHomePersonManage;
+    // if (reloadTrigger.mid === false) {
+    //   return;
+    // }
+    // this.loadData().then(() => {
+    //   reloadTrigger.mid = false;
+    // });
+    let trigger = getApp().globalData.managerHomePersonManageAddUser;
+    if (trigger.userName === ''){
       return;
     }
-    this.loadData().then(() => {
-      reloadTrigger.mid = false;
-    });
+    service.addUser(trigger.userName);
+    let userList = [...this.data.userList];
+    userList.push({
+      name: trigger.userName
+    })
+    this.setData({
+      userList
+    })
+    trigger.userName = ''
 
   },
 
@@ -124,8 +139,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function() {
-    let reloadTrigger = getApp().globalData.managerHomePersonManage;
-    reloadTrigger.mid = true;
+    
   },
 
   /**
