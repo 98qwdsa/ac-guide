@@ -1,4 +1,13 @@
 /* src/pages/manage/personDetail/personDetail.wxss */
+.input-container{
+  position: relative;
+}
+.input-container icon{
+  position: absolute;
+  right: 45rpx;
+  top: 15rpx; 
+  z-index: 100;
+}
 .input{
   background: #f5f5f5;
   margin: 10rpx 30rpx 20rpx 30rpx;

@@ -1,9 +1,8 @@
   <form bindsubmit='submit'>
     <view class="content">
       <checkbox-group bindchange="checkboxChange">
-        <label class="checkbox-item" wx:for="{{items}}" wx:key="{{item.index}}">
-          <checkbox value="{{item.name}}" checked="{{item.checked}}"/> {{item.value}}
-          <text>{{item.number}}人</text>
+        <label class="checkbox-item" wx:for="{{roles}}" wx:key="index">
+          <checkbox value="{{item.code}}" checked="{{item.checked}}"/> {{item.code}}
         </label>
       </checkbox-group>
     </view>

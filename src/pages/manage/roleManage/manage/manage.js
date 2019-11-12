@@ -6,14 +6,17 @@ Page({
    * 页面的初始数据
    */
   data: {
-    currentTab: 'tableft',
-    userList:[]
+    currentTab: 'Publisher',
+    userList:[],
+    role:[],
+    visibility: 'hidden'
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.loadRole();
     this.loadData();
   },
   switchTab(e){
@@ -21,29 +24,21 @@ Page({
     this.setData({
       currentTab
     });
-    if (currentTab === 'tableft'){
-      this.loadData();
-    } else if (currentTab === 'tabmiddle'){
-
-    } else if (currentTab === 'tabright'){
-
-    }
+    this.loadData();
+    
   },
   loadData(){
-    let reloadTrigger = getApp().globalData.managerHomeRoleManage;
-    if(reloadTrigger.left === false){
-      return;
-    }
     wx.showLoading({
       title: '加载中...',
       mask: true
     })
     service.getUserList().then(userList => {
       this.setData({
-        userList: userList.data
+        userList: userList.data,
+        visibility: 'visible'
       })
       wx.hideLoading();
-      reloadTrigger.left = false;
+      // reloadTrigger.left = false;
     })
   },
   addRoleUser(){
@@ -81,6 +76,13 @@ Page({
           })
         }
       }
+    })
+  },
+  loadRole(){
+    service.getPowerRole().then(powerRole =>{
+      this.setData({
+        role: powerRole.role
+      });
     })
   },
 

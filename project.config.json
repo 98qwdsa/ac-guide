@@ -51,13 +51,17 @@
 		"game": {
 			"list": []
 		},
+		"gamePlugin": {
+			"current": -1,
+			"list": []
+		},
 		"miniprogram": {
 			"current": 0,
 			"list": [
 				{
 					"id": 0,
-					"name": "pages/manage/taskManage/taskManage",
-					"pathName": "pages/manage/taskManage/taskManage",
+					"name": "pages/manage/taskManage/manage/manage",
+					"pathName": "pages/manage/taskManage/manage/manage",
 					"query": "",
 					"scene": null
 				}

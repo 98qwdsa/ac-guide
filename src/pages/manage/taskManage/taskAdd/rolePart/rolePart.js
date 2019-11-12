@@ -1,29 +1,38 @@
 let taskAdd = getApp().globalData.managerHomeTaskManagerTaskAdd;
+const service = require('../../../service.js');
+let roleChecked = [];
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    items: [
-      { name: 'F19', value: 'F19', number:'22', checked: false },
-      { name: 'F20', value: 'F20', number: '17', checked: false },
-      { name: 'PM', value: 'PM', number: '3', checked: false }
-    ]
+    roles:[]
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.data.items.forEach(function (val) {
-      if (options.role.includes(val.value)) {
-        val.checked = true;
-      } else {
-        val.checked = false; 
-      }
-    });
-    this.setData({
-      items: this.data.items
+    roleChecked = options.role;
+    this.loadRole();
+  },
+  loadRole(){
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
+    service.getPowerRole().then(data =>{
+      data.role.forEach(function(val){
+        if (roleChecked.includes(val.code)){
+          val.checked = true;
+        }else{
+          val.checked = false; 
+        }
+      });
+      this.setData({
+        roles: data.role
+      })
+      wx.hideLoading();
     });
   },
   checkboxChange: function (e) {

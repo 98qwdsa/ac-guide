@@ -1,13 +1,13 @@
 <!--src/pages/manage/roleDetail/roleDetail.wxml-->
 <view class='container'>
-
-  <view class='tab-wrapper'>
-    <view id='tableft' class='tab-left {{currentTab === "tableft" ? "tab-active":""}}' bindtap='switchTab'>Publisher</view>
-    <view id='tabmiddle' class='tab-middle {{currentTab === "tabmiddle" ? "tab-active" : ""}}' bindtap='switchTab'>Observer</view>
-    <view id='tabright' class='tab-right {{currentTab === "tabright" ? "tab-active" : ""}}' bindtap='switchTab'>Participant</view>
+  <view class="tab-wrapper">
+    <block wx:for="{{role}}" wx:key="item">
+      <view id="{{item.code}}" class='tab {{currentTab === item.code ? "tab-active":""}}' 
+      bindtap='switchTab'>{{item.code}}</view>
+    </block>
   </view>
 
-  <view class='content-wrapper' wx:if='{{currentTab === "tableft"}}'>
+  <view class='content-wrapper' style="visibility:{{visibility}}">
     <view class="user_add" bindtap="addRoleUser">
       <text>添加</text>
     </view>
@@ -21,10 +21,4 @@
       </block>
     </view>
   </view>
-  <view class='content-wrapper' wx:if='{{currentTab === "tabmiddle"}}'>
-    pm
-  </view>
-  <view class='content-wrapper' wx:if='{{currentTab === "tabright"}}'>
-    admin
-  </view>
-</view>
+</view> 

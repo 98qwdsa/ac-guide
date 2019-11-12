@@ -8,7 +8,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userList: []
+    userList: [],
+    searchInput: ''
   },
 
   /**
@@ -31,6 +32,12 @@ Page({
         wx.hideLoading();
       })
     })
+  },
+  deleteText(){
+    this.setData({
+      searchInput: ''
+    })
+    this.loadData();
   },
   addUser() {
     wx.navigateTo({
@@ -61,13 +68,16 @@ Page({
               }
             })
             _this.setData({
-              userList: newUserList
+              userList: newUserList,
+              searchInput: ''
             })
+            _this.loadData();
             wx.hideLoading();
           })
         }
       }
     })
+
   },
   bindKeyInput: function(e) {
     let _this = this;

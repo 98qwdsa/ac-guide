@@ -62,6 +62,10 @@ module.exports = {
     return cloud.call('adminEditUser', {
       ...data
     })
+  },
+  getPowerRole(){
+    return cloud.call('getPowerRole',{
+    })
   }
   
   // getEventDetail(code) {
