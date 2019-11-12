@@ -97,12 +97,14 @@ async function getUserObserver(data) {
   //   }
   // }
   let list = [];
-  for (let e of res.data[0].observer_open_id) {
-    const name = await getUserName(e)
-    list.push({
-      name,
-      open_id: e
-    })
+  if (res.data.length) {
+    for (let e of res.data[0].observer_open_id) {
+      const name = await getUserName(e)
+      list.push({
+        name,
+        open_id: e
+      })
+    }
   }
 
   async function getUserName(open_id) {

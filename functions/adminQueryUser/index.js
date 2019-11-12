@@ -6,6 +6,7 @@ cloud.init();
 function checkParamFormat(data) {
   let {
     name,
+    role,
     page
   } = data;
 
@@ -25,6 +26,12 @@ function checkParamFormat(data) {
     res.code = '1001';
     res.msg.push('param name:string wrong');
   }
+
+  if (role !== undefined && !(role instanceof Array)) {
+    res.code = '1001';
+    res.msg.push('param role:array wrong');
+  }
+
 
   if (page === undefined) {
     page = defaultPageConf;
@@ -59,17 +66,28 @@ function checkParamFormat(data) {
   }
 
   if (res.code === '1001') {
-    res.msg = 'param ' + res.msg.join(' ') + ' is wrong';
+    res.msg = res.msg.join(' ');
   }
 
   if (res.code === '0000') {
     res.msg = 'param format ok';
+    let extendPram = {};
+    if (name) {
+      extendPram = {
+        name
+      }
+    }
+    if (role) {
+      extendPram = {
+        role
+      }
+    }
     res.data = {
-      name,
       page: {
         ...defaultPageConf,
         ...page
-      }
+      },
+      ...extendPram
     }
   }
 
@@ -105,19 +123,25 @@ async function checkPermission() {
 
 //获取用户列表
 async function getUserList(data) {
-  const param = data.name ? {
-    name: data.name
-  } : {};
-  let records = {}
   const DB = cloud.database();
-  const COLION = DB.collection('user').where(param);
-<<<<<<< HEAD
-  
-=======
+  const _ = DB.command;
+  let param = {};
+  if (data.name) {
+    param = {
+      name: data.name
+    }
+  } else if (data.role && data.role.length) {
+    param = {
+      role: _.in(data.role)
+    }
+  }
 
->>>>>>> 9b262834bc1502562212142367e400476af88362
+
+  const COLION = DB.collection('user').where(param);
   const limit = data.page.size > 20 ? 20 : data.page.size;
   const skip = data.page.current_num * limit;
+
+  let records = {}
   try {
     records = await COLION.skip(skip).limit(limit).get();
     if (records.data.length > 0) {
@@ -183,7 +207,7 @@ async function getUserList(data) {
 }
 /**
  * {
- *  name:string
+ *  [name:string|role:[]]
  * }
  * 
  */
