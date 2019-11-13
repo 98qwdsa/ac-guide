@@ -1,6 +1,4 @@
-// src/pages/manage/addUser/addUser.js
 const service = require('../../service.js');
-// let reloadTrigger = getApp().globalData.managerHomePersonManage;
 let trigger = getApp().globalData.managerHomePersonManageAddUser;
 Page({
 

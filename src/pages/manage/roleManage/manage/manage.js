@@ -15,7 +15,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.loadRole();
+    this.loadRole().then(powerRole => {
+      this.setData({
+        role: powerRole.role
+      })
+    });
     this.loadData(['Publisher']);
   },
   switchTab(e){
@@ -24,19 +28,42 @@ Page({
       currentTab
     });
     this.loadData(currentTab.split(" "));
+  },
+  loadRole() {
+    return new Promise((reslove, reject) =>{
+      service.getPowerRole().then(powerRole => {
+        reslove(powerRole);
+        // this.setData({
+        //   role: powerRole.role
+        // });
+      })
+    })
+
+
     
   },
   loadData(roles){
-    wx.showLoading({
-      title: '加载中...',
-      mask: true
+    let _this = this;
+    let reloadTrigger = getApp().globalData.managerHomeRoleManage;
+    this.loadRole().then(powerRole =>{
+      for (let i = 0; i < powerRole.role.length; i++) {
+        if (reloadTrigger[powerRole.role[i].code] === true && powerRole.role[i].code === roles[0]) {
+          wx.showLoading({
+            title: '加载中...',
+            mask: true
+          })
+          service.getUserList({ role: roles }).then(userList => {
+            _this.setData({
+              userList: userList.data
+            })
+            wx.hideLoading();
+          })
+          reloadTrigger[powerRole.role[i].code] = false;
+        }
+        
+      }
     })
-    service.getUserList({role:roles}).then(userList => {
-      this.setData({
-        userList: userList.data
-      })
-      wx.hideLoading();
-    })
+    
   },
   addRoleUser(){
     wx.navigateTo({
@@ -75,13 +102,7 @@ Page({
       }
     })
   },
-  loadRole(){
-    service.getPowerRole().then(powerRole =>{
-      this.setData({
-        role: powerRole.role
-      });
-    })
-  },
+  
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -109,7 +130,11 @@ Page({
    */
   onUnload: function () {
     let reloadTrigger = getApp().globalData.managerHomeRoleManage;
-    reloadTrigger.left = true;
+    this.loadRole().then(powerRole => {
+      for (let i = 0; i < powerRole.role.length; i++) {
+        reloadTrigger[powerRole.role[i].code] = true;
+      }
+    })
   },
 
   /**

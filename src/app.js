@@ -48,9 +48,9 @@ App({
       right: true
     },
     'managerHomeRoleManage':{
-      left: true,
-      mid: true,
-      right: true
+      Publisher: true,
+      Observer: true,
+      Participant: true
     },
     'managerHomePersonManageAddUser':{
       userName:''

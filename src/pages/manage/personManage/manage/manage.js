@@ -105,27 +105,21 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    // let reloadTrigger = getApp().globalData.managerHomePersonManage;
-    // if (reloadTrigger.mid === false) {
-    //   return;
-    // }
-    // this.loadData().then(() => {
-    //   reloadTrigger.mid = false;
-    // });
     let trigger = getApp().globalData.managerHomePersonManageAddUser;
     if (trigger.userName === ''){
       return;
     }
-    service.addUser(trigger.userName);
     let userList = [...this.data.userList];
-    userList.push({
-      name: trigger.userName
-    })
-    this.setData({
-      userList
-    })
-    trigger.userName = ''
-
+    service.addUser(trigger.userName).then(_id => {
+      userList.push({
+        _id,
+        name: trigger.userName
+      })
+      this.setData({
+        userList
+      })
+      trigger.userName = ''
+    }); 
   },
 
   /**

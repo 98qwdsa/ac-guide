@@ -245,8 +245,6 @@ Page({
         && this.data.allUserList.length) {
       this.loadfollowerList('allUserList');
     }
-
-
   },
 
   /**
