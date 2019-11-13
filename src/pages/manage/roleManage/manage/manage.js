@@ -6,73 +6,88 @@ Page({
    * 页面的初始数据
    */
   data: {
-    currentTab: 'Publisher',
-    userList:[],
-    role:[]
+    currentTab: '',
+    role: [],
+    userList: [],
+    Publisher: [],
+    Observer: [],
+    Participant: []
+
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    this.loadRole().then(powerRole => {
-      this.setData({
-        role: powerRole.role
-      })
+  onLoad: function(options) {
+    this.loadRole().then(() => {
+      this.loadData(this.data.currentTab);
     });
-    this.loadData(['Publisher']);
+
   },
-  switchTab(e){
-    let currentTab = e.currentTarget.id;
-    this.setData({
+  switchTab(e) {
+    const currentTab = e.currentTarget.id;
+    const reloadTrigger = getApp().globalData.managerHomeRoleManage;
+    let data = {
       currentTab
-    });
-    this.loadData(currentTab.split(" "));
+    }
+    if (reloadTrigger[currentTab] === true) {
+      this.loadData(currentTab);
+    } else {
+      data = {
+        currentTab,
+        userList: this.data[currentTab]
+      }
+    }
+    this.setData({
+      ...data
+    })
+
   },
   loadRole() {
-    return new Promise((reslove, reject) =>{
+    let reloadTrigger = getApp().globalData.managerHomeRoleManage;
+    return new Promise((reslove, reject) => {
       service.getPowerRole().then(powerRole => {
         reslove(powerRole);
-        // this.setData({
-        //   role: powerRole.role
-        // });
+        let role = powerRole.role
+        this.setData({
+          role,
+          currentTab: role[0].code
+        });
+        for (let i in role) {
+          reloadTrigger[i] = true;
+        }
       })
     })
-
-
-    
   },
-  loadData(roles){
-    let _this = this;
+  loadData(role) {
     let reloadTrigger = getApp().globalData.managerHomeRoleManage;
-    this.loadRole().then(powerRole =>{
-      for (let i = 0; i < powerRole.role.length; i++) {
-        if (reloadTrigger[powerRole.role[i].code] === true && powerRole.role[i].code === roles[0]) {
-          wx.showLoading({
-            title: '加载中...',
-            mask: true
-          })
-          service.getUserList({ role: roles }).then(userList => {
-            _this.setData({
-              userList: userList.data
-            })
-            wx.hideLoading();
-          })
-          reloadTrigger[powerRole.role[i].code] = false;
-        }
-        
-      }
+
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
     })
-    
+    service.getUserList({
+      role: [role]
+    }).then(userList => {
+      this.setData({
+        userList: userList.data,
+        [role]: userList.data
+      })
+      wx.hideLoading();
+      reloadTrigger[role] = false
+    })
+
+
   },
-  addRoleUser(){
+  addRoleUser() {
     wx.navigateTo({
       url: '../addRoleUser/addRoleUser',
     })
   },
   deleteUser(e) {
+    let curentTab = this.data.curentTab
     let _this = this;
-    let newUserList = [...this.data.userList]
+    let newUserList = [...this.data[curentTab]]
     let _id = e.currentTarget.dataset.deleteid
     wx.showModal({
       title: '提示',
@@ -94,6 +109,7 @@ Page({
               }
             })
             _this.setData({
+              [curentTab]: newUserList,
               userList: newUserList
             })
             wx.hideLoading();
@@ -102,33 +118,33 @@ Page({
       }
     })
   },
-  
+
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
     let reloadTrigger = getApp().globalData.managerHomeRoleManage;
     this.loadRole().then(powerRole => {
       for (let i = 0; i < powerRole.role.length; i++) {
@@ -140,21 +156,21 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   }
 })

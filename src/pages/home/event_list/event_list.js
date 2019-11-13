@@ -21,7 +21,6 @@ Page({
     return new Promise((reslove, reject) => {
       const userInfo = {}
       service.checkUserInfo().then(data => {
-        console.log(data);
         APP.globalData.userInfo = data;
         wx.hideLoading();
         this.setData({

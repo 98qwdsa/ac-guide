@@ -1,9 +1,8 @@
 <!--src/pages/manage/roleDetail/roleDetail.wxml-->
 <view class='container'>
   <view class="tab-wrapper">
-    <block wx:for="{{role}}" wx:key="item">
-      <view id="{{item.code}}" class='tab {{currentTab === item.code ? "tab-active":""}}' 
-      bindtap='switchTab'>{{item.code}}</view>
+    <block wx:for="{{role}}" wx:key='index' wx:if='{{item.code !="Participant" }}'>
+      <view id="{{item.code}}" class='tab {{currentTab === item.code ? "tab-active":""}}' bindtap='switchTab'>{{item.label}}</view>
     </block>
   </view>
 
@@ -12,13 +11,13 @@
       <text>添加</text>
     </view>
     <view class="user-list">
-      <block wx:for="{{userList}}" wx:key="{{index}}">
-      <user-item userName="{{item.name}}">
-        <view class="user-delete" bindtap="deleteUser" data-deleteid="{{item._id}}">
-          <image src="../../../../asset/task_step_delete.png"></image>
-        </view>
-      </user-item>
+      <block wx:for='{{userList}}' wx:key="{{index}}">
+        <user-item userName="{{item.name}}">
+          <view class="user-delete" bindtap="deleteUser" data-deleteid="{{item._id}}">
+            <image src="../../../../asset/task_step_delete.png"></image>
+          </view>
+        </user-item>
       </block>
     </view>
   </view>
-</view> 
+</view>

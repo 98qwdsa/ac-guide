@@ -7,6 +7,7 @@ function checkParamFormat(data) {
   let {
     name,
     role,
+    filterRoles,
     page
   } = data;
 
@@ -30,6 +31,11 @@ function checkParamFormat(data) {
   if (role !== undefined && !(role instanceof Array)) {
     res.code = '1001';
     res.msg.push('param role:array wrong');
+  }
+
+  if (filterRoles !== undefined && !(filterRoles instanceof Array)) {
+    res.code = '1001';
+    res.msg.push('param filterRoles:array wrong');
   }
 
 
@@ -75,6 +81,11 @@ function checkParamFormat(data) {
     if (name) {
       extendPram = {
         name
+      }
+    }
+    if (filterRoles) {
+      extendPram = {
+        filterRoles
       }
     }
     if (role) {
@@ -129,6 +140,10 @@ async function getUserList(data) {
   if (data.name) {
     param = {
       name: data.name
+    }
+  } else if (data.filterRoles && data.filterRoles.length) {
+    param = {
+      role: _.nin(data.filterRoles)
     }
   } else if (data.role && data.role.length) {
     param = {
@@ -207,7 +222,7 @@ async function getUserList(data) {
 }
 /**
  * {
- *  [name:string|role:[]]
+ *  [name:string|role:[]|filterRoles:[]]
  * }
  * 
  */
