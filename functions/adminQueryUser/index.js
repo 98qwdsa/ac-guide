@@ -116,6 +116,7 @@ function checkParamFormat(data) {
         role,
         name
       }
+      
     }
     res.data = {
       page: {
@@ -179,7 +180,7 @@ async function getUserList(data) {
     param = _.and([{
       name: data.name
     }, {
-      role: _.in(data.role)
+      role: _.nin(data.role)
     }])
   }
 

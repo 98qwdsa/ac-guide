@@ -13,7 +13,6 @@ Page({
     Publisher: [],
     Observer: [],
     Participant: []
-
   },
 
   /**
@@ -82,18 +81,8 @@ Page({
 
   },
   addRoleUser() {
-    let role = this.data.currentTab;
-    let otherRole = [];
-    otherRole = allRole.filter(e =>{
-      if(e.code !== role){
-        return {
-          ...e
-        }
-      }
-    })
     wx.navigateTo({
       url: '../addRoleUser/addRoleUser?role=' + this.data.currentTab 
-        + '&otherRole=' + otherRole.map(e => e.code),
     })
   },
   deleteUserRole(e) {
@@ -153,7 +142,6 @@ Page({
     if (userList === '' || reloadTrigger.userName === '' || reloadTrigger.userId === '') {
       return;
     }
-
     userList.push({
       _id: reloadTrigger.userId,
       name: reloadTrigger.userName

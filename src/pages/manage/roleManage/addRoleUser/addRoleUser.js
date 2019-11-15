@@ -2,10 +2,10 @@
 const service = require('../../service.js');
 const reloadTrigger = getApp().globalData.managerHomeRoleManage;
 let role = '';
-let otherRole = [];
 let num = 0;
 let delay = 500;
 let timer = {};
+let userRoleList = [];
 Page({
 
   /**
@@ -21,7 +21,6 @@ Page({
    */
   onLoad: function (options) {
     role = options.role;
-    otherRole = options.otherRole.split(',');
     this.loadData(role);
   },
   loadData(role){
@@ -35,11 +34,16 @@ Page({
       this.setData({
         userList: data.data
       })
+      userRoleList = data.data;
       wx.hideLoading();
+    },error =>{
+      this.setData({
+        userList: []
+      })
     })
   },
   addUser(e){
-    let newUserList = this.data.userList;
+    let newUserList = userRoleList;
     let _this = this;
     let target = e.currentTarget.dataset;
     wx.showModal({
@@ -68,8 +72,10 @@ Page({
               }
             })
             _this.setData({
-              userList: newUserList
+              userList: newUserList,
+              searchInput: ''
             })
+            userRoleList = newUserList;
             wx.hideLoading();
           });
         } else if (res.cancel) {
@@ -86,9 +92,15 @@ Page({
     timer = setInterval(() =>{
       num += 100
       if(num > delay){
+        let name = e.detail.value
         num = 0
         clearInterval(timer)
-        _this.loadUserByName(e.detail.value);
+        if (name){
+          _this.loadUserByName(name);
+        }else{
+          _this.loadData(role);
+        }
+          
       }
     },100)
   },
@@ -99,17 +111,20 @@ Page({
     })
     service.getUserList({
       name,
-      role: otherRole,
+      role: [role],
       action: 'userInRole'
     }).then((userList) =>{
       this.setData({
         userList:userList.data
       })
       wx.hideLoading();
+    },error =>{
+      this.setData({
+        userList: []
+      })
     })
   },
   deleteInputText(){
-    
     this.setData({
       searchInput: ''
     })

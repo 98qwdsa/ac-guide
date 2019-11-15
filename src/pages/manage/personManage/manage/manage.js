@@ -2,6 +2,7 @@ const service = require('../../service.js');
 let num = 0;
 let delay = 300;
 let timer = {};
+let allUserList = [];
 Page({
 
   /**
@@ -18,7 +19,7 @@ Page({
   onLoad: function(options) {
     this.loadData();
   },
-  loadData(name) {
+  loadData(name = '') {
     return new Promise((reslove, reject) => {
       wx.showLoading({
         title: '加载中...',
@@ -29,17 +30,29 @@ Page({
       }).then(userList => {
         reslove();
         this.setData({
-          userList: userList.data
+          userList: userList.data,
+          searchInput: name
         })
+        if (name === '') {
+          allUserList = [...userList.data]
+        };
         wx.hideLoading();
+      },error =>{
+        this.setData({
+          userList: []
+        })
       })
     })
   },
-  deleteText(){
-    this.setData({
-      searchInput: ''
-    })
-    this.loadData();
+  deleteText() {
+    if (allUserList) {
+      this.setData({
+        searchInput: '',
+        userList: allUserList
+      })
+    } else {
+      this.loadData();
+    }
   },
   addUser() {
     wx.navigateTo({
@@ -48,7 +61,7 @@ Page({
   },
   deleteUser(e) {
     let _this = this;
-    let newUserList = [...this.data.userList]
+    let newUserList = allUserList;
     let _id = e.currentTarget.dataset.deleteid
     wx.showModal({
       title: '提示',
@@ -74,7 +87,7 @@ Page({
               userList: newUserList,
               searchInput: ''
             })
-            _this.loadData();
+            allUserList = newUserList
             wx.hideLoading();
           })
         }
@@ -107,20 +120,21 @@ Page({
    */
   onShow: function() {
     let trigger = getApp().globalData.managerHomePersonManageAddUser;
-    if (trigger.userName === ''){
+    if (trigger.userName === '') {
       return;
     }
-    let userList = [...this.data.userList];
+    let newUserList = [...allUserList];
     service.addUser(trigger.userName).then(_id => {
-      userList.push({
+      newUserList.push({
         _id,
         name: trigger.userName
       })
       this.setData({
-        userList
+        userList: newUserList
       })
+      allUserList = newUserList
       trigger.userName = ''
-    }); 
+    });
   },
 
   /**
@@ -134,7 +148,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function() {
-    
+
   },
 
   /**
