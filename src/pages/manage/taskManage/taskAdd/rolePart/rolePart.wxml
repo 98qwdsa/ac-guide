@@ -2,7 +2,7 @@
     <view class="content">
       <checkbox-group bindchange="checkboxChange">
         <label class="checkbox-item" wx:for="{{roles}}" wx:key="index">
-          <checkbox value="{{item.code}}" checked="{{item.checked}}"/> {{item.code}}
+          <checkbox value="{{item.label}}" checked="{{item.checked}}"/> {{item.label}}
         </label>
       </checkbox-group>
     </view>

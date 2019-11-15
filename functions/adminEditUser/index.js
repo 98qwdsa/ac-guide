@@ -4,9 +4,11 @@ const cloud = require('wx-server-sdk')
 cloud.init();
 
 function checkParamFormat(param) {
+  const actionSet = new Set(['edit', 'delete', 'addRole', 'removeRole'])
   const {
     _id,
-    data
+    data,
+    action = 'edit',
   } = param;
 
   const res = {
@@ -14,7 +16,10 @@ function checkParamFormat(param) {
     msg: [],
     data: null
   }
-
+  if (typeof(action) !== 'string' || !actionSet.has(action)) {
+    res.code = '1003';
+    res.msg.push('action:string must be one of [edit|delete|addRole|removeRole]')
+  }
   if (_id === undefined) {
     res.code = '1000';
     res.msg.push('_id:string')
@@ -24,37 +29,44 @@ function checkParamFormat(param) {
       res.msg.push('_id:string')
     }
   }
-  // if(action === undefined){
-  //   action = 'delete'
-  // }else{
-  //   if (action != 'delete' && action != 'update'){
-  //     res.code = '1001';
-  //     res.msg.push('action:string')
-  //   }
-  // }
-  if (data === undefined) {
-    // res.code = '1000';
-    // res.msg.push('data:object')
-  } else {
-    if (data['name'] === undefined && data['role'] === undefined && data['power'] === undefined) {
-      res.code = '1002';
-      res.msg = 'should set one of them:data.name:string,data.role:array,data.power:arraye';
-    } else {
-      if (data.name && typeof(data.name) != 'string') {
-        res.code = '1001';
-        res.msg.push('data.name:string')
-      }
-      if (data.role && (!(data.role instanceof Array))) {
-        res.code = '1001';
-        res.msg.push('data.role:array')
-      }
 
-      if (data.power && (!(data.power instanceof Array))) {
-        res.code = '1001';
-        res.msg.push('data.power:string')
+  if (data === undefined && action !== 'delete') {
+    res.code = '1000';
+    res.msg.push('data:object')
+  } else {
+    if (action === 'edit') {
+      if (data['name'] === undefined && data['role'] === undefined && data['power'] === undefined) {
+        res.code = '1002';
+        res.msg = 'should set one of them:data.name:string,data.role:array,data.power:arraye';
+      } else {
+        if (data.name && typeof(data.name) != 'string') {
+          res.code = '1001';
+          res.msg.push('data.name:string')
+        }
+        if (data.role && (!(data.role instanceof Array))) {
+          res.code = '1001';
+          res.msg.push('data.role:array')
+        }
+
+        if (data.power && (!(data.power instanceof Array))) {
+          res.code = '1001';
+          res.msg.push('data.power:string')
+        }
       }
     }
 
+    if (action === 'addRole') {
+      if (!data.role || !(data.role instanceof Array)) {
+        res.code = '1001';
+        res.msg.push('data.role:array')
+      }
+    }
+    if (action === 'removeRole') {
+      if (!data.role || typeof(data.role) !== 'string') {
+        res.code = '1001';
+        res.msg.push('data.role:string')
+      }
+    }
   }
 
   if (res.code === '1000') {
@@ -66,11 +78,24 @@ function checkParamFormat(param) {
   }
 
   if (res.code === '0000') {
-    res.msg = '',
-      res.data = {
-        _id,
-        data
+    let param = {
+      _id
+    }
+    if (action === 'edit') {
+      param['data'] = data;
+    }
+
+    if (action === 'addRole' || action === 'removeRole') {
+      param['data'] = {
+        role: data.role
       }
+    }
+
+    res.msg = '';
+    res.data = {
+      ...param,
+      action
+    };
   }
   return res;
 }
@@ -104,15 +129,37 @@ async function checkPermission() {
 
 // 跟新用户信息
 async function updateUserInfo(data) {
-  let res = undefined;
+  const DB = cloud.database();
+  const record = DB.collection('user').doc(data._id)
+  const _ = DB.command
+  let res;
   try {
-    if (data.data === undefined){
-      res = await cloud.database().collection('user').doc(data._id).remove();
-    }else{
-      res = await cloud.database().collection('user').doc(data._id).update({
-        data: data.data
-      });
+    if (data.action === 'delete') {
+      res = await record.remove();
+    } else {
+      let userInfo = {};
+      if (data.action === 'edit') {
+        userInfo = {
+          data: data.data
+        };
+      }
+      if (data.action === 'addRole') {
+        userInfo = {
+          data: {
+            role: _.push(data.data.role)
+          }
+        };
+      }
+      if (data.action === 'removeRole') {
+        userInfo = {
+          data: {
+            role: _.pull(data.data.role)
+          }
+        };
+      }
+      res = await record.update(userInfo)
     }
+
     if (res.stats.updated < 1) {
       return {
         code: '2001',
@@ -140,7 +187,8 @@ async function updateUserInfo(data) {
  *    name:'',
  *    role:[],
  *    power:[]
- *  }
+ *  },
+ *  action:'' [edit|delete|addRole|removeRole]
  * }
  * 
  */
@@ -150,7 +198,7 @@ exports.main = async(event, context) => {
   if (param.code != '0000') {
     return param;
   }
-
+  // 验证 role 和 power 值得合法性
   const permission = await checkPermission();
   if (permission.code != '0000') {
     return permission;

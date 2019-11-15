@@ -58,7 +58,7 @@ module.exports = {
       name
     })
   },
-  deleteUser(data) {
+  editUser(data) {
     return cloud.call('adminEditUser', {
       ...data
     })

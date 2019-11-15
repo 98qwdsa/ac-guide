@@ -4,11 +4,13 @@ const cloud = require('wx-server-sdk')
 cloud.init();
 
 function checkParamFormat(data) {
+  const actionSet = new Set(['userInRole'])
   let {
     name,
     role,
     filterRoles,
-    page
+    page,
+    action
   } = data;
 
   //初始化页面信息
@@ -38,6 +40,22 @@ function checkParamFormat(data) {
     res.msg.push('param filterRoles:array wrong');
   }
 
+  if (action) {
+    if (actionSet.has(action)) {
+      if (name == undefined && typeof(name) != 'string') {
+        res.code = '1001';
+        res.msg.push('param name:string wrong');
+      }
+
+      if (role == undefined && !(role instanceof Array)) {
+        res.code = '1001';
+        res.msg.push('param role:array wrong');
+      }
+    } else {
+      res.code = '1002';
+      res.msg.push('param action:string must be one of [UserInRole]');
+    }
+  }
 
   if (page === undefined) {
     page = defaultPageConf;
@@ -93,12 +111,19 @@ function checkParamFormat(data) {
         role
       }
     }
+    if (action === 'userInRole') {
+      extendPram = {
+        role,
+        name
+      }
+    }
     res.data = {
       page: {
         ...defaultPageConf,
         ...page
       },
-      ...extendPram
+      ...extendPram,
+      action
     }
   }
 
@@ -150,7 +175,13 @@ async function getUserList(data) {
       role: _.in(data.role)
     }
   }
-
+  if (data.action === 'userInRole') {
+    param = _.and([{
+      name: data.name
+    }, {
+      role: _.in(data.role)
+    }])
+  }
 
   const COLION = DB.collection('user').where(param);
   const limit = data.page.size > 20 ? 20 : data.page.size;
@@ -223,6 +254,7 @@ async function getUserList(data) {
 /**
  * {
  *  [name:string|role:[]|filterRoles:[]]
+ *  action:[UserInRole]
  * }
  * 
  */

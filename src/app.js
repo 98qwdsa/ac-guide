@@ -50,7 +50,9 @@ App({
     'managerHomeRoleManage':{
       Publisher: true,
       Observer: true,
-      Participant: true
+      Participant: true,
+      userName: '',
+      userId: ''
     },
     'managerHomePersonManageAddUser':{
       userName:''

@@ -59,8 +59,9 @@ Page({
             title: '删除用户中...',
             mask: true
           })
-          service.deleteUser({
-            _id
+          service.editUser({
+            _id,
+            action: 'delete'
           }).then(() => {
             newUserList = newUserList.filter(e => {
               if (e._id !== _id) {

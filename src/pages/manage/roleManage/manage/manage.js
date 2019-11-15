@@ -1,5 +1,6 @@
 // src/pages/manage/roleDetail/roleDetail.js
 const service = require('../../service.js');
+let allRole = [];
 Page({
 
   /**
@@ -48,13 +49,14 @@ Page({
     return new Promise((reslove, reject) => {
       service.getPowerRole().then(powerRole => {
         reslove(powerRole);
+        allRole = powerRole.role;
         let role = powerRole.role
         this.setData({
           role,
           currentTab: role[0].code
         });
         for (let i in role) {
-          reloadTrigger[i] = true;
+          reloadTrigger[role[i].code] = true;
         }
       })
     })
@@ -80,27 +82,42 @@ Page({
 
   },
   addRoleUser() {
+    let role = this.data.currentTab;
+    let otherRole = [];
+    otherRole = allRole.filter(e =>{
+      if(e.code !== role){
+        return {
+          ...e
+        }
+      }
+    })
     wx.navigateTo({
-      url: '../addRoleUser/addRoleUser',
+      url: '../addRoleUser/addRoleUser?role=' + this.data.currentTab 
+        + '&otherRole=' + otherRole.map(e => e.code),
     })
   },
-  deleteUser(e) {
-    let curentTab = this.data.curentTab
+  deleteUserRole(e) {
+    let currentTab = this.data.currentTab
+    let newUserList = [...this.data.userList]
     let _this = this;
-    let newUserList = [...this.data[curentTab]]
     let _id = e.currentTarget.dataset.deleteid
     wx.showModal({
       title: '提示',
-      content: '是否删除用户',
+      content: '是否取消用户的角色',
       success(res) {
         if (res.confirm) {
           wx.showLoading({
-            title: '删除用户中...',
+            title: '取消用户角色中...',
             mask: true
           })
-          service.deleteUser({
-            _id
+          service.editUser({
+            _id,
+            data: {
+              role: currentTab
+            },
+            action: 'removeRole'
           }).then(() => {
+            
             newUserList = newUserList.filter(e => {
               if (e._id !== _id) {
                 return {
@@ -108,8 +125,8 @@ Page({
                 }
               }
             })
+            _this.data[_this.data.currentTab] = newUserList;
             _this.setData({
-              [curentTab]: newUserList,
               userList: newUserList
             })
             wx.hideLoading();
@@ -131,7 +148,21 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
+    let userList = this.data.userList;
+    const reloadTrigger = getApp().globalData.managerHomeRoleManage;
+    if (userList === '' || reloadTrigger.userName === '' || reloadTrigger.userId === '') {
+      return;
+    }
 
+    userList.push({
+      _id: reloadTrigger.userId,
+      name: reloadTrigger.userName
+    })
+    this.setData({
+      userList
+    })
+    reloadTrigger.userName = '';
+    reloadTrigger.userId = '';
   },
 
   /**
@@ -145,12 +176,9 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function() {
-    let reloadTrigger = getApp().globalData.managerHomeRoleManage;
-    this.loadRole().then(powerRole => {
-      for (let i = 0; i < powerRole.role.length; i++) {
-        reloadTrigger[powerRole.role[i].code] = true;
-      }
-    })
+    const reloadTrigger = getApp().globalData.managerHomeRoleManage;
+    reloadTrigger.userName = '';
+    reloadTrigger.userId = '';
   },
 
   /**

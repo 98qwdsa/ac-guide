@@ -23,7 +23,7 @@ Page({
     })
     service.getPowerRole().then(data =>{
       data.role.forEach(function(val){
-        if (roleChecked.includes(val.code)){
+        if (roleChecked.includes(val.label)){
           val.checked = true;
         }else{
           val.checked = false; 

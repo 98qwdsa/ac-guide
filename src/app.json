@@ -3,8 +3,6 @@
     "pages/home/event_list/event_list",
     "pages/home/event_detail/event_detail",
     "pages/login/login",
-    "pages/admins/user/list/list",
-    "pages/admins/user/detail/detail",
     "pages/manage/home/home",
     "pages/manage/taskManage/manage/manage",
     "pages/manage/personManage/manage/manage",

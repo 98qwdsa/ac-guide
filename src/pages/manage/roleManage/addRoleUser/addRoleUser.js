@@ -1,4 +1,8 @@
 // src/pages/manage/addRole/addRole.js
+const service = require('../../service.js');
+const reloadTrigger = getApp().globalData.managerHomeRoleManage;
+let role = '';
+let otherRole = [];
 let num = 0;
 let delay = 500;
 let timer = {};
@@ -8,32 +12,108 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userList:[{
-      name:'张三'
-    },{
-      name:'李四'
-    }]
+    userList: [],
+    searchInput: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    role = options.role;
+    otherRole = options.otherRole.split(',');
+    this.loadData(role);
+  },
+  loadData(role){
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
+    service.getUserList({
+      filterRoles: [role]
+    }).then(data =>{
+      this.setData({
+        userList: data.data
+      })
+      wx.hideLoading();
+    })
+  },
+  addUser(e){
+    let newUserList = this.data.userList;
+    let _this = this;
+    let target = e.currentTarget.dataset;
+    wx.showModal({
+      title: '提示',
+      content: '是否添加该成员',
+      success(res) {
+        if (res.confirm) {
+          wx.showLoading({
+            title: '增加用户角色中...',
+            mask: true
+          })
+          service.editUser({
+            _id: e.currentTarget.dataset.adduserid,
+            data: {
+              role: [role]
+            },
+            action: 'addRole'
+          }).then(() => {
+            reloadTrigger.userName = target.addusername;
+            reloadTrigger.userId = target.adduserid;
+            newUserList = newUserList.filter(e =>{
+              if(e._id !== target.adduserid){
+                return {
+                  ...e
+                }
+              }
+            })
+            _this.setData({
+              userList: newUserList
+            })
+            wx.hideLoading();
+          });
+        } else if (res.cancel) {
 
+        }
+      }
+    })  
   },
   bindKeyInput: function(e){
+    let _this = this;
     let userName = '';
     num = 0;
     clearInterval(timer);
     timer = setInterval(() =>{
       num += 100
-      console.log(num)
       if(num > delay){
         num = 0
         clearInterval(timer)
-        console.log('start query')
+        _this.loadUserByName(e.detail.value);
       }
     },100)
+  },
+  loadUserByName(name){
+    wx.showLoading({
+      title: '搜索用户中...',
+      mask: true
+    })
+    service.getUserList({
+      name,
+      role: otherRole,
+      action: 'userInRole'
+    }).then((userList) =>{
+      this.setData({
+        userList:userList.data
+      })
+      wx.hideLoading();
+    })
+  },
+  deleteInputText(){
+    
+    this.setData({
+      searchInput: ''
+    })
+    this.loadData(role);
   },
 
   /**
