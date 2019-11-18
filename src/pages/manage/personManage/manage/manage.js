@@ -108,6 +108,16 @@ Page({
       }
     }, 100)
   },
+  editUser(e){
+    let _id = e.currentTarget.dataset.userid;
+    let userName = e.currentTarget.dataset.username;
+    let power = e.currentTarget.dataset.userpower;
+    let role = e.currentTarget.dataset.userrole;
+    wx.navigateTo({
+      url: '../editUser/editUser?userId=' + _id +'&userName=' + userName + 
+        '&power=' + power + '&role=' + role,
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -120,21 +130,41 @@ Page({
    */
   onShow: function() {
     let trigger = getApp().globalData.managerHomePersonManageAddUser;
-    if (trigger.userName === '') {
+    if (trigger.userName !== '') {
+      let newUserList = [...allUserList];
+      service.addUser(trigger.userName).then(_id => {
+        newUserList.push({
+          _id,
+          name: trigger.userName
+        })
+        this.setData({
+          userList: newUserList
+        })
+        allUserList = newUserList
+        trigger.userName = ''
+      });
+    }
+    
+    let userInfo = getApp().globalData.managerHomePersonManageEditUser;
+    if (userInfo._id === ''){
       return;
     }
     let newUserList = [...allUserList];
-    service.addUser(trigger.userName).then(_id => {
-      newUserList.push({
-        _id,
-        name: trigger.userName
-      })
-      this.setData({
-        userList: newUserList
-      })
-      allUserList = newUserList
-      trigger.userName = ''
+    newUserList.forEach(function(item,index){
+      if(item._id === userInfo._id){
+        item.name = userInfo.name;
+        item.power = userInfo.power;
+        item.role = userInfo.role;
+      }
     });
+    this.setData({
+      userList : newUserList
+    })
+    allUserList = newUserList
+    userInfo._id = '';
+    userInfo.name = '';
+    userInfo.power = [];
+    userInfo.role = []
   },
 
   /**

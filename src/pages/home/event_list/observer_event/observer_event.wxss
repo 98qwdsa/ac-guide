@@ -1,0 +1,20 @@
+/* src/pages/home/event_list/observer_event/observer_event.wxss */
+
+.task_progress_item {
+  margin:20rpx 20rpx 0 20rpx;
+}
+.task_progress_item  .cancel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150rpx;
+  height: 40rpx;
+  border-radius: 18rpx;
+  background-image: linear-gradient(-90deg, #7e46dd 0%, #dd60b3 100%);
+  margin-top: 10rpx;
+  margin-left: 520rpx;
+  color: #fff;
+  font-size: 25rpx;
+  font-family: SourceHanSansCN-Regular;
+  z-index: 100;
+}

@@ -31,7 +31,6 @@ module.exports = {
       ...data
     })
   },
-
   nextStep(code, step_Uid) {
     return cloud.call('employeeAddStep', {
       code,

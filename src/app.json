@@ -1,7 +1,7 @@
 {
   "pages": [
     "pages/home/event_list/event_list",
-    "pages/home/event_detail/event_detail",
+    "pages/home/event_list/participant_detail/participant_detail",
     "pages/login/login",
     "pages/manage/home/home",
     "pages/manage/taskManage/manage/manage",
@@ -13,7 +13,9 @@
     "pages/manage/taskManage/taskProgress/taskProgress/taskProgress",
     "pages/manage/taskManage/taskProgress/addObserver/addObserver",
     "pages/manage/personManage/addUser/addUser",
-    "pages/manage/roleManage/addRoleUser/addRoleUser"
+    "pages/manage/roleManage/addRoleUser/addRoleUser",
+    "pages/manage/personManage/editUser/editUser",
+    "pages/home/event_list/observer_event/observer_event"
   ],
   "window": {
     "backgroundTextStyle": "light",

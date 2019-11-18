@@ -1,5 +1,6 @@
 // src/pages/index/user_event_steps/user_event_steps.js
-const service = require('../service.js');
+let reloadTrigger = getApp().globalData.homeEventListObserverEvent;
+const service = require('../../service.js');
 Page({
 
   /**
@@ -76,6 +77,8 @@ Page({
           stepList
         })
       }
+      reloadTrigger.load = true;
+
     })
   },
   initSwiperHeight() {

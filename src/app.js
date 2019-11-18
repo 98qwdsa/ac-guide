@@ -37,26 +37,34 @@ App({
   },
   globalData: {
     userInfo: null,
-    'managerHomeTaskManagerTaskAdd':{
+    'managerHomeTaskManagerTaskAdd': {
       roles: '',
-      stepIndex: 0, 
-      stepName: '', 
+      stepIndex: 0,
+      stepName: '',
     },
     'managerHomeTaskManagerTaskProgess': {
       left: true,
       mid: true,
       right: true
     },
-    'managerHomeRoleManage':{
+    'managerHomeRoleManage': {
       Publisher: true,
       Observer: true,
       Participant: true,
       userName: '',
       userId: ''
     },
-    'managerHomePersonManageAddUser':{
-      userName:''
+    'managerHomePersonManageAddUser': {
+      userName: ''
+    },
+    'managerHomePersonManageEditUser': {
+      _id: '',
+      name: '',
+      power: [],
+      role: []
+    },
+    'homeEventListObserverEvent':{
+      load: true
     }
   }
 })
-

@@ -1,5 +1,5 @@
 /* src/pages/index/user_event_steps/user_event_steps.wxss */
-@import "../../../common/css/common.wxss";
+@import "../../../../common/css/common.wxss";
 
 .warp {
   padding: 20rpx;

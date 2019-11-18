@@ -25,16 +25,9 @@
   <text class="list-title">任务列表</text>
   <view class='event_list_warp'>
     <view class='event_item_warp' wx:for="{{eventList}}" wx:key="unique">
-      <navigator url='../event_detail/event_detail?code={{item.code}}' open-type="navigate">
-        <event-detail detail='{{item}}'></event-detail>
-      </navigator>
+      <event-detail detail='{{item}}' bindtap="eventDetail" data-code='{{item.code}}'
+        data-name='{{item.name}}'>
+      </event-detail>
     </view>
-    <!-- <view class='event_item_warp'>
-      <navigator url='../../event_manage/list/list' open-type="navigate">
-        <view class='event_item'>
-          <text>编辑</text>
-        </view>
-      </navigator>
-    </view> -->
   </view>
 </view>

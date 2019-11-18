@@ -78,5 +78,18 @@ Page({
     this.setData({
       authButtonShow: false
     })
+  },
+  eventDetail(e) {
+    let role = APP.globalData.userInfo.role;
+    if (role.length !== 0  && role.includes('Observer')){
+      wx.navigateTo({
+        url: 'observer_event/observer_event?code=' + e.currentTarget.dataset.code +
+          '&name=' + e.currentTarget.dataset.name
+      })
+    }else{
+      wx.navigateTo({
+        url: 'participant_detail/participant_detail?code=' + e.currentTarget.dataset.code
+      })
+    }
   }
 })

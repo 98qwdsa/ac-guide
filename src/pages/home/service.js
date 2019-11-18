@@ -17,6 +17,21 @@ module.exports = {
       step_Uid,
       status_code: 50
     })
-  }
+  },
+  getQueryObserverEventDetail(data) {
+    return cloud.call('queryObserverEventDetail', {
+      ...data
+    });
+  },
+  getUserObserver(data) {
+    return cloud.call('queryUserObserver', {
+      ...data
+    })
+  },
+  editObserverForUser(data) {
+    return cloud.call('editObserver', {
+      ...data
+    })
+  },
   
 }

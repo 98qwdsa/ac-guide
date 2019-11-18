@@ -9,8 +9,9 @@
 </view>
 <view class="user-list">
   <block wx:for="{{userList}}" wx:key="{{index}}">
-    <user-item userName="{{item.name}}">
-      <view class="user-delete" bindtap="deleteUser" data-deleteid="{{item._id}}">
+    <user-item userName="{{item.name}}" bindtap="editUser" data-username="{{item.name}}"
+      data-userpower="{{item.power}}" data-userrole="{{item.role}}" data-userid="{{item._id}}">
+      <view class="user-delete" catchtap="deleteUser" data-deleteid="{{item._id}}">
         <image src="../../../../asset/task_step_delete.png"></image>
       </view>
     </user-item>
