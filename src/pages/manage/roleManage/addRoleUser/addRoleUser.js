@@ -62,8 +62,12 @@ Page({
             },
             action: 'addRole'
           }).then(() => {
-            reloadTrigger.userName = target.addusername;
-            reloadTrigger.userId = target.adduserid;
+            reloadTrigger.user.push({
+              name: target.addusername,
+              id: target.adduserid
+            })
+            // reloadTrigger.user = target.addusername;
+            // reloadTrigger.userId = target.adduserid;
             newUserList = newUserList.filter(e =>{
               if(e._id !== target.adduserid){
                 return {

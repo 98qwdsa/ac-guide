@@ -76,6 +76,12 @@ Page({
       })
       wx.hideLoading();
       reloadTrigger[role] = false
+    }, error =>{
+      this.setData({
+        userList: [],
+        [role] : []
+      })
+      reloadTrigger[role] = false
     })
 
 
@@ -139,18 +145,19 @@ Page({
   onShow: function() {
     let userList = this.data.userList;
     const reloadTrigger = getApp().globalData.managerHomeRoleManage;
-    if (userList === '' || reloadTrigger.userName === '' || reloadTrigger.userId === '') {
+    if (userList === '' || reloadTrigger.user.length === 0 ) {
       return;
     }
-    userList.push({
-      _id: reloadTrigger.userId,
-      name: reloadTrigger.userName
+    reloadTrigger.user.forEach(function(item){
+      userList.push({
+        _id: item.id,
+        name: item.name
+      })
     })
     this.setData({
       userList
     })
-    reloadTrigger.userName = '';
-    reloadTrigger.userId = '';
+    reloadTrigger.user = [];
   },
 
   /**

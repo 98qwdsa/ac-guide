@@ -77,6 +77,13 @@ Page({
     }).then(()=>{
       wx.hideLoading();
       wx.navigateBack();
+    },error =>{
+      wx.showModal({
+        title: '提示',
+        content: '请修改用户信息',
+        success: function(res) {},
+        fail: function(res) {},
+      })
     })
     userInfo._id = e.detail.value.userId;
     userInfo.name = e.detail.value.userName;

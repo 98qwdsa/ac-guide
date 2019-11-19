@@ -51,8 +51,13 @@ App({
       Publisher: true,
       Observer: true,
       Participant: true,
-      userName: '',
-      userId: ''
+      user: [{
+        name:'',
+        id: ''
+      }
+      ]
+      // userName: '',
+      // userId: ''
     },
     'managerHomePersonManageAddUser': {
       userName: ''
