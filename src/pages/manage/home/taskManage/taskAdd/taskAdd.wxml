@@ -12,7 +12,7 @@
           value='{{eventDetail.desc}}' bindblur='descBindblur' 
           placeholder="事件描述"></textarea>
       <view class='event_view'>
-        <navigator class="nav_role" url="../rolePart/rolePart?role={{eventDetail.role}}">
+        <navigator class="nav_role" url="rolePart/rolePart?role={{eventDetail.role}}">
           <checkbox-group name="role">
             <label class="checkbox-item" wx:for="{{eventDetail.role}}" 
             wx:key="{{eventDetail.role.index}}">
@@ -44,7 +44,7 @@
           </label>
         </checkbox-group>
         <view class="addStep">
-          <navigator url="../addTaskStep/addTaskStep">
+          <navigator url="addTaskStep/addTaskStep">
             <image src="../../../../../asset/Task_add.svg"></image>
           </navigator>
         </view>   

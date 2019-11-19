@@ -1,6 +1,6 @@
 {
   "usingComponents": {
-    "user-item": "../../components/user_item/user_item"
+    "user-item": "../../../components/user_item/user_item"
   },
   "navigationBarTitleText": "添加角色人员"
 }

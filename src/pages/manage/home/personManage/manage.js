@@ -41,6 +41,10 @@ Page({
         this.setData({
           userList: []
         })
+        wx.showModal({
+          title: '提示',
+          content: '找不到该用户，请重新输入',
+        })
       })
     })
   },
@@ -56,7 +60,7 @@ Page({
   },
   addUser() {
     wx.navigateTo({
-      url: '../addUser/addUser',
+      url: 'addUser/addUser',
     })
   },
   deleteUser(e) {
@@ -114,7 +118,7 @@ Page({
     let power = e.currentTarget.dataset.userpower;
     let role = e.currentTarget.dataset.userrole;
     wx.navigateTo({
-      url: '../editUser/editUser?userId=' + _id +'&userName=' + userName + 
+      url: 'editUser/editUser?userId=' + _id +'&userName=' + userName + 
         '&power=' + power + '&role=' + role,
     })
   },

@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "taskProgress": "../../../../components/task_progress/task_progress",
+    "step-warp": "../../../../components/step_warp/step_warp",
+    "event-detail": "../../../../components/event_item/event_item"
+  },
+  "navigationBarTitleText": ""
+}

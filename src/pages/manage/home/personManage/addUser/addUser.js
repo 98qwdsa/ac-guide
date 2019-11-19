@@ -1,4 +1,4 @@
-const service = require('../../service.js');
+const service = require('../../../service.js');
 let trigger = getApp().globalData.managerHomePersonManageAddUser;
 Page({
 

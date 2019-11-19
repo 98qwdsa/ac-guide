@@ -154,7 +154,7 @@ Page({
   },
   addObserverForUser(e) {
     wx.navigateTo({
-      url: '../addObserver/addObserver?code=' + this.data.event_code +
+      url: 'addObserver/addObserver?code=' + this.data.event_code +
         '&observed=' + e.currentTarget.dataset.observed,
     })
   },

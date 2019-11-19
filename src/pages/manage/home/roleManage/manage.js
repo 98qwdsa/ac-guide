@@ -41,7 +41,6 @@ Page({
     this.setData({
       ...data
     })
-
   },
   loadRole() {
     let reloadTrigger = getApp().globalData.managerHomeRoleManage;
@@ -62,7 +61,6 @@ Page({
   },
   loadData(role) {
     let reloadTrigger = getApp().globalData.managerHomeRoleManage;
-
     wx.showLoading({
       title: '加载中...',
       mask: true
@@ -79,16 +77,19 @@ Page({
     }, error =>{
       this.setData({
         userList: [],
-        [role] : []
+        [role] : [],
       })
-      reloadTrigger[role] = false
+      wx.showModal({
+        title: '提示',
+        content: '该角色没有用户，请添加',
+      })
     })
 
 
   },
   addRoleUser() {
     wx.navigateTo({
-      url: '../addRoleUser/addRoleUser?role=' + this.data.currentTab 
+      url: 'addRoleUser/addRoleUser?role=' + this.data.currentTab 
     })
   },
   deleteUserRole(e) {

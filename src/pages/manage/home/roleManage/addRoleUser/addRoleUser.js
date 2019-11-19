@@ -1,11 +1,12 @@
 // src/pages/manage/addRole/addRole.js
-const service = require('../../service.js');
+const service = require('../../../service.js');
 const reloadTrigger = getApp().globalData.managerHomeRoleManage;
 let role = '';
 let num = 0;
 let delay = 500;
 let timer = {};
 let userRoleList = [];
+let clear = false;
 Page({
 
   /**
@@ -39,6 +40,10 @@ Page({
     },error =>{
       this.setData({
         userList: []
+      })
+      wx.showModal({
+        title: '提示',
+        content: '无数据显示',
       })
     })
   },
@@ -89,6 +94,7 @@ Page({
     })  
   },
   bindKeyInput: function(e){
+    clear = true;
     let _this = this;
     let userName = '';
     num = 0;
@@ -126,13 +132,20 @@ Page({
       this.setData({
         userList: []
       })
+      wx.showModal({
+        title: '提示',
+        content: '找不到该用户，请重新输入',
+      })
     })
   },
   deleteInputText(){
-    this.setData({
-      searchInput: ''
-    })
-    this.loadData(role);
+    if (clear){
+      this.setData({
+        searchInput: ''
+      })
+      this.loadData(role);
+      clear = false;
+    }
   },
 
   /**

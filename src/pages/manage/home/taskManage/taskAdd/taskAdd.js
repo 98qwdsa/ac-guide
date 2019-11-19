@@ -72,7 +72,7 @@ Page({
       return;
     }
     service.addEvent(e.detail.value).then(() => {
-      wx.navigateTo('../taskManage/taskManage');
+      wx.navigateTo('../manage');
       detail = {
         code: '',
         name: '',
@@ -126,7 +126,7 @@ Page({
   },
   editTaskStep: function(e) {
     wx: wx.navigateTo({
-      url: '../addTaskStep/addTaskStep?stepname=' +
+      url: 'addTaskStep/addTaskStep?stepname=' +
         e.currentTarget.dataset.steptask +
         '&&stepindex=' + e.currentTarget.dataset.stepindex
     })

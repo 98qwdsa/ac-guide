@@ -1,6 +1,6 @@
 // src/pages/manage/personManage/editUser/editUser.js
 let userInfo = getApp().globalData.managerHomePersonManageEditUser;
-const service = require('../../service.js');
+const service = require('../../../service.js');
 Page({
 
   /**
