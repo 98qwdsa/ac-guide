@@ -1,0 +1,49 @@
+<!--src/pages/manage/home/taskManage/taskProgress/allObserver/allObserver.wxml-->
+<view class="container">
+  <view class="tab-wrapper">
+    <view id="tableft" class='tab {{currentTab ==="tableft" ? "tab-active":""}}' bindtap="switchTap">已关注的人</view>
+    <view id="tabright" class='tab {{currentTab ==="tabright" ? "tab-active":""}}' bindtap="switchTap">所有用户</view>
+  </view>
+
+  <view class="content-wrapper" wx:if='{{currentTab === "tableft"}}'>
+    <view wx:for="{{observerList}}" wx:key="{{index}}" class="user-item">
+      <text class="user-item-text">{{item.name}}</text>
+      <label bindtap="cancleObserve" data-item="{{item}}" class="user-add cancel-observer">
+        <text>取消关注</text>
+      </label>
+    </view>
+  </view>
+  <view class="content-wrapper" wx:if='{{currentTab === "tabright"}}'>
+    <view wx:for="{{userList}}" wx:key="{{index}}" class="user-item"  
+      wx:if="{{ass.fn(observerList,item.open_id)}}">
+      <text class="user-item-text">{{item.name}}</text>
+      <label bindtap="addObserve" data-observer="{{item}}" class="user-add"
+        wx:if="{{ass.fn(observerList,item.open_id)}}">
+        <text>添加</text>
+      </label>
+    </view>
+    <view wx:for="{{userList}}" wx:key="{{index}}" class="user-item" 
+      wx:if="{{!ass.fn(observerList,item.open_id)}}">
+      <text class="user-item-text" >{{item.name}}</text>
+      <label wx:if="{{!ass.fn(observerList,item.open_id)}}" class="user-added">
+        <text>已添加</text>
+      </label>
+    </view>
+  </view>
+</view>
+
+
+<wxs module="ass">
+  module.exports = {
+    fn: function(target, item) {
+      var b = false;
+      for (var i = 0; i < target.length; i++) {
+        if (target[i].open_id === item) {
+          b = true;
+          break;
+        }
+      }
+      return !b;
+    }
+  }
+</wxs>

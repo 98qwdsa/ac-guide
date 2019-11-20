@@ -41,10 +41,24 @@ Page({
         this.setData({
           userList: []
         })
-        wx.showModal({
-          title: '提示',
-          content: '找不到该用户，请重新输入',
-        })
+        if (error.code === '2000') {
+          wx.showModal({
+            title: '提示',
+            content: '用户没有权限，请求被拒绝',
+          })
+        } else if (error.code === '2001' || error.code === '2002') {
+          if(name === ''){
+            wx.showModal({
+              title: '提示',
+              content: '目前还没有用户，请添加',
+            })
+          }else{
+            wx.showModal({
+              title: '提示',
+              content: '找不到该用户，请重新输入',
+            })
+          }
+        }
       })
     })
   },

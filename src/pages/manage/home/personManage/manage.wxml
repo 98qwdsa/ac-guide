@@ -5,7 +5,8 @@
   <icon type="clear" size="20" catchtap="deleteText"/>
 </view>
 <view class="user_add" bindtap="addUser">
-  <text>添加</text>
+  <image src="../../../../asset/Task_add.svg"></image>
+  <text>添加用户</text>
 </view>
 <view class="user-list">
   <block wx:for="{{userList}}" wx:key="{{index}}">

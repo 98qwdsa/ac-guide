@@ -11,11 +11,11 @@
     "pages/manage/home/taskManage/taskAdd/addTaskStep/addTaskStep",
     "pages/manage/home/taskManage/taskAdd/taskAdd",
     "pages/manage/home/taskManage/taskProgress/taskProgress",
-    "pages/manage/home/taskManage/taskProgress/addObserver/addObserver",
     "pages/manage/home/personManage/addUser/addUser",
     "pages/manage/home/roleManage/addRoleUser/addRoleUser",
     "pages/manage/home/personManage/editUser/editUser",
-    "pages/home/event_list/observer_event/observer_event"
+    "pages/home/event_list/observer_event/observer_event",
+    "pages/manage/home/taskManage/taskProgress/allObserver/allObserver"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -41,10 +41,17 @@ Page({
       this.setData({
         userList: []
       })
-      wx.showModal({
-        title: '提示',
-        content: '无数据显示',
-      })
+      if (error.code === '2000') {
+        wx.showModal({
+          title: '提示',
+          content: '用户没有权限，请求被拒绝',
+        })
+      } else if (error.code === '2001' || error.code === '2002') {
+        wx.showModal({
+          title: '提示',
+          content: '无用户信息',
+        })
+      }
     })
   },
   addUser(e){

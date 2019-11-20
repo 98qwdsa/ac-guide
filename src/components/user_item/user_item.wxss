@@ -3,6 +3,6 @@
   border-radius: 8rpx;
   background: #fff;
   box-shadow: 0 0 10rpx 0 rgba(0, 0, 0, 0.15);
-  padding: 26rpx;
+  padding: 30rpx;
   margin: 0 20rpx;
 }

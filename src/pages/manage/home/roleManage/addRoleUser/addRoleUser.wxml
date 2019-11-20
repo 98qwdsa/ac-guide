@@ -9,7 +9,6 @@
     <user-item userName="{{item.name}}">
       <view class="user-add" bindtap="addUser" data-adduserid="{{item._id}}" 
             data-addusername="{{item.name}}">
-        <!-- <image src="../../../../asset/hr_guide2.png"></image> -->
         <label>
           <text>添加</text>
         </label>

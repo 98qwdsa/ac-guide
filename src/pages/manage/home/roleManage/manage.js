@@ -1,6 +1,5 @@
 // src/pages/manage/roleDetail/roleDetail.js
 const service = require('../../service.js');
-let allRole = [];
 Page({
 
   /**
@@ -47,7 +46,6 @@ Page({
     return new Promise((reslove, reject) => {
       service.getPowerRole().then(powerRole => {
         reslove(powerRole);
-        allRole = powerRole.role;
         let role = powerRole.role
         this.setData({
           role,
@@ -74,22 +72,28 @@ Page({
       })
       wx.hideLoading();
       reloadTrigger[role] = false
-    }, error =>{
+    }, error => {
       this.setData({
         userList: [],
-        [role] : [],
+        [role]: [],
       })
-      wx.showModal({
-        title: '提示',
-        content: '该角色没有用户，请添加',
-      })
+      reloadTrigger[role] = false
+      if (error.code === '2000'){
+        wx.showModal({
+          title: '提示',
+          content: '用户没有权限，请求被拒绝',
+        })
+      }else if (error.code === '2001' || error.code === '2002'){
+        wx.showModal({
+          title: '提示',
+          content: '该角色没有用户，请添加',
+        })
+      }
     })
-
-
   },
   addRoleUser() {
     wx.navigateTo({
-      url: 'addRoleUser/addRoleUser?role=' + this.data.currentTab 
+      url: 'addRoleUser/addRoleUser?role=' + this.data.currentTab
     })
   },
   deleteUserRole(e) {
@@ -113,7 +117,6 @@ Page({
             },
             action: 'removeRole'
           }).then(() => {
-            
             newUserList = newUserList.filter(e => {
               if (e._id !== _id) {
                 return {
@@ -146,10 +149,10 @@ Page({
   onShow: function() {
     let userList = this.data.userList;
     const reloadTrigger = getApp().globalData.managerHomeRoleManage;
-    if (userList === '' || reloadTrigger.user.length === 0 ) {
+    if (userList === '' || reloadTrigger.user.length === 0) {
       return;
     }
-    reloadTrigger.user.forEach(function(item){
+    reloadTrigger.user.forEach(function(item) {
       userList.push({
         _id: item.id,
         name: item.name

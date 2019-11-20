@@ -25,6 +25,12 @@
   padding: 20rpx;
   margin: 0 20rpx;
 }
+.user_add image{
+  width: 48rpx;
+  height: 48rpx;
+  margin-right: 15rpx;
+  vertical-align: middle;
+}
 .user-list{
   margin-top: 30rpx;
 }
