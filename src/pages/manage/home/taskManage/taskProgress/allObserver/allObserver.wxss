@@ -68,6 +68,9 @@
   font-size: 32rpx;
   color: #fff;
 }
+.user-item .user-added{
+  line-height: 35rpx;
+}
 .user-item .user-added text{
   font-size: 32rpx;
   color: #999;

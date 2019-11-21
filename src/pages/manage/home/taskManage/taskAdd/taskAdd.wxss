@@ -1,6 +1,5 @@
 /* src/event/detail/detail.wxss */
 page{
-  height: 100%;
   position: relative;
   background-color: #F5F5F5;
 }
@@ -82,13 +81,6 @@ form{
   margin-top: 15rpx;
   padding: 0 30rpx;
 }
-.step .checkbox-item .edit{
-  position: absolute;
-  right: 65rpx;
-  margin-top: 19rpx;
-  width: 64rpx;
-  height: 64rpx;
-}
 
 .step .checkbox-item .delete{
   position: absolute;
@@ -96,6 +88,7 @@ form{
   width: 55rpx;
   height: 55rpx;
   margin-top: 20rpx;
+  z-index: 100;
 }
 .step .addStep{
   position: relative;
@@ -112,6 +105,11 @@ form{
 checkbox{
   visibility: hidden;
   width: 0;
+}
+.filler{
+  width: 100%;
+  height: 120rpx;
+  background-color: #F5F5F5;
 }
 .event_buttons{
   width: 100%;

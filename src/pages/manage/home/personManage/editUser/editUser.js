@@ -57,7 +57,7 @@ Page({
     })
   },
   submit:function(e){
-    if (e.detail.value.userName === '' || e.detail.value.role.length === 0){
+    if (e.detail.value.userName === '' || e.detail.value.power.length === 0){
       wx.showModal({
         title: '提示',
         content: '用户名字和权限都不能为空',

@@ -31,16 +31,14 @@
       <view class='event_view step'>
         <text>步骤</text>
         <checkbox-group name="steps">
-           <label class="checkbox-item" wx:for="{{eventDetail.steps}}" 
-           wx:key="{{eventDetail.steps.index}}">
+           <label class="checkbox-item" wx:for="{{eventDetail.steps}}" bindtap="editTaskStep"
+           wx:key="{{eventDetail.steps.index}}" data-steptask="{{item}}" 
+            data-stepindex="{{index}}">
             <checkbox value="{{item}}" checked="{{true}}" />
             {{index+1}}:
             {{item}}
-            <icon type="info" class="edit" data-steptask="{{item}}" 
-            data-stepindex="{{index}}" class="edit"
-            bindtap="editTaskStep"></icon>
             <image src="../../../../../asset/task_step_delete.png" data-steptask="{{item}}"
-            bindtap="deleteTaskStep" class="delete"></image>
+             catchtap="deleteTaskStep" class="delete"></image>
           </label>
         </checkbox-group>
         <view class="addStep">
@@ -54,6 +52,8 @@
         <switch name="disabled" checked="{{eventDetail.disabled}}" class="switch"
         color="#46DFA2" bindchange="switchChange"/> 
       </view>  
+    </view>
+    <view class="filler">
     </view>
     <view class='event_buttons'>
       <button form-type='reset' class="reset">取消</button>

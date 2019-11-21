@@ -1,6 +1,5 @@
 /* src/pages/manage/addUser/addUser.wxss */
 page{
-  height: 100%;
   position: relative;
   background-color: #F5F5F5;
 }

@@ -6,7 +6,6 @@ Page({
    */
   data: {
     taskDetailList: [
-    
     ]
   },
 
@@ -27,8 +26,11 @@ Page({
       wx.hideLoading();
     });
   },
-
-
+  taskAdd(){
+    wx.navigateTo({
+      url: 'taskAdd/taskAdd'
+    })
+  },
 
 
   /**

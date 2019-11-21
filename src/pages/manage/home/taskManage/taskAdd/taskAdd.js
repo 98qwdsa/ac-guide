@@ -117,12 +117,21 @@ Page({
     detail.disabled = e.detail.value;
   },
   deleteTaskStep: function(e) {
-    detail.steps = detail.steps.filter(function(item) {
-      return (item !== e.currentTarget.dataset.steptask);
-    });
-    this.setData({
-      eventDetail: detail
-    });
+    let _this = this;
+    wx.showModal({
+      title: '提示',
+      content: '是否删除该步骤',
+      success(res) {
+        if (res.confirm) {
+          detail.steps = detail.steps.filter(function (item) {
+            return (item !== e.currentTarget.dataset.steptask);
+          });
+          _this.setData({
+            eventDetail: detail
+          });
+        } 
+      }
+    })
   },
   editTaskStep: function(e) {
     wx: wx.navigateTo({
