@@ -20,6 +20,12 @@ form{
   color: #999;
   font-size: 32rpx;
 }
+.deleteText {
+  position: absolute;
+  right: 70rpx;
+  bottom: 100rpx;
+  z-index: 100;
+}
 .event_buttons{
   width: 100%;
   position: fixed;

@@ -1,8 +1,6 @@
 /* components/user_item/user_item.wxss */
 .user_item{
-  border-radius: 8rpx;
-  background: #fff;
-  box-shadow: 0 0 10rpx 0 rgba(0, 0, 0, 0.15);
+  border-bottom: 2rpx solid #e8e8e8;
   padding: 30rpx;
   margin: 0 20rpx;
 }

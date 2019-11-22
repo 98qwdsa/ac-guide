@@ -1,44 +1,54 @@
 /* src/pages/manage/personDetail/personDetail.wxss */
-.input-container{
+
+.input-container {
   position: relative;
 }
-.input-container icon{
+
+.input-container icon {
   position: absolute;
   right: 45rpx;
-  top: 15rpx; 
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 100;
 }
-.input{
+
+.input {
   background: #f5f5f5;
   margin: 10rpx 30rpx 20rpx 30rpx;
-  padding: 15rpx 0 10rpx 20rpx;
-  border-radius: 10rpx;
+  padding: 20rpx 30rpx;
+  border-radius: 13rpx;
 }
-.search_name_placeholder{
+
+.search_name_placeholder {
   color: #999;
   font-size: 34rpx;
 }
-.user_add{
+
+.user_add {
   border-radius: 8rpx;
   background: #fff;
   box-shadow: 0 0 10rpx 0 rgba(0, 0, 0, 0.15);
-  padding: 20rpx;
+  padding: 26rpx 20rpx;
   margin: 0 20rpx;
 }
-.user_add image{
+
+.user_add image {
   width: 48rpx;
   height: 48rpx;
   margin-right: 15rpx;
   vertical-align: middle;
 }
-.user-list{
+
+.user-list {
   margin-top: 30rpx;
 }
-.user-list .user-delete{
+
+.user-list .user-delete {
   position: relative;
   z-index: 100;
 }
-.user-list .user-delete image{
+
+.user-list .user-delete image {
   position: absolute;
   right: 0;
   top: -50rpx;

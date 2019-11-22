@@ -20,12 +20,25 @@ Page({
       });
     }
   },
-  bindNameInput: function(e){
-    taskAdd.stepName = e.detail.value;
-  },
   formSubmit: function(e){
+    taskAdd.stepName = e.detail.value.stepName;
     wx.navigateBack({
       delta: 1
+    })
+  },
+  formReset: function(e){
+    wx.navigateBack({
+      delta: 1,
+    });
+  },
+  deleteText: function(e){
+    this.setData({
+      stepName: ''
+    })
+    wx.showToast({
+      title: '用户事项已重置成功',
+      icon: 'success',
+      duration: 2000
     })
   }
 
