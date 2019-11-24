@@ -1,10 +1,13 @@
 <!--src/pages/home/event_list/observer_event/observer_event.wxml-->
+<view class="task_progress_item">
+  <taskProgress detail='{{myEventSteps}}' bindtap="eventDetail" >
+  </taskProgress>
+</view>
+
 
 <view class="task_progress_item" wx:for="{{observerEvent}}" wx:key="{{index}}">
-  <taskProgress detail='{{item}}' cancel='{{item.cancel}}' bindtap="eventDetail" 
-    data-userid='{{item._id}}'>
-    <view wx:if="{{item.name !== '我自己'}}" class="cancel" catchtap="cancelObserver" 
-      data-observed="{{item.open_id}}">
+  <taskProgress detail='{{item}}' cancel='{{item.cancel}}'>
+    <view  class="cancel" data-observed="{{item.open_id}}" catchtap="cancelObserver">
       <label>
         <text>取消关注</text>
       </label>

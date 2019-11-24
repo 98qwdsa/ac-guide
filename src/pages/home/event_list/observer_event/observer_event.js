@@ -8,6 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    myEventSteps: null,
     observerEvent: []
   },
 
@@ -19,36 +20,54 @@ Page({
       title: options.name,
     })
     event_code = options.code;
-   
   },
-  loadUserForEvent(event_code) {
+  loadMyEventDetail() {
     let reloadTrigger = getApp().globalData.homeEventListObserverEvent;
-    if (reloadTrigger.load === false){
+    if (reloadTrigger.myDataload === false){
       return;
     }
     wx.showLoading({
       title: '加载中...',
       mask: true
     })
+
+    this.loadUserObserver(APP.globalData.userInfo.open_id).then(followerList => {
+      console.log("我的关注者：", followerList);
+    })
+    service.getSelfEventStep(event_code).then(myEventDetail => {
+      this.loadUserObserver(APP.globalData.userInfo.open_id).then(followerList => {
+        let newEventSteps = {
+          name: '我自己',
+          event_steps: myEventDetail,
+          followerList: followerList.map(e => e.name)
+        }
+        this.setData({
+          myEventSteps: newEventSteps
+        })
+      })
+      wx.hideLoading();
+      reloadTrigger.myDataload = false;
+    })
+    
+  },
+  loadUserForEvent() {
+    let reloadTrigger = getApp().globalData.homeEventListObserverEvent;
+    if (reloadTrigger.userDataLoad === false) {
+      return;
+    }
     service.getQueryObserverEventDetail({
       code: event_code
     }).then(observer => {
-      let newObserver = observer.data;
-      newObserver.forEach(function(item,index){
-        if (item.name === APP.globalData.userInfo.name){
-          item.name = '我自己'
-        }
-      })
       this.setData({
-        observerEvent: newObserver
+        observerEvent: observer.data
       })
-      wx.hideLoading();
-      reloadTrigger.load = false;
+      reloadTrigger.userDataLoad = false;
       if (this.data.observerEvent.length){
         this.loadfollowerList('observerEvent');
       }
     })
   },
+  
   loadUserObserver(observed_open_id) {
     return new Promise((reslove, reject) => {
       service.getUserObserver({
@@ -75,11 +94,9 @@ Page({
     });
   },
   eventDetail(e){
-    if (APP.globalData.userInfo._id === e.currentTarget.dataset.userid){
-      wx.navigateTo({
-        url: '../participant_detail/participant_detail?code=' + event_code
-      })
-    }
+    wx.navigateTo({
+      url: '../participant_detail/participant_detail?code=' + event_code
+    })
   },
   cancelObserver(e){
     let _this = this;
@@ -126,7 +143,8 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    this.loadUserForEvent(event_code);
+    this.loadMyEventDetail();
+    this.loadUserForEvent();
   },
 
   /**
@@ -141,7 +159,8 @@ Page({
    */
   onUnload: function() {
     let reloadTrigger = getApp().globalData.homeEventListObserverEvent;
-    reloadTrigger.load = true;
+    reloadTrigger.myDataload = true;
+    reloadTrigger.userDataLoad = true;
   },
 
   /**

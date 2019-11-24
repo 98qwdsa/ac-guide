@@ -24,7 +24,6 @@ Page({
       mask: true,
     })
     service.getSelfEventStep(event_code).then(data => {
-      console.log(data);
       const stepList = [...data.steps];
       let curStep = 0;
       let eventFinished = false;
@@ -77,7 +76,7 @@ Page({
           stepList
         })
       }
-      reloadTrigger.load = true;
+      reloadTrigger.myDataload = true;
 
     })
   },

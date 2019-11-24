@@ -38,7 +38,7 @@ page{
 .content-wrapper {
   width: 100%;
   flex: 1;
-  margin-top: 115rpx;
+  margin-top: 100rpx;
   background-color: #fff;
 }
 
@@ -64,4 +64,7 @@ page{
   top: -50rpx;
   width: 64rpx;
   height: 64rpx;
+}
+user-item:last-child view{
+  border-bottom: none;
 }
