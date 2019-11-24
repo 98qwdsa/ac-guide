@@ -30,10 +30,6 @@ Page({
       title: '加载中...',
       mask: true
     })
-
-    this.loadUserObserver(APP.globalData.userInfo.open_id).then(followerList => {
-      console.log("我的关注者：", followerList);
-    })
     service.getSelfEventStep(event_code).then(myEventDetail => {
       this.loadUserObserver(APP.globalData.userInfo.open_id).then(followerList => {
         let newEventSteps = {
