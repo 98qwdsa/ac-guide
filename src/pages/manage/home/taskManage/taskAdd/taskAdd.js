@@ -56,18 +56,17 @@ Page({
     })
   },
   submit: function(e) {
-    console.log('form发生了submit事件，携带的数据:', e.detail.value);
     if (e.detail.value.code == "" || e.detail.value.name == "" ) {
       wx.showModal({
         title: '提示',
         content: '事件编码和事件名称都不能为空',
-        success(res) {
-          if (res.confirm) {
-            console.log('用户点击确定')
-          } else if (res.cancel) {
-            console.log('用户点击取消')
-          }
-        }
+        // success(res) {
+        //   if (res.confirm) {
+        //     console.log('用户点击确定')
+        //   } else if (res.cancel) {
+        //     console.log('用户点击取消')
+        //   }
+        // }
       })
       return;
     }
