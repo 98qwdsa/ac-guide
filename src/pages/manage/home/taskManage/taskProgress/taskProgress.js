@@ -149,7 +149,7 @@ Page({
         this.loadfollowerList('myObserverList');
       }
     }, (e) => {
-      console.log(e);
+      // console.log(e);
     })
   },
   addObserverForUser(e) {

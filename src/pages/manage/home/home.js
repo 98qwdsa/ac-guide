@@ -22,7 +22,6 @@ Page({
       const userInfo = {}
       const _this = this;
       service.checkUserInfo().then(data => {
-        console.log(data);
         APP.globalData.userInfo = data;
         wx.hideLoading();
         

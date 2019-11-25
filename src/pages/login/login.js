@@ -19,7 +19,6 @@ Page({
   },
   // 注册
   register(e) {
-    console.log(this.data.data);
     wx.showLoading({
       mask: true,
       title: "登录中..."

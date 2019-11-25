@@ -165,7 +165,11 @@ async function getUserList(data) {
   let param = {};
   if (data.name) {
     param = {
-      name: data.name
+      name: DB.RegExp({
+        regexp: data.name,
+        options: 'i',
+      })
+
     }
   } else if (data.filterRoles && data.filterRoles.length) {
     param = {
@@ -178,7 +182,10 @@ async function getUserList(data) {
   }
   if (data.action === 'userInRole') {
     param = _.and([{
-      name: data.name
+      name: DB.RegExp({
+        regexp: data.name,
+        options: 'i',
+      })
     }, {
       role: _.nin(data.role)
     }])
