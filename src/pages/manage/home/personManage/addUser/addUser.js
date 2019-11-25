@@ -32,8 +32,13 @@ Page({
     wx.navigateBack();
   },
   formReset:function(){
+    wx.navigateBack({
+      delta: 1,
+    })
+  },
+  deleteText(e){
     this.setData({
-      userName: []
+      userName: ''
     });
     wx.showToast({
       title: '姓名已重置成功',

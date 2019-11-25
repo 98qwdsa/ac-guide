@@ -41,7 +41,8 @@ App({
       role: []
     },
     'homeEventListObserverEvent': {
-      load: true
+      myDataload: true,
+      userDataLoad: true
     }
   }
 })

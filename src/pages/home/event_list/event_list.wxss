@@ -55,7 +55,7 @@
   color: #999;
   padding-left: 20rpx;
   display: inline-block;
-  margin: 12rpx 0;
+  margin: 28rpx 0 12rpx;
 }
 
 .event_item_warp navigator {

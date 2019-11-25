@@ -1,7 +1,7 @@
 <!--src/pages/manage/addRole/addRole.wxml-->
 <view class="input-container">
-  <input class="input" placeholder-class="search_name_placeholder"
-    bindinput="bindKeyInput" placeholder="搜索" value="{{searchInput}}"/>
+  <input  placeholder="搜索" placeholder-class="user_placeholder" bindinput="bindKeyInput"
+      class="user_name" value='{{searchInput}}' name='userName'/>
   <icon type="clear" size="20" catchtap="deleteInputText"/>
 </view>
 <view class="user-list">

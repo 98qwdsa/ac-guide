@@ -1,40 +1,32 @@
 /* src/pages/manage/addRole/addRole.wxss */
+
 .input-container{
   position: relative;
+  margin-top: 20rpx;
+}
+
+.user_name {
+  width: 620rpx;
+  padding: 20rpx 30rpx;
+  background-color: #f5f5f5;
+  margin: 0 auto;
+  border-radius: 13rpx;
+}
+.user_placeholder {
+  color: #999;
+  font-size: 32rpx;
 }
 .input-container icon{
   position: absolute;
-  right: 45rpx;
-  top: 15rpx; 
+  right: 60rpx;
+  top: 50%;
+  transform: translateY(-50%); 
   z-index: 100;
-}
-.input {
-  background: #f5f5f5;
-  margin: 10rpx 30rpx 20rpx 30rpx;
-  padding: 15rpx 0 10rpx 20rpx;
-  border-radius: 10rpx;
-}
-
-.search_name_placeholder {
-  color: #999;
-  font-size: 34rpx;
 }
 
 .user-list {
-  margin-top: 30rpx;
+  margin-top: 25rpx;
 }
-
-/* .user-list .user-add{
-  position: relative;
-} */
-
-/* .user-list .user-add image{
-  position: absolute;
-  right: 0;
-  top: -50rpx;
-  width: 64rpx;
-  height: 64rpx;
-} */
 
 .user-add {
   position: relative;
@@ -56,3 +48,4 @@
   font-size: 25rpx;
   font-family: SourceHanSansCN-Regular;
 }
+

@@ -3,9 +3,10 @@
   <view class="content"> 
     <input  placeholder="姓名" placeholder-class="user_placeholder"
       class="user_name" value='{{userName}}' name='userName'/>
+      <icon type="clear" size="20" catchtap="deleteText" class="deleteText"/>
   </view> 
   <view class='user_buttons'>
-    <button form-type='reset' class="reset">取消</button>
-    <button form-type='submit' class="submit" >确定</button>
+    <button form-type='reset' class="reset">返回</button>
+    <button form-type='submit' class="submit" >提交</button>
   </view>
 </form>
