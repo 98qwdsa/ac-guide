@@ -1,7 +1,9 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
 
-cloud.init();
+cloud.init({
+  env: cloud.DYNAMIC_CURRENT_ENV
+});
 const DB = cloud.database();
 // 检查参数格式
 function checkParamFormat(data) {
