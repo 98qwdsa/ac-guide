@@ -24,6 +24,14 @@ Page({
         taskDetailList
       })
       wx.hideLoading();
+    }, error =>{
+      if (error.code === '2003') {
+        wx.showToast({
+          title: '查询不到事件',
+          icon: 'none',
+          duration: 2000
+        })
+      }
     });
   },
   taskAdd(){

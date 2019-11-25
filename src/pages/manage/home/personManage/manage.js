@@ -42,20 +42,23 @@ Page({
           userList: []
         })
         if (error.code === '2000') {
-          wx.showModal({
-            title: '提示',
-            content: '用户没有权限，请求被拒绝',
+          wx.showToast({
+            title: '用户没有权限，请求被拒绝',
+            icon: 'none',
+            duration: 2000
           })
         } else if (error.code === '2001' || error.code === '2002') {
           if(name === ''){
-            wx.showModal({
-              title: '提示',
-              content: '目前还没有用户，请添加',
+            wx.showToast({
+              title: '目前还没有用户,请添加',
+              icon: 'none',
+              duration: 2000
             })
           }else{
-            wx.showModal({
-              title: '提示',
-              content: '找不到该用户，请重新输入',
+            wx.showToast({
+              title: '找不到该用户，请重新输入',
+              icon: 'none',
+              duration: 2000
             })
           }
         }

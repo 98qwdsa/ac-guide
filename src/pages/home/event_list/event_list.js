@@ -51,6 +51,14 @@ Page({
         eventList
       })
       wx.hideLoading();
+    },error =>{
+      if (error.code === '2003') {
+        wx.showToast({
+          title: '查询不到事件',
+          icon: 'none',
+          duration: 2000
+        })
+      }
     });
 
     // 查看是否授权
@@ -81,7 +89,12 @@ Page({
   },
   eventDetail(e) {
     service.checkUserInfo().then( data =>{
-      if (data.role.length !== 0 && data.role.includes('Observer')) {
+      if (data.role.length !== 0 && data.role.includes('Publisher')) {
+        wx.navigateTo({
+          url: 'publisher_event/publisher_event?code=' + e.currentTarget.dataset.code +
+            '&name=' + e.currentTarget.dataset.name
+        })
+      }else if (data.role.length !== 0 && data.role.includes('Observer')) {
         wx.navigateTo({
           url: 'observer_event/observer_event?code=' + e.currentTarget.dataset.code +
             '&name=' + e.currentTarget.dataset.name

@@ -1,5 +1,5 @@
 // src/pages/manage/home/taskManage/taskProgress/allObserver/allObserver.js
-const service = require('../../../../service.js');
+const service = require('../../../service.js');
 const reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
 Page({
 
@@ -40,6 +40,12 @@ Page({
         userList: res
       });
       wx.hideLoading();
+    },error =>{
+      wx.showToast({
+        title: '无观察者用户',
+        icon: 'none',
+        duration: 2000
+      })
     });
   },
   loadUserObserver() {
@@ -51,6 +57,14 @@ Page({
         observerList
       });
       wx.hideLoading();
+    },error => {
+      // if(error.code === ''){
+      //   wx.showToast({
+      //     title: '暂时无已关注的人',
+      //     icon: 'none',
+      //     duration: 2000
+      //   })
+      // }
     });
   },
   addObserve(e) {

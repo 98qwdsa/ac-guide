@@ -1,5 +1,5 @@
 // src/pages/manage/taskProgress/taskProgress.js
-const service = require('../../../service.js');
+const service = require('../../service.js');
 Page({
 
   /**
@@ -21,7 +21,7 @@ Page({
    */
   onLoad: function(options) {
     wx.setNavigationBarTitle({
-      title: options.eventname
+      title: options.name
     });
     this.data.event_code = options.code;
     this.loadMyData(options.code);
@@ -127,7 +127,15 @@ Page({
       if(this.data.allUserList.length){
         this.loadfollowerList('allUserList');
       }
-    }, (e) => {})
+    }, (error) => {
+      if (error.code === '2001' || error.code === '2002' || error.code === '2003'){
+        wx.showToast({
+          title: '该事件还没有参与者',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
   },
   loadMyObserver(event_code) {
     let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
@@ -148,8 +156,20 @@ Page({
       if(this.data.myObserverList.length){
         this.loadfollowerList('myObserverList');
       }
-    }, (e) => {
-      // console.log(e);
+    }, (error) => {
+      if (error.code === '2001'){
+        wx.showToast({
+          title: '角色不匹配',
+          icon: 'none',
+          duration: 2000
+        })
+      } else if (error.code === '2002') {
+        wx.showToast({
+          title: '你还没有关注的用户',
+          icon: 'none',
+          duration: 2000
+        })
+      }
     })
   },
   addObserverForUser(e) {
