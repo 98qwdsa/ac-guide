@@ -32,6 +32,8 @@ Page({
         })
         if (data.power.includes('event_admin') || data.power.includes('account_admin')) {
           wx.showTabBar();
+        } else {
+          wx.hideTabBar()
         }
         reslove();
       }).catch(e => {
@@ -51,7 +53,7 @@ Page({
         eventList
       })
       wx.hideLoading();
-    },error =>{
+    }, error => {
       if (error.code === '2003') {
         wx.showToast({
           title: '查询不到事件',
@@ -88,13 +90,13 @@ Page({
     })
   },
   eventDetail(e) {
-    service.checkUserInfo().then( data =>{
+    service.checkUserInfo().then(data => {
       if (data.role.length !== 0 && data.role.includes('Publisher')) {
         wx.navigateTo({
           url: 'publisher_event/publisher_event?code=' + e.currentTarget.dataset.code +
             '&name=' + e.currentTarget.dataset.name
         })
-      }else if (data.role.length !== 0 && data.role.includes('Observer')) {
+      } else if (data.role.length !== 0 && data.role.includes('Observer')) {
         wx.navigateTo({
           url: 'observer_event/observer_event?code=' + e.currentTarget.dataset.code +
             '&name=' + e.currentTarget.dataset.name
