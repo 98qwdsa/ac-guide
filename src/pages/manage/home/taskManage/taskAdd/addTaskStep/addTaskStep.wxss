@@ -1,5 +1,4 @@
 page{
-  position: relative;
   background-color: #F5F5F5;
 }
 form{
@@ -8,6 +7,9 @@ form{
 }
 .content{
   padding: 30rpx;
+}
+.input-container{
+  position: relative;
 }
 .event_name{
   width: 620rpx;
@@ -22,8 +24,9 @@ form{
 }
 .deleteText {
   position: absolute;
-  right: 70rpx;
-  bottom: 100rpx;
+  right: 35rpx;
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 100;
 }
 .event_buttons{
