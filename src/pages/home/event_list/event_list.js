@@ -101,7 +101,7 @@ Page({
         })
       } else {
         wx.navigateTo({
-          url: 'participant_detail/participant_detail?code=' + e.currentTarget.dataset.code
+          url: 'participant_event/participant_event?code=' + e.currentTarget.dataset.code
         })
       }
     })

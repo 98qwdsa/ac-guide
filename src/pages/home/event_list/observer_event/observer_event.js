@@ -23,7 +23,7 @@ Page({
   },
   loadMyEventDetail() {
     let reloadTrigger = getApp().globalData.homeEventListObserverEvent;
-    if (reloadTrigger.myDataload === false){
+    if (reloadTrigger.myDataload === false) {
       return;
     }
     wx.showLoading({
@@ -44,7 +44,7 @@ Page({
       wx.hideLoading();
       reloadTrigger.myDataload = false;
     })
-    
+
   },
   loadUserForEvent() {
     let reloadTrigger = getApp().globalData.homeEventListObserverEvent;
@@ -58,12 +58,12 @@ Page({
         observerEvent: observer.data
       })
       reloadTrigger.userDataLoad = false;
-      if (this.data.observerEvent.length){
+      if (this.data.observerEvent.length) {
         this.loadfollowerList('observerEvent');
       }
     })
   },
-  
+
   loadUserObserver(observed_open_id) {
     return new Promise((reslove, reject) => {
       service.getUserObserver({
@@ -89,18 +89,18 @@ Page({
       })
     });
   },
-  eventDetail(e){
+  eventDetail(e) {
     wx.navigateTo({
-      url: '../participant_detail/participant_detail?code=' + event_code
+      url: '../participant_event/participant_event?code=' + event_code
     })
   },
-  cancelObserver(e){
+  cancelObserver(e) {
     let _this = this;
     wx.showModal({
       title: '提示',
       content: '是否取消关注',
-      success(res){
-        if(res.confirm){
+      success(res) {
+        if (res.confirm) {
           wx.showLoading({
             title: '取消关注中...',
             mask: true
@@ -122,7 +122,7 @@ Page({
               observerEvent: newObserverEvent
             })
           })
-        }else if(res.cancel){
+        } else if (res.cancel) {
 
         }
       }

@@ -3,7 +3,6 @@ const conf = require('./conf.js');
 App({
   onLaunch: function() {
     wx.hideTabBar();
-    console.log(conf);
     wx.cloud.init({
       env: conf.cloud_env_code
     });
