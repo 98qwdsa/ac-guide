@@ -16,11 +16,11 @@ module.exports = {
       code
     });
   },
-  getQueryAllUserEventDetail(data){
-    return cloud.call('queryAllUserEventDetail',{
-      ...data
-    });
-  },
+  // getQueryAllUserEventDetail(data){
+  //   return cloud.call('queryAllUserEventDetail',{
+  //     ...data
+  //   });
+  // },
   getQueryObserverEventDetail(data){
     return cloud.call('queryObserverEventDetail', {
       ...data
@@ -38,10 +38,10 @@ module.exports = {
       status_code: 50
     })
   },
-  getAllObserver(){
-    return cloud.call('queryAllObserver', {
-    })
-  },
+  // getAllObserver(){
+  //   return cloud.call('queryAllObserver', {
+  //   })
+  // },
   getUserObserver(data){
     return cloud.call('queryUserObserver',{
       ...data

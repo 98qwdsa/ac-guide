@@ -33,5 +33,14 @@ module.exports = {
       ...data
     })
   },
+  getQueryAllUserEventDetail(data) {
+    return cloud.call('queryAllUserEventDetail', {
+      ...data
+    });
+  },
+  getAllObserver() {
+    return cloud.call('queryAllObserver', {
+    })
+  },
   
 }
