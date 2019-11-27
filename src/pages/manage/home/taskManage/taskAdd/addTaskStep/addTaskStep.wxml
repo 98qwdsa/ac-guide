@@ -1,9 +1,11 @@
 <form bindsubmit="formSubmit" bindreset="formReset" enctype="multipart/form-data">
   <view class="content">
      <text>新入职员工完成事项</text> 
-     <input  placeholder="步骤名称" placeholder-class="event_placeholder"
+     <view class="input-container">
+      <input  placeholder="步骤名称" placeholder-class="event_placeholder"
           class="event_name" value='{{stepName}}' name='stepName' />
       <icon type="clear" size="20" catchtap="deleteText" class="deleteText"/>
+     </view>
   </view> 
   <view class='event_buttons'>
     <button form-type='reset' class="reset">返回</button>
