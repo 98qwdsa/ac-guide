@@ -121,11 +121,22 @@ async function checkEvent(code) {
 
 //检查操作者是否有权限
 async function checkPermision(action) {
+  const wxContext = cloud.getWXContext();
   //角色验证
   try {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
+      data: {
+        open_id: wxContext.OPENID
+      }
     })
+    if (curUserInfo.result.code !== '0000') {
+      return {
+        code: '2010',
+        msg: res.result,
+        data: null
+      }
+    }
     if (action === 'cancel') {
       if (!curUserInfo.result.data.role.includes('Observer') && !curUserInfo.result.data.role.includes('Publisher')) {
         return {
@@ -183,6 +194,14 @@ async function checkObserverPermision(data) {
           open_id
         }
       })
+      if (curUserInfo.result.code !== '0000') {
+        return {
+          code: '2010',
+          msg: res.result,
+          data: null
+        }
+      }
+      
       if (curUserInfo.result.data && (curUserInfo.result.data.role.includes('Observer') || curUserInfo.result.data.role.includes('Publisher'))) {
         return {
           code: '0000',

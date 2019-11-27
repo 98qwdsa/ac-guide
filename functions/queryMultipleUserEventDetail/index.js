@@ -78,7 +78,15 @@ async function getUserInfo(open_id) {
         open_id
       }
     });
-    return userInfo.result;
+    if (userInfo.result.code !== '0000') {
+      return {
+        code: '2010',
+        msg: userInfo.result,
+        data: null
+      }
+    } else {
+      return userInfo.result;
+    }
   } catch (e) {
     return {
       code: '3001',
@@ -90,9 +98,13 @@ async function getUserInfo(open_id) {
 
 //角色验证
 async function checkRole() {
+  const wxContext = cloud.getWXContext();
   try {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
+      data: {
+        open_id: wxContext.OPENID
+      }
     })
     if (curUserInfo.result.code != '0000') {
       return curUserInfo.result

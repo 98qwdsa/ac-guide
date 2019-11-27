@@ -118,11 +118,21 @@ async function getObserverUserOpenId(data) {
 }
 //角色验证
 async function checkRole() {
+  const wxContext = cloud.getWXContext();
   try {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
+      data: {
+        open_id: wxContext.OPENID
+      }
     })
-    if (!curUserInfo.result.data.role.includes('Observer')) {
+    if (curUserInfo.result.code !== '0000') {
+      return {
+        code: '2010',
+        msg: curUserInfo.result,
+        data: null
+      }
+    } else if (!curUserInfo.result.data.role.includes('Observer')) {
       return {
         msg: 'role mismatch Function: queryObserverEventDetail',
         code: '2001',

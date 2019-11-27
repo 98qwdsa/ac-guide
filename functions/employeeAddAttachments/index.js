@@ -72,6 +72,13 @@ async function checkUserPermission(open_id) {
     name: 'checkUserInfo',
     open_id
   });
+  if (res.result.code !== '0000') {
+    return {
+      code: '2010',
+      msg: res.result,
+      data: null
+    }
+  }
   return res.result;
 }
 //上传附件

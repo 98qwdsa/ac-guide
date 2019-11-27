@@ -103,10 +103,14 @@ function checkParamFormat(param) {
 }
 // 权限验证
 async function checkPermission() {
+  const wxContext = cloud.getWXContext();
   //角色验证
   try {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
+      data: {
+        open_id: wxContext.OPENID
+      }
     })
     if (!curUserInfo.result.data.power.includes('event_admin')) {
       return {

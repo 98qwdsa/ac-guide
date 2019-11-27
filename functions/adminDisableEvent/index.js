@@ -62,10 +62,14 @@ function checkParamFormat(data) {
 
 //检查用户是否有admin权限
 async function checkPermision() {
+  const wxContext = cloud.getWXContext();
   //角色验证
   try {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
+      data: {
+        open_id: wxContext.OPENID
+      }
     })
     if (!curUserInfo.result.data.power.includes('event_admin')) {
       return {

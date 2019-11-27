@@ -42,6 +42,9 @@ App({
     'homeEventListObserverEvent': {
       myDataload: true,
       userDataLoad: true
+    },
+    'managerHomeTaskManageTaskAdd':{
+      load: true
     }
   }
 })

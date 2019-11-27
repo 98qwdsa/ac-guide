@@ -87,8 +87,17 @@ function checkParams(data) {
 async function checkUserPermission(open_id) {
   const res = await cloud.callFunction({
     name: 'checkUserInfo',
-    open_id
+    data:{
+      open_id
+    }
   });
+  if (res.result.code !== '0000') {
+    return {
+      code: '2010',
+      msg: res.result,
+      data: null
+    }
+  }
   return res.result;
 }
 

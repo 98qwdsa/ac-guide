@@ -61,7 +61,13 @@ async function checkRole() {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo'
     })
-    if (curUserInfo.result.data.role.includes('Publisher') ||
+    if (curUserInfo.result.code !== '0000') {
+      return {
+        code: '2010',
+        msg: curUserInfo.result,
+        data: null
+      }
+    } else if (curUserInfo.result.data.role.includes('Publisher') ||
       curUserInfo.result.data.role.includes('Observer')) {
       return {
         msg: '',
@@ -117,7 +123,16 @@ async function getUserObserver(data) {
           open_id
         }
       })
-      return userInfo.result.data ? userInfo.result.data.name : ''
+      if (userInfo.result.code !== '0000') {
+        return {
+          code: '2010',
+          msg: userInfo.result,
+          data: null
+        }
+      } else{
+        return userInfo.result.data ? userInfo.result.data.name : ''
+      }
+      
     } catch (e) {
       return {
         code: '3000',

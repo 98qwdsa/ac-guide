@@ -95,12 +95,22 @@ function checkParamFormat(data) {
 }
 //检查用户是否有admin权限
 async function checkPermision() {
+  const wxContext = cloud.getWXContext();
   //角色验证
   try {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
+      data: {
+        open_id: wxContext.OPENID
+      }
     })
-    if (!curUserInfo.result.data.power.includes('event_admin')) {
+    if (curUserInfo.result.code !== '0000') {
+      return {
+        code: '2010',
+        msg: curUserInfo.result,
+        data: null
+      }
+    } else if (!curUserInfo.result.data.power.includes('event_admin')) {
       return {
         code: '2000',
         msg: 'permission denied',

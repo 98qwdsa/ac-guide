@@ -79,11 +79,21 @@ function checkParamFormat(data) {
 
 //角色验证
 async function checkRole() {
+  const wxContext = cloud.getWXContext();
   try {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
+      data: {
+        open_id: wxContext.OPENID
+      }
     })
-    if (curUserInfo.result.data.role.includes('Publisher')) {
+    if (curUserInfo.result.code !== '0000') {
+      return {
+        code: '2010',
+        msg: curUserInfo.result,
+        data: null
+      }
+    } else if (curUserInfo.result.data.role.includes('Publisher')) {
       return {
         msg: '',
         code: '0000',

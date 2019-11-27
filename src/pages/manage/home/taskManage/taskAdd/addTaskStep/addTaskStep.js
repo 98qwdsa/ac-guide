@@ -35,11 +35,6 @@ Page({
     this.setData({
       stepName: ''
     })
-    wx.showToast({
-      title: '用户事项已重置成功',
-      icon: 'success',
-      duration: 2000
-    })
   }
 
 })

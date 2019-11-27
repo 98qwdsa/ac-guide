@@ -60,29 +60,29 @@ Page({
       wx.showModal({
         title: '提示',
         content: '事件编码和事件名称都不能为空',
-        // success(res) {
-        //   if (res.confirm) {
-        //     console.log('用户点击确定')
-        //   } else if (res.cancel) {
-        //     console.log('用户点击取消')
-        //   }
-        // }
       })
       return;
     }
+    wx.showLoading({
+      title: '添加事件中...',
+      mask: true
+    })
     service.addEvent(e.detail.value).then(() => {
-      wx.navigateTo('../manage');
-      detail = {
-        code: '',
-        name: '',
-        desc: '',
-        disabled: true,
-        role: [],
-        steps: []
-      };
-      this.setData({
-        eventDetail: detail
-      });
+      wx.hideLoading();
+      wx.navigateBack();
+      let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
+      reloadTrigger.load = true;
+      // detail = {
+      //   code: '',
+      //   name: '',
+      //   desc: '',
+      //   disabled: true,
+      //   role: [],
+      //   steps: []
+      // };
+      // this.setData({
+      //   eventDetail: detail
+      // });
     });
   },
   formReset: function() {

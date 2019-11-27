@@ -96,14 +96,18 @@ function checkParam(data) {
 }
 
 async function getUserRole() {
+  const wxContext = cloud.getWXContext();
   try {
     const res = await cloud.callFunction({
-      name: 'checkUserInfo'
+      name: 'checkUserInfo',
+      data: {
+        open_id: wxContext.OPENID
+      }
     })
     if (res.result.code !== '0000') {
       return {
         code: '2000',
-        msg: res.result.msg,
+        msg: res.result,
         data: null
       }
     }

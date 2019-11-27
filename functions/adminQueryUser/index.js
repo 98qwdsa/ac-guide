@@ -134,11 +134,22 @@ function checkParamFormat(data) {
 }
 // 权限验证
 async function checkPermission() {
+  const wxContext = cloud.getWXContext();
   //角色验证
   try {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
+      data: {
+        open_id: wxContext.OPENID
+      }
     })
+    if (curUserInfo.result.code !== '0000') {
+      return {
+        code: '2010',
+        msg: res.result,
+        data: null
+      }
+    }
     if (!curUserInfo.result.data.power.includes('event_admin')) {
       return {
         code: '2000',

@@ -13,9 +13,13 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    this.loadData();
+    
   },
   loadData(){
+    let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
+    if (reloadTrigger.load === false){
+      return;
+    }
     wx.showLoading({
       mask: true,
     })
@@ -24,6 +28,7 @@ Page({
         taskDetailList
       })
       wx.hideLoading();
+      reloadTrigger.load = false;
     }, error =>{
       if (error.code === '2003') {
         wx.showToast({
@@ -52,7 +57,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-
+    this.loadData();
   },
 
   /**
@@ -66,7 +71,8 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function() {
-
+    let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
+    reloadTrigger.load = false;
   },
 
   /**
