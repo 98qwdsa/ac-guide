@@ -8,8 +8,8 @@ cloud.init({
 function checkParamFormat(event) {
   const wxContext = cloud.getWXContext();
   let {
-    open_id,
-    _id
+    open_id = wxContext.OPENID,
+      _id
   } = event;
   const res = {
     code: '0000',
@@ -17,21 +17,24 @@ function checkParamFormat(event) {
     data: null
   }
   if (open_id === undefined && _id === undefined) {
-    open_id = wxContext.OPENID;
-  }
-  if (open_id === undefined && _id != undefined) {
-    if (typeof(_id) != 'string') {
-      res.code = '1001';
-      res.msg.push('_id:string');
+    res.code = '1001';
+    res.msg.push('_id:string, open_id:string');
+  } else {
+    if (open_id === undefined && _id != undefined) {
+      if (typeof(_id) != 'string') {
+        res.code = '1001';
+        res.msg.push('_id:string');
+      }
+    }
+
+    if (_id === undefined && open_id != undefined) {
+      if (typeof(open_id) != 'string') {
+        res.code = '1001';
+        res.msg.push('open_id:string');
+      }
     }
   }
 
-  if (open_id != undefined) {
-    if (typeof(open_id) != 'string') {
-      res.code = '1001';
-      res.msg.push('open_id:string');
-    }
-  }
 
   if (res.code === '1000') {
     res.msg = 'param ' + res.msg.join(' ') + ' is required';
