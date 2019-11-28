@@ -2,7 +2,7 @@
 const cloud = require('wx-server-sdk')
 
 cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV
+  env: 'prod-ayp2z'
 })
 const DB = cloud.database();
 // 检查参数格式

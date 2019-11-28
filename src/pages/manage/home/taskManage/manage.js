@@ -5,19 +5,18 @@ Page({
    * 页面的初始数据
    */
   data: {
-    taskDetailList: [
-    ]
+    taskDetailList: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    
+
   },
-  loadData(){
+  loadData() {
     let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
-    if (reloadTrigger.load === false){
+    if (reloadTrigger.load === false) {
       return;
     }
     wx.showLoading({
@@ -29,17 +28,17 @@ Page({
       })
       wx.hideLoading();
       reloadTrigger.load = false;
-    }, error =>{
+    }, error => {
       if (error.code === '2003') {
         wx.showToast({
-          title: '查询不到事件',
+          title: '无事件',
           icon: 'none',
           duration: 2000
         })
       }
     });
   },
-  taskAdd(){
+  taskAdd() {
     wx.navigateTo({
       url: 'taskAdd/taskAdd'
     })

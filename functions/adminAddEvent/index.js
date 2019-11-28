@@ -2,7 +2,7 @@
 const cloud = require('wx-server-sdk')
 
 cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV
+  env: 'prod-ayp2z'
 })
 const DB = cloud.database();
 const COLION = DB.collection('event_list');
@@ -216,6 +216,7 @@ async function addCustomEventToEventList(data) {
 }
 //添加事件关联表
 async function createCustomEventCollection(code, steps) {
+  const wxContext = cloud.getWXContext();
   const result = {
     code: '0000',
     msg: '',
@@ -231,7 +232,7 @@ async function createCustomEventCollection(code, steps) {
   }
   try {
     const stepsDB = await DB.createCollection(code + '_event_steps');
-    const wxContext = cloud.getWXContext();
+
     if (stepsDB.errMsg === "createCollection:ok") {
       for (let param of steps) {
         const res = await cloud.callFunction({

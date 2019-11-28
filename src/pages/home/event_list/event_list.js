@@ -9,6 +9,26 @@ Page({
     checkingUser: false
   },
   onLoad() {
+    // 查看是否授权
+    const _this = this;
+    wx.getSetting({
+      success(res) {
+        if (res.authSetting['scope.userInfo']) {
+          // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+          wx.getUserInfo({
+            success(res) {
+              _this.setData({
+                authButtonShow: false
+              })
+            }
+          })
+        } else {
+          _this.setData({
+            authButtonShow: true
+          });
+        }
+      }
+    })
     this.checkoutUser().then(() => {
       this.loadData();
     })
@@ -48,40 +68,23 @@ Page({
     wx.showLoading({
       mask: true
     })
-    service.getEventList().then(eventList => {
-      this.setData({
-        eventList
-      })
-      wx.hideLoading();
-    }, error => {
-      if (error.code === '2003') {
-        wx.showToast({
-          title: '查询不到事件',
-          icon: 'none',
-          duration: 2000
+    return new Promise((reslove, reject) => {
+      service.getEventList().then(eventList => {
+        this.setData({
+          eventList
         })
-      }
-    });
-
-    // 查看是否授权
-    const _this = this;
-    wx.getSetting({
-      success(res) {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-          wx.getUserInfo({
-            success(res) {
-              _this.setData({
-                authButtonShow: false
-              })
-            }
+        wx.hideLoading();
+        reslove()
+      }, error => {
+        if (error.code === '2003') {
+          wx.showToast({
+            title: '没有可参与的事件',
+            icon: 'none',
+            duration: 2000
           })
-        } else {
-          _this.setData({
-            authButtonShow: true
-          });
         }
-      }
+        reject()
+      });
     })
   },
   bindGetUserInfo(e) {
@@ -107,5 +110,13 @@ Page({
         })
       }
     })
+  },
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function() {
+    this.loadData().then(() => {
+      wx.stopPullDownRefresh()
+    });
   }
 })
