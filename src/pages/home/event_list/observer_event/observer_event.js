@@ -30,21 +30,28 @@ Page({
       title: '加载中...',
       mask: true
     })
-    service.getSelfEventStep(event_code).then(myEventDetail => {
+    let eventDetail = new Promise((resolve, reject) => {
+      service.getSelfEventStep(event_code).then(myEventDetail => {
+        resolve(myEventDetail);
+      })
+    }); 
+    let observerList = new Promise((resolve, reject) => {
       this.loadUserObserver(APP.globalData.userInfo.open_id).then(followerList => {
-        let newEventSteps = {
-          name: '我自己',
-          event_steps: myEventDetail,
-          followerList: followerList.map(e => e.name)
-        }
-        this.setData({
-          myEventSteps: newEventSteps
-        })
+        resolve(followerList);
+      })
+    }); 
+    Promise.all([eventDetail, observerList]).then(values =>{
+      let newEventSteps = {
+        name: '我自己',
+        event_steps: values[0],
+        followerList: values[1].map(e => e.name)
+      }
+      this.setData({
+        myEventSteps: newEventSteps
       })
       wx.hideLoading();
       reloadTrigger.myDataload = false;
     })
-
   },
   loadUserForEvent() {
     let reloadTrigger = getApp().globalData.homeEventListObserverEvent;
@@ -54,6 +61,7 @@ Page({
     service.getQueryObserverEventDetail({
       code: event_code
     }).then(observer => {
+      console.log("我关注的用户：", observer.data);
       this.setData({
         observerEvent: observer.data
       })

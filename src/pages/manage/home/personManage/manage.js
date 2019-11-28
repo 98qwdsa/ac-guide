@@ -131,12 +131,8 @@ Page({
   },
   editUser(e){
     let _id = e.currentTarget.dataset.userid;
-    let userName = e.currentTarget.dataset.username;
-    let power = e.currentTarget.dataset.userpower;
-    let role = e.currentTarget.dataset.userrole;
     wx.navigateTo({
-      url: 'editUser/editUser?userId=' + _id +'&userName=' + userName + 
-        '&power=' + power + '&role=' + role,
+      url: 'editUser/editUser?userId=' + _id,
     })
   },
   /**
@@ -152,6 +148,10 @@ Page({
   onShow: function() {
     let trigger = getApp().globalData.managerHomePersonManageAddUser;
     if (trigger.userName !== '') {
+      wx.showLoading({
+        title: '添加用户中...',
+        mask: true
+      })
       let newUserList = [...allUserList];
       service.addUser(trigger.userName).then(_id => {
         newUserList.push({
@@ -161,6 +161,7 @@ Page({
         this.setData({
           userList: newUserList
         })
+        wx.hideLoading();
         allUserList = newUserList
         trigger.userName = ''
       });

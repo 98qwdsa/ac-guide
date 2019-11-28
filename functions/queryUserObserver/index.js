@@ -99,13 +99,13 @@ async function getUserObserver(data) {
   const res = await COLION.where({
     observed_open_id: data.observered_open_id
   }).get();
-  // if (res.data.length < 1) {
-  //   return {
-  //     code: '2001',
-  //     msg: 'no records',
-  //     data: null
-  //   }
-  // }
+  if (res.data.length < 1) {
+    return {
+      code: '2001',
+      msg: 'no records',
+      data: null
+    }
+  }
   let list = [];
   if (res.data.length) {
     for (let e of res.data[0].observer_open_id) {

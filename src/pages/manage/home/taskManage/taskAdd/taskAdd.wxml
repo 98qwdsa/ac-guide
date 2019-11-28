@@ -7,7 +7,7 @@
       <input name="name" type="text" class="event_name" placeholder-class="event_placeholder" value='{{eventDetail.name}}' bindblur='nameBindblur' placeholder="事件名称"></input>
       <textarea name="desc" class="event_desc" placeholder-class="event_placeholder" value='{{eventDetail.desc}}' bindblur='descBindblur' placeholder="事件描述"></textarea>
       <view class='event_view'>
-        <navigator class="nav_role" url="rolePart/rolePart?role={{eventDetail.role}}">
+        <navigator class="nav_role" url="rolePart/rolePart?role={{m1.formatRole(eventDetail.role)}}">
           <checkbox-group name="role">
             <label class="checkbox-item" wx:for="{{eventDetail.role}}" wx:key="{{eventDetail.role.index}}">
               <checkbox value="{{item.code}}" checked="{{true}}" />

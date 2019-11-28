@@ -74,17 +74,19 @@ form{
 .step .checkbox-item{
   position: relative;
   display: inline-block;
-  width: 600rpx;
-  height: 90rpx;
+  width: 650rpx;
+  min-height: 90rpx;
   line-height: 90rpx;
   background-color: #f8f8f8;
   margin-top: 15rpx;
-  padding: 0 30rpx;
+  box-sizing: border-box;
+  padding-left: 12rpx;
+  padding-right: 45rpx;
 }
 
 .step .checkbox-item .delete{
   position: absolute;
-  right: 20rpx;
+  right: 18rpx;
   width: 55rpx;
   height: 55rpx;
   margin-top: 20rpx;

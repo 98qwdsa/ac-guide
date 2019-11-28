@@ -12,7 +12,7 @@
       <label for="power">用户权限：</label>
       <checkbox-group id="power" name="power" bindchange="checkboxChange">
         <label class="checkbox" wx:for="{{power}}" wx:key="item">
-          <checkbox value="{{item.name}}" checked="{{item.checked}}" />{{item.name}}
+          <checkbox value="{{item.code}}" checked="{{item.checked}}" />{{item.label}}
         </label>
       </checkbox-group>
     </view>
@@ -21,7 +21,7 @@
       <label for="role">用户角色：</label>
       <checkbox-group id="role" name="role" bindchange="checkboxChange">
         <label class="checkbox" wx:for="{{role}}" wx:key="item">
-          <checkbox value="{{item.name}}" checked="{{item.checked}}" />{{item.name}}
+          <checkbox value="{{item.code}}" checked="{{item.checked}}" />{{item.label}}
         </label>
       </checkbox-group>
     </view>

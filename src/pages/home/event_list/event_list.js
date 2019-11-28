@@ -72,7 +72,7 @@ Page({
       service.getEventList().then(eventList => {
         this.setData({
           eventList
-        })
+      })
         wx.hideLoading();
         reslove()
       }, error => {

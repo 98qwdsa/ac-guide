@@ -16,6 +16,11 @@ module.exports = {
       code
     });
   },
+  queryUser(_id){
+    return cloud.call('checkUserInfo',{
+      _id
+    })
+  },
   // getQueryAllUserEventDetail(data){
   //   return cloud.call('queryAllUserEventDetail',{
   //     ...data
