@@ -4,7 +4,7 @@ let detail = {
   code: '',
   name: '',
   desc: '',
-  disabled: true,
+  disabled: false,
   role: [],
   steps: []
 };
@@ -26,7 +26,7 @@ Page({
     this.setData({
       eventDetail: {
         ...detail,
-        disabled: true
+        disabled: false
       }
     });
   },
@@ -56,52 +56,40 @@ Page({
     })
   },
   submit: function(e) {
-    if (e.detail.value.code == "" || e.detail.value.name == "" ) {
-      wx.showModal({
-        title: '提示',
-        content: '事件编码和事件名称都不能为空',
-      })
+    const params = e.detail.value;
+    if (params.code == "" || params.name == "") {
+      wx.showToast({
+        icon: 'none',
+        title: '事件编码和事件名称都不能为空',
+      });
       return;
     }
     wx.showLoading({
       title: '添加事件中...',
       mask: true
     })
-    service.addEvent(e.detail.value).then(() => {
+    params.steps = params.steps.map(e => ({
+      title: e
+    }))
+    service.addEvent(params).then(() => {
       wx.hideLoading();
-      wx.navigateBack();
       let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
       reloadTrigger.load = true;
-      // detail = {
-      //   code: '',
-      //   name: '',
-      //   desc: '',
-      //   disabled: true,
-      //   role: [],
-      //   steps: []
-      // };
-      // this.setData({
-      //   eventDetail: detail
-      // });
+      wx.navigateBack();
+
     });
   },
   formReset: function() {
-    detail = {
-      code: '',
-      name: '',
-      desc: '',
-      disabled: true,
-      role: [],
-      steps: []
-    };
     this.setData({
-      eventDetail: detail
+      eventDetail: {
+        code: '',
+        name: '',
+        desc: '',
+        disabled: false,
+        role: [],
+        steps: []
+      }
     });
-    wx.showToast({
-      title: '消息已重置成功',
-      icon: 'success',
-      duration: 2000
-    })
   },
   codeBindblur: function(e) {
     detail.code = e.detail.value;
@@ -122,13 +110,13 @@ Page({
       content: '是否删除该步骤',
       success(res) {
         if (res.confirm) {
-          detail.steps = detail.steps.filter(function (item) {
+          detail.steps = detail.steps.filter(function(item) {
             return (item !== e.currentTarget.dataset.steptask);
           });
           _this.setData({
             eventDetail: detail
           });
-        } 
+        }
       }
     })
   },

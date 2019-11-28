@@ -96,13 +96,13 @@ async function getObserverUserOpenId(data) {
     const res = await DB.collection(data.code + '_event_observeds').where({
       observer_open_id: _.in([data.open_id])
     }).get()
-    // if (res.data.length < 1) {
-    //   return {
-    //     code: '2000',
-    //     msg: 'not records',
-    //     data: null
-    //   }
-    // }
+    if (res.data.length < 1) {
+      return {
+        code: '2000',
+        msg: 'not records',
+        data: null
+      }
+    }
     return {
       code: '0000',
       msg: res.errMsg,

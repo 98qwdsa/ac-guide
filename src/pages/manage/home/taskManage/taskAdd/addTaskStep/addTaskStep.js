@@ -22,14 +22,10 @@ Page({
   },
   formSubmit: function(e){
     taskAdd.stepName = e.detail.value.stepName;
-    wx.navigateBack({
-      delta: 1
-    })
+    wx.navigateBack()
   },
   formReset: function(e){
-    wx.navigateBack({
-      delta: 1,
-    });
+    wx.navigateBack();
   },
   deleteText: function(e){
     this.setData({

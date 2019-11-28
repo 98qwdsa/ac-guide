@@ -15,7 +15,8 @@ function checkParamFormat(data) {
     icon,
     disabled,
     verifiers,
-    role
+    role,
+    steps
   } = data;
   const res = {
     code: '0000',
@@ -27,7 +28,8 @@ function checkParamFormat(data) {
       icon,
       disabled,
       verifiers,
-      role
+      role,
+      steps
     }
   }
   if (code === undefined) {
@@ -80,6 +82,15 @@ function checkParamFormat(data) {
     if (!(role instanceof Array)) {
       res.code = '1001';
       res.msg.push('role:string')
+    }
+  }
+  if (steps === undefined) {
+    res.code = '1001';
+    res.msg.push('steps:array')
+  } else {
+    if (!(steps instanceof Array)) {
+      res.code = '1001';
+      res.msg.push('steps:string')
     }
   }
   if (res.code === '1000') {
@@ -204,7 +215,7 @@ async function addCustomEventToEventList(data) {
   }
 }
 //添加事件关联表
-async function createCustomEventCollection(code) {
+async function createCustomEventCollection(code, steps) {
   const result = {
     code: '0000',
     msg: '',
@@ -219,8 +230,28 @@ async function createCustomEventCollection(code) {
     }
   }
   try {
-    const steps = await DB.createCollection(code + '_event_steps');
-    if (steps.errMsg != "createCollection:ok") {
+    const stepsDB = await DB.createCollection(code + '_event_steps');
+    const wxContext = cloud.getWXContext();
+    if (stepsDB.errMsg === "createCollection:ok") {
+      for (let param of steps) {
+        const res = await cloud.callFunction({
+          name: 'adminEditEventStep',
+          data: {
+            open_id: wxContext.OPENID,
+            code,
+            action: 'add',
+            param
+          }
+        })
+        if (res.result.code !== '0000') {
+          return {
+            code: '2011',
+            msg: res.result,
+            data: null
+          }
+        }
+      }
+    } else {
       result.code = '2004';
       result.msg += 'create ' + code + '_event_steps fail, ';
     }
@@ -241,17 +272,6 @@ async function createCustomEventCollection(code) {
     result.msg += 'create ' + code + '_event_user fail, ';
   }
 
-  // try {
-  //   const attachments = await DB.createCollection(code + '_event_attachments');
-  //   if (attachments.errMsg != "createCollection:ok") {
-  //     result.code = '2004';
-  //     result.msg += 'create ' + code + '_event_attachments fail, ';
-  //   }
-  // } catch (e) {
-  //   result.code = '3003';
-  //   result.data.push(e);
-  //   result.msg += 'create ' + code + '_event_attachments fail, ';
-  // }
 
   try {
     const observers = await DB.createCollection(code + '_event_observeds');
@@ -275,7 +295,8 @@ async function createCustomEventCollection(code) {
  *  icon = '',
  *  disabled = false,
  *  verifiers = [],
- *  role = ['Participant']
+ *  role = ['Participant'],
+ *  steps=[]
  * }
  */
 
@@ -300,7 +321,7 @@ exports.main = async(event, context) => {
     return customEvent;
   }
 
-  const customEventCollections = await createCustomEventCollection(event.code);
+  const customEventCollections = await createCustomEventCollection(event.code, checkParam.data.steps);
   if (customEventCollections.code !== '0000') {
     return customEventCollections
   }

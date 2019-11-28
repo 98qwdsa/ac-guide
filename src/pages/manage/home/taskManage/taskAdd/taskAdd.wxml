@@ -1,26 +1,20 @@
 <!--src/event/detail/detail.wxml-->
-<wxs src='../../../../../wxs/format.wxs' module="m1"/>
+<wxs src='../../../../../wxs/format.wxs' module="m1" />
 <view class='content'>
   <form bindsubmit='submit' bindreset="formReset">
     <view class='event_info'>
-      <input name="code" type="text" class="event_name" placeholder-class="event_placeholder"
-          value='{{eventDetail.code}}' bindblur='codeBindblur' 
-          placeholder="事件编码:只能填英文字母"></input>
-      <input name="name" type="text" class="event_name" placeholder-class="event_placeholder"
-          value='{{eventDetail.name}}' bindblur='nameBindblur' placeholder="事件名称"></input>
-      <textarea name="desc" class="event_desc" placeholder-class="event_placeholder"
-          value='{{eventDetail.desc}}' bindblur='descBindblur' 
-          placeholder="事件描述"></textarea>
+      <input name="code" type="text" class="event_name" placeholder-class="event_placeholder" value='{{eventDetail.code}}' bindblur='codeBindblur' placeholder="事件编码:只能填英文字母"></input>
+      <input name="name" type="text" class="event_name" placeholder-class="event_placeholder" value='{{eventDetail.name}}' bindblur='nameBindblur' placeholder="事件名称"></input>
+      <textarea name="desc" class="event_desc" placeholder-class="event_placeholder" value='{{eventDetail.desc}}' bindblur='descBindblur' placeholder="事件描述"></textarea>
       <view class='event_view'>
         <navigator class="nav_role" url="rolePart/rolePart?role={{eventDetail.role}}">
           <checkbox-group name="role">
-            <label class="checkbox-item" wx:for="{{eventDetail.role}}" 
-            wx:key="{{eventDetail.role.index}}">
-              <checkbox value="{{item}}" checked="{{true}}" />
+            <label class="checkbox-item" wx:for="{{eventDetail.role}}" wx:key="{{eventDetail.role.index}}">
+              <checkbox value="{{item.code}}" checked="{{true}}" />
             </label>
           </checkbox-group>
           <block wx:if="{{m1.formatArray(eventDetail.role)}}">
-            <text class="text_role">{{m1.formatArray(eventDetail.role)}}</text>
+            <text class="text_role">{{m1.formatRole(eventDetail.role)}}</text>
           </block>
           <block wx:else>
             <text>可参与角色</text>
@@ -31,33 +25,27 @@
       <view class='event_view step'>
         <text>步骤</text>
         <checkbox-group name="steps">
-           <label class="checkbox-item" wx:for="{{eventDetail.steps}}" bindtap="editTaskStep"
-           wx:key="{{eventDetail.steps.index}}" data-steptask="{{item}}" 
-            data-stepindex="{{index}}">
-            <checkbox value="{{item}}" checked="{{true}}" />
-            {{index+1}}:
-            {{item}}
-            <image src="../../../../../asset/task_step_delete.png" data-steptask="{{item}}"
-             catchtap="deleteTaskStep" class="delete"></image>
+          <label class="checkbox-item" wx:for="{{eventDetail.steps}}" bindtap="editTaskStep" wx:key="{{eventDetail.steps.index}}" data-steptask="{{item}}" data-stepindex="{{index}}">
+            <checkbox value="{{item}}" checked="{{true}}" /> {{index+1}}: {{item}}
+            <image src="../../../../../asset/task_step_delete.png" data-steptask="{{item}}" catchtap="deleteTaskStep" class="delete"></image>
           </label>
         </checkbox-group>
         <view class="addStep">
           <navigator url="addTaskStep/addTaskStep">
             <image src="../../../../../asset/Task_add.svg"></image>
           </navigator>
-        </view>   
+        </view>
       </view>
       <view class="event_view">
-        <text>是否启用事件</text>
-        <switch name="disabled" checked="{{eventDetail.disabled}}" class="switch"
-        color="#46DFA2" bindchange="switchChange"/> 
-      </view>  
+        <text>禁用事件</text>
+        <switch name="disabled" checked="{{eventDetail.disabled}}" class="switch" color="#46DFA2" bindchange="switchChange" />
+      </view>
     </view>
     <view class="filler">
     </view>
     <view class='event_buttons'>
-      <button form-type='reset' class="reset">取消</button>
-      <button form-type='submit' class="submit" >确定</button>
+      <button form-type='reset' class="reset">重置</button>
+      <button form-type='submit' class="submit">确定</button>
     </view>
   </form>
 </view>

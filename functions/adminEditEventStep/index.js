@@ -8,11 +8,13 @@ const DB = cloud.database();
 let COLION;
 //检查参数格式
 function checkParamFormat(data) {
+  const wxContext = cloud.getWXContext();
   let {
     code,
     action,
     param,
-    _id
+    _id,
+    open_id = wxContext.OPENID
   } = data;
 
   const defaultParam = {
@@ -35,6 +37,15 @@ function checkParamFormat(data) {
     if (typeof(code) != 'string') {
       res.code = '1001';
       res.msg.push('code:string')
+    }
+  }
+  if (open_id === undefined) {
+    res.code = '1000';
+    res.msg.push('open_id:string')
+  } else {
+    if (typeof(open_id) != 'string') {
+      res.code = '1001';
+      res.msg.push('open_id:string')
     }
   }
 
@@ -125,20 +136,20 @@ function checkParamFormat(data) {
       code,
       action,
       param,
-      _id
+      _id,
+      open_id
     }
   }
   return res;
 }
 //检查用户是否有admin权限
-async function checkPermision() {
-  const wxContext = cloud.getWXContext();
+async function checkPermision(open_id) {
   //角色验证
   try {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
       data: {
-        open_id: wxContext.OPENID
+        open_id
       }
     })
     if (!curUserInfo.result.data.power.includes('event_admin')) {
@@ -155,7 +166,7 @@ async function checkPermision() {
     }
   } catch (e) {
     return {
-      code: '1000',
+      code: '3000',
       msg: e,
       data: null
     }
@@ -182,7 +193,7 @@ async function checkEvent(code) {
     }
   } catch (e) {
     return {
-      code: '1001',
+      code: '3001',
       msg: e,
       data: null
     }
@@ -315,6 +326,7 @@ async function updateStep(data) {
 // 云函数入口函数
 /** 
  *  {
+ *    open_id:''
  *    code = '',
  *    action = '', [add|edit|remove]
  *    param = {
@@ -334,7 +346,7 @@ exports.main = async(event, context) => {
 
   COLION = DB.collection(event.code + '_event_steps');
 
-  const permission = await checkPermision();
+  const permission = await checkPermision(checkParam.data.open_id);
   if (permission.code !== '0000') {
     return permission;
   }

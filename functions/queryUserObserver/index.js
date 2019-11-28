@@ -6,7 +6,6 @@ cloud.init({
 })
 
 function checkParamFormat(data) {
-  const wxContext = cloud.getWXContext();
   let {
     code,
     observered_open_id
@@ -56,10 +55,13 @@ function checkParamFormat(data) {
 }
 
 //角色验证
-async function checkRole() {
+async function checkRole(open_id) {
   try {
     const curUserInfo = await cloud.callFunction({
-      name: 'checkUserInfo'
+      name: 'checkUserInfo',
+      data: {
+        open_id
+      }
     })
     if (curUserInfo.result.code !== '0000') {
       return {
@@ -77,7 +79,7 @@ async function checkRole() {
     }
     return {
       msg: 'role mismatch Function: queryUserObserver',
-      code: '3000',
+      code: '2000',
       data: null
     }
   } catch (e) {
@@ -129,13 +131,13 @@ async function getUserObserver(data) {
           msg: userInfo.result,
           data: null
         }
-      } else{
+      } else {
         return userInfo.result.data ? userInfo.result.data.name : ''
       }
-      
+
     } catch (e) {
       return {
-        code: '3000',
+        code: '3001',
         msg: e,
         daa: null
       }
@@ -168,11 +170,12 @@ async function getUserObserver(data) {
 
 // 云函数入口函数
 exports.main = async(event, context) => {
+  const wxContext = cloud.getWXContext();
   const param = checkParamFormat(event);
   if (param.code !== '0000') {
     return param;
   }
-  const role = await checkRole();
+  const role = await checkRole(wxContext.OPENID);
   if (role.code !== '0000') {
     return role;
   }

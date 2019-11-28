@@ -1,4 +1,4 @@
-var formatArray = function (array) {
+var formatArray = function(array) {
   if (array == undefined) {
     return;
   }
@@ -6,15 +6,23 @@ var formatArray = function (array) {
   return roles;
 }
 
-var getProgress = function (array){
-  if(array == undefined){
+function formatRole(arr) {
+  var roles = arr.map(function(e) {
+    return e.label
+  })
+  return formatArray(roles);
+}
+
+var getProgress = function(array) {
+  if (array == undefined) {
     return;
   }
-  var progress = array.filter(function (item) {
+  var progress = array.filter(function(item) {
     return (item.user_step.status_code === 100);
   }).length / array.length * 100
   return progress;
 }
 
-module.exports.formatArray = formatArray;
-module.exports.getProgress = getProgress;
+module.exports.formatArray = formatArray
+module.exports.getProgress = getProgress
+module.exports.formatRole = formatRole
