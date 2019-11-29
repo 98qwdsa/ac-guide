@@ -17,7 +17,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.loadData(options.code || 'entry');
+    this.loadData(options.code);
   },
   loadData(event_code) {
     wx.showLoading({
@@ -43,8 +43,6 @@ Page({
         event_code,
         eventDetail: data.detail
       });
-      //this.initSwiperHeight();
-
       wx.hideLoading();
     })
   },

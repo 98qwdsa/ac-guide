@@ -6,10 +6,9 @@ cloud.init({
 });
 
 function checkParamFormat(data) {
-  const wxContext = cloud.getWXContext();
   let {
     code,
-    open_id,
+    open_id = cloud.getWXContext().OPENID,
     page
   } = data
   // 初始化页面信息
@@ -32,13 +31,9 @@ function checkParamFormat(data) {
     }
   }
 
-  if (open_id === undefined) {
-    open_id = wxContext.OPENID;
-  } else {
-    if (typeof(open_id) != 'string') {
-      res.code = '1001';
-      res.msg.push('open_id:string')
-    }
+  if (open_id === undefined || typeof(open_id) != 'string') {
+    res.code = '1001';
+    res.msg.push('open_id:string')
   }
   if (page === undefined) {
     page = defaultPageConf;
@@ -203,11 +198,18 @@ async function getUserEventDetail(param, data) {
     const userEventDetailList = await cloud.callFunction({
       name: 'queryMultipleUserEventDetail',
       data: {
+        open_id: param.open_id,
         code: param.code,
         user_open_id_list: data.open_ids,
       }
     });
-    if (userEventDetailList.result.length < 1) {
+    if (userEventDetailList.result.code !== '0000') {
+      return {
+        code: '2005',
+        msg: res.result,
+        data: null
+      }
+    } else if (userEventDetailList.result.data.length < 1) {
       return {
         code: '2003',
         msg: 'there is no uers in this event',
@@ -218,7 +220,7 @@ async function getUserEventDetail(param, data) {
       code: '0000',
       msg: '',
       data: {
-        data: userEventDetailList.result,
+        data: userEventDetailList.result.data,
         page_info: {
           ...param.page,
           count: data.count

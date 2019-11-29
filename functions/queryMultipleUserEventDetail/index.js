@@ -8,12 +8,17 @@ cloud.init({
 function checkParamFormat(data) {
   const {
     code,
-    user_open_id_list
+    user_open_id_list,
+    open_id = cloud.getWXContext().OPENID
   } = data;
   const res = {
     code: '0000',
     msg: [],
     data: null
+  }
+  if (open_id === undefined) {
+    res.code = '1000';
+    res.msg.push('open_id:string');
   }
   if (code === undefined) {
     res.code = '1000';
@@ -38,14 +43,12 @@ function checkParamFormat(data) {
     res.msg = 'param ' + res.msg.join(',') + ' required'
   }
 
-  if (res.code === '1001') {
-    res.msg = 'param ' + res.msg.join(',') + ' wrong'
-  }
   if (res.code === '0000') {
     res.msg = 'param format ok';
     res.data = {
       user_open_id_list,
-      code
+      code,
+      open_id
     }
   }
   return res
@@ -97,17 +100,21 @@ async function getUserInfo(open_id) {
 }
 
 //角色验证
-async function checkRole() {
-  const wxContext = cloud.getWXContext();
+async function checkRole(open_id) {
+
   try {
     const curUserInfo = await cloud.callFunction({
       name: 'checkUserInfo',
       data: {
-        open_id: wxContext.OPENID
+        open_id
       }
     })
     if (curUserInfo.result.code != '0000') {
-      return curUserInfo.result
+      return {
+        code: '2001',
+        msg: curUserInfo.result,
+        data: null
+      }
     }
     if (curUserInfo.result.data.role.includes('Publisher') || curUserInfo.result.data.role.includes('Observer')) {
       return {
@@ -147,6 +154,7 @@ async function mergeUserEventDetail(data) {
 }
 /**
  * {
+ *  open_id
  *  user_open_id_list:[],
  *  code:''
  * }
@@ -157,9 +165,13 @@ exports.main = async(event, context) => {
   if (checkParam.code !== '0000') {
     return checkParam;
   }
-  const role = await checkRole();
+  const role = await checkRole(checkParam.data.open_id);
   if (role.code != '0000') {
     return role;
   }
-  return await mergeUserEventDetail(checkParam.data);
+  return {
+    code: '0000',
+    msg: '',
+    data: await mergeUserEventDetail(checkParam.data)
+  }
 }
