@@ -4,24 +4,3 @@
   <step-warp stepList="{{stepList}}" bindcustomevent="nextStep" curStep="{{curStep}}">
  </step-warp>
 </view>
-
-
-
-
-<!--<swiper style='height:{{swiperHeight}}px' previous-margin="50rpx " next-margin='50rpx' easing-function="easeInOutCubic " bindchange="swiperChange " current="{{curIndex}} ">
-
-<block wx:for="{{stepList}} " wx:key="unique ">
-  <swiper-item class="swip_item {{curIndex===i ndex ? 'no_opacity' : ''}} ">
-    <view class='swip_item_warp' id='swip_item_warp{{index}}'>
-      <text class='title'>{{item.title}}</text>
-      <view class='tips'>
-        <text wx:for="{{item.tips}} " wx:for-item="tip " wx:for-index="idx " wx:key="unique ">{{idx+1}}. {{tip}}</text>
-      </view>
-      <block wx:if="{{item.user_step.status_code !==1 00 && curStep===i ndex}} ">
-        <button bindtap='nextStep' data-Uid="{{item._id}} ">下一步</button>
-      </block>
-    </view>
-  </swiper-item>
-</block>
-</swiper>
--->

@@ -23,7 +23,7 @@
 		}
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.6.0",
+	"libVersion": "2.9.4",
 	"appid": "wx7ffe7278ec55755b",
 	"projectname": "ac-guide",
 	"miniprogramRoot": "src/",

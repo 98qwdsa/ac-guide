@@ -161,7 +161,13 @@ async function getObserverEventDetail(param, openIdList) {
         user_open_id_list: qyeryOpenIdList,
       }
     });
-    if (res.result.length < 1) {
+    if (res.result.code !== '0000') {
+      return {
+        code: '2005',
+        msg: res.result,
+        data: null
+      }
+    } else if (res.result.length < 1) {
       return {
         code: '2002',
         msg: '',
