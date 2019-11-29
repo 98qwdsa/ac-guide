@@ -126,5 +126,15 @@ Page({
         e.currentTarget.dataset.steptask +
         '&&stepindex=' + e.currentTarget.dataset.stepindex
     })
+  },
+  onUnload() {
+    detail = {
+      code: '',
+      name: '',
+      desc: '',
+      disabled: false,
+      role: [],
+      steps: []
+    }
   }
 })

@@ -11,32 +11,27 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
-
-  },
+  onLoad: function(options) {},
   loadData() {
-    let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
-    if (reloadTrigger.load === false) {
-      return;
-    }
-    wx.showLoading({
-      mask: true,
-    })
-    service.getEventList().then(taskDetailList => {
-      this.setData({
-        taskDetailList
+    return new Promise((reslove, reject) => {
+      wx.showLoading({
+        mask: true,
       })
-      wx.hideLoading();
-      reloadTrigger.load = false;
-    }, error => {
-      if (error.code === '2003') {
-        wx.showToast({
-          title: '无事件',
-          icon: 'none',
-          duration: 2000
+      service.getEventList().then(taskDetailList => {
+        this.setData({
+          taskDetailList
         })
-      }
-    });
+        wx.hideLoading();
+      }, error => {
+        if (error.code === '2003') {
+          wx.showToast({
+            title: '无事件',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      });
+    })
   },
   taskAdd() {
     wx.navigateTo({
@@ -56,23 +51,26 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    this.loadData();
+    let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
+    if (reloadTrigger.load === false) {
+      return;
+    }
+    this.loadData().then(() => {
+      reloadTrigger.load = false;
+    });
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function() {
-
+    getApp().globalData.managerHomeTaskManageTaskAdd.load = true
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {
-    let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
-    reloadTrigger.load = false;
-  },
+  onUnload: function() {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
