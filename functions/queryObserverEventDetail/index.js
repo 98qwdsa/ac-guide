@@ -157,6 +157,7 @@ async function getObserverEventDetail(param, openIdList) {
     const res = await cloud.callFunction({
       name: 'queryMultipleUserEventDetail',
       data: {
+        open_id: cloud.getWXContext().OPENID,
         code: param.code,
         user_open_id_list: qyeryOpenIdList,
       }
@@ -167,7 +168,7 @@ async function getObserverEventDetail(param, openIdList) {
         msg: res.result,
         data: null
       }
-    } else if (res.result.length < 1) {
+    } else if (res.result.data.length < 1) {
       return {
         code: '2002',
         msg: '',
@@ -178,7 +179,7 @@ async function getObserverEventDetail(param, openIdList) {
       code: '0000',
       msg: '',
       data: {
-        data: res.result,
+        data: res.result.data,
         page_info: {
           ...param.page,
           count: openIdList.length

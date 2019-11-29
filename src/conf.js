@@ -1,4 +1,4 @@
-const EVN_CODE = 'ENV'; // 'ENV'  'PROD'
+const EVN_CODE = 'PROD'; // 'ENV'  'PROD'
 
 const PROD = {
   cloud_env_code: 'prod-ayp2z'
