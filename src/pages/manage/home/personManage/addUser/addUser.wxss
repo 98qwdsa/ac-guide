@@ -53,3 +53,9 @@ page {
   background-image: linear-gradient(-90deg, #7e46dd 0%, #dd60b3 100%);
   color: #fff;
 }
+button{
+  border-radius: 0;
+}
+button::after{
+  border-radius: 0;
+}

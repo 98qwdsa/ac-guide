@@ -48,3 +48,9 @@ checkbox-group{
   background-image: linear-gradient(-90deg, #7E46DD 0%, #DD60B3 100%);
   color: #fff;
 }
+button{
+  border-radius: 0;
+}
+button::after{
+  border-radius: 0;
+}

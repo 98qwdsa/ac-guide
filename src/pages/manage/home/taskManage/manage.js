@@ -71,7 +71,7 @@ Page({
    */
   onUnload: function() {
     let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
-    reloadTrigger.load = false;
+    reloadTrigger.load = true;
   },
 
   /**

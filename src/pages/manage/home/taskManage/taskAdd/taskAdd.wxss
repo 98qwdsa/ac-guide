@@ -75,13 +75,17 @@ form{
   position: relative;
   display: inline-block;
   width: 650rpx;
-  min-height: 90rpx;
+  height: 90rpx;
   line-height: 90rpx;
   background-color: #f8f8f8;
   margin-top: 15rpx;
   box-sizing: border-box;
   padding-left: 12rpx;
   padding-right: 45rpx;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
 }
 
 .step .checkbox-item .delete{
@@ -133,7 +137,12 @@ checkbox{
   background-image: linear-gradient(-90deg, #7E46DD 0%, #DD60B3 100%);
   color: #fff;
 }
-
+button{
+  border-radius: 0;
+}
+button::after{
+  border-radius: 0;
+}
 
 
 
