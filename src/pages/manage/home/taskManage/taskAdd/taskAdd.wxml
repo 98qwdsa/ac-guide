@@ -9,7 +9,7 @@
       <view class='event_view'>
         <navigator class="nav_role" url="rolePart/rolePart?role={{m1.formatRole(eventDetail.role)}}">
           <checkbox-group name="role">
-            <label class="checkbox-item" wx:for="{{eventDetail.role}}" wx:key="{{eventDetail.role.index}}">
+            <label class="checkbox-item" wx:for="{{eventDetail.role}}" wx:key="index">
               <checkbox value="{{item.code}}" checked="{{true}}" />
             </label>
           </checkbox-group>
@@ -25,7 +25,7 @@
       <view class='event_view step'>
         <text>步骤</text>
         <checkbox-group name="steps">
-          <label class="checkbox-item" wx:for="{{eventDetail.steps}}" bindtap="editTaskStep" wx:key="{{eventDetail.steps.index}}" data-steptask="{{item}}" data-stepindex="{{index}}">
+          <label class="checkbox-item" wx:for="{{eventDetail.steps}}" bindtap="editTaskStep" wx:key="index" data-steptask="{{item}}" data-stepindex="{{index}}">
             <checkbox value="{{item}}" checked="{{true}}" /> {{index+1}}: {{item}}
             <image src="../../../../../asset/task_step_delete.png" data-steptask="{{item}}" catchtap="deleteTaskStep" class="delete"></image>
           </label>

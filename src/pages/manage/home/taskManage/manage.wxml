@@ -1,15 +1,15 @@
 <view class='content'>
   <view class='task_list_warp'>
-    <view class='task_item_warp' wx:for="{{taskDetailList}}"  wx:key="{{index}}">
+    <view class='task_item_warp' wx:for="{{taskDetailList}}" wx:key="index">
       <navigator url='../../../home/event_list/publisher_event/publisher_event?name={{item.name}}&&code={{item.code}}' open-type="navigate">
         <event-detail detail='{{item}}'> </event-detail>
       </navigator>
     </view>
   </view>
- <view class="task_img">
+  <view class="task_img">
     <image class="bg" bindtap="taskAdd" src="../../../../asset/Task_add.svg"></image>
- </view>
-  
+  </view>
+
 </view>
 
 

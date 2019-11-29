@@ -17,7 +17,7 @@
   </view>
   <view class='content-wrapper' wx:if='{{currentTab === "tabmiddle"}}'>
     <block wx:if="{{myObserverList.length}}">
-      <view class="task_progress_item" wx:for="{{myObserverList}}"  wx:key="{{index}}">
+      <view class="task_progress_item" wx:for="{{myObserverList}}"  wx:key="index">
         <taskProgress detail='{{item}}' cancel = '{{item.cancel}}'>
           <view class="cancel" bindtap="cancelObserverForMyself" 
           data-observed="{{item.open_id}}">
@@ -31,7 +31,7 @@
   </view>
   <view class='content-wrapper' wx:if='{{currentTab === "tabright"}}'>
     <block wx:if="{{allUserList.length}}">
-      <view class="task_progress_item" wx:for="{{allUserList}}"  wx:key="{{index}}">
+      <view class="task_progress_item" wx:for="{{allUserList}}"  wx:key="index">
         <taskProgress detail='{{item}}'>
           <view class="add" bindtap="addObserverForUser" data-observed="{{item.open_id}}">
             <label>

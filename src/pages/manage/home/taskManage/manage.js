@@ -11,9 +11,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
-
-  },
+  onLoad: function(options) {},
   loadData() {
     let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
     if (reloadTrigger.load === false) {
@@ -69,9 +67,9 @@ Page({
   /**
    * 生命周期函数--监听页面卸载
    */
+
   onUnload: function() {
-    let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
-    reloadTrigger.load = true;
+    getApp().globalData.managerHomeTaskManageTaskAdd.load = true
   },
 
   /**
