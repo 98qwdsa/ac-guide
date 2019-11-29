@@ -16,8 +16,8 @@ module.exports = {
       code
     });
   },
-  queryUser(_id){
-    return cloud.call('checkUserInfo',{
+  queryUser(_id) {
+    return cloud.call('checkUserInfo', {
       _id
     })
   },
@@ -26,13 +26,13 @@ module.exports = {
   //     ...data
   //   });
   // },
-  getQueryObserverEventDetail(data){
+  getQueryObserverEventDetail(data) {
     return cloud.call('queryObserverEventDetail', {
       ...data
     });
   },
-  editObserverForUser(data){
-    return cloud.call('editObserver',{
+  editObserverForUser(data) {
+    return cloud.call('editObserver', {
       ...data
     })
   },
@@ -47,18 +47,18 @@ module.exports = {
   //   return cloud.call('queryAllObserver', {
   //   })
   // },
-  getUserObserver(data){
-    return cloud.call('queryUserObserver',{
+  getUserObserver(data) {
+    return cloud.call('queryUserObserver', {
       ...data
     })
   },
-  getUserList(data){
-    return cloud.call('adminQueryUser',{
+  getUserList(data) {
+    return cloud.call('adminQueryUser', {
       ...data
     })
   },
-  addUser(name){
-    return cloud.call('addUser',{
+  addUser(name) {
+    return cloud.call('addUser', {
       name
     })
   },
@@ -67,11 +67,13 @@ module.exports = {
       ...data
     })
   },
-  getPowerRole(){
-    return cloud.call('getPowerRole',{
+  getPowerRole(types, open_id = undefined) {
+    return cloud.call('getPowerRole', {
+      open_id,
+      types
     })
   }
-  
+
   // getEventDetail(code) {
   //   return cloud.call('queryEventList', {
   //     code

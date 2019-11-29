@@ -1,37 +1,33 @@
-<view class='container'>
+<view class='container {{!showMyevent ? "pad_top" :""}}}'>
 
-  <view class='tab-wrapper'>
-    <view id='tableft' class='tab-left {{currentTab === "tableft" ? "tab-active":""}}' bindtap='switchTab'>我的</view>
-    <view id='tabmiddle' class='tab-middle {{currentTab === "tabmiddle" ? "tab-active" : ""}}' bindtap='switchTab'>我关注的</view>
-    <view id='tabright' class='tab-right {{currentTab === "tabright" ? "tab-active" : ""}}' bindtap='switchTab'>所有参与者</view>
+  <view wx:if='{{!showMyevent}}' class='tab-wrapper'>
+    <view wx:for='{{tabs}}' wx:key='index' id='{{index}}' class='tab-left {{currentTab == index? "tab-active":""}}' bindtap='switchTab'>{{item.tab_label}}</view>
   </view>
 
-  <view class='content-wrapper' wx:if='{{currentTab === "tableft"}}'>
+  <view class='content-wrapper' wx:if='{{currentTab == 0}}'>
     <block wx:if="{{stepList.length}}">
       <view class="task_progress_item">
         <event-detail detail="{{eventDetail}}" finished="{{eventFinished}}"></event-detail>
-        <step-warp stepList="{{stepList}}" curStep="{{curStep}}"
-         bindcustomevent="nextStep"></step-warp>
+        <step-warp stepList="{{stepList}}" curStep="{{curStep}}" bindcustomevent="nextStep"></step-warp>
       </view>
     </block>
   </view>
-  <view class='content-wrapper' wx:if='{{currentTab === "tabmiddle"}}'>
+  <view class='content-wrapper' wx:if='{{currentTab == 1}}'>
     <block wx:if="{{myObserverList.length}}">
-      <view class="task_progress_item" wx:for="{{myObserverList}}"  wx:key="index">
-        <taskProgress detail='{{item}}' cancel = '{{item.cancel}}'>
-          <view class="cancel" bindtap="cancelObserverForMyself" 
-          data-observed="{{item.open_id}}">
+      <view class="task_progress_item" wx:for="{{myObserverList}}" wx:key="index">
+        <taskProgress detail='{{item}}' cancel='{{item.cancel}}'>
+          <view class="cancel" bindtap="cancelObserverForMyself" data-observed="{{item.open_id}}">
             <label>
               <text>取消关注</text>
             </label>
-            </view>
+          </view>
         </taskProgress>
       </view>
     </block>
   </view>
-  <view class='content-wrapper' wx:if='{{currentTab === "tabright"}}'>
+  <view class='content-wrapper' wx:if='{{currentTab == 2}}'>
     <block wx:if="{{allUserList.length}}">
-      <view class="task_progress_item" wx:for="{{allUserList}}"  wx:key="index">
+      <view class="task_progress_item" wx:for="{{allUserList}}" wx:key="index">
         <taskProgress detail='{{item}}'>
           <view class="add" bindtap="addObserverForUser" data-observed="{{item.open_id}}">
             <label>

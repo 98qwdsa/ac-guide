@@ -21,7 +21,7 @@ Page({
       title: '加载中...',
       mask: true
     })
-    service.getPowerRole().then(data => {
+    service.getPowerRole(['role']).then(data => {
       data.role.forEach(function(val) {
         if (roleChecked.includes(val.label)) {
           val.checked = true;

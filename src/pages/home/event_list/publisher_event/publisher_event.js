@@ -1,19 +1,22 @@
 // src/pages/manage/taskProgress/taskProgress.js
 const service = require('../../service.js');
+let event_code = ''
+const APP = getApp();
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    currentTab: "tableft",
+    tabs: [],
+    currentTab: 0,
     allUserList: [],
     myObserverList: [],
     stepList: [],
-    event_code: '',
     curStep: 0,
     eventDetail: {},
-    observerList: []
+    observerList: [],
+    showMyevent: true
   },
   userList: [],
   /**
@@ -23,25 +26,51 @@ Page({
     wx.setNavigationBarTitle({
       title: options.name
     });
-    this.data.event_code = options.code;
-    this.loadMyData(options.code);
+    event_code = options.code;
+    this.initTabs(options).then(data => {
+      console.log(data);
+    })
+  },
+  initTabs(data) {
+    return new Promise((reslove, reject) => {
+      service.getPowerRole(['role']).then(data => {
+        let tabs = data.role.filter(e => {
+          if (APP.globalData.userInfo.role.includes(e.code)) {
+            return { ...e
+            }
+          }
+        })
+        let showMyevent = false
+        if (tabs.length === 1 && tabs[0].code === 'Participant') {
+          showMyevent = true
+        }
+        this.setData({
+          tabs,
+          showMyevent,
+          currentTab: data.currentTab || 0
+        })
+        this.switchTab(0)
+      })
+    })
   },
   switchTab(e) {
-    let currentTab = e.currentTarget.id;
-    let event_code = this.data.event_code;
+    let currentTab = e
+    if (typeof(e) === 'object') {
+      currentTab = e.currentTarget.id;
+    }
 
     this.setData({
       currentTab
     });
-    if (currentTab == "tableft") {
-      this.loadMyData(event_code);
-    } else if (currentTab == "tabmiddle") {
-      this.loadMyObserver(event_code);
-    } else if (currentTab == "tabright") {
-      this.loadAllUserForEvent(event_code);
+    if (currentTab == 0) {
+      this.loadMyData();
+    } else if (currentTab == 1) {
+      this.loadMyObserver();
+    } else if (currentTab == 2) {
+      this.loadAllUserForEvent();
     }
   },
-  loadMyData(event_code) {
+  loadMyData() {
     let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
     if (reloadTrigger.left === false) {
       return;
@@ -66,7 +95,6 @@ Page({
         stepList,
         curStep,
         eventFinished,
-        event_code,
         eventDetail: data.detail
       });
       wx.hideLoading();
@@ -80,7 +108,7 @@ Page({
       mask: true
     })
     const dataSet = e.detail.currentTarget.dataset;
-    service.nextStep(this.data.event_code, dataSet.uid).then(data => {
+    service.nextStep(event_code, dataSet.uid).then(data => {
       wx.hideLoading();
       wx.showToast({
         icon: 'success',
@@ -108,7 +136,7 @@ Page({
     reloadTrigger.right = true;
     reloadTrigger.mid = true;
   },
-  loadAllUserForEvent(event_code) {
+  loadAllUserForEvent() {
     let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
     if (reloadTrigger.right === false) {
       return;
@@ -124,11 +152,17 @@ Page({
       this.setData({
         allUserList: allUser.data
       });
-      if(this.data.allUserList.length){
+      if (this.data.allUserList.length) {
         this.loadfollowerList('allUserList');
       }
     }, (error) => {
-      if (error.code === '2001' || error.code === '2002' || error.code === '2003'){
+      if (error.code === '2000') {
+        wx.showToast({
+          title: '角色不匹配',
+          icon: 'none',
+          duration: 2000
+        })
+      } else if (error.code === '2001' || error.code === '2002' || error.code === '2003') {
         wx.showToast({
           title: '该事件还没有参与者',
           icon: 'none',
@@ -137,7 +171,7 @@ Page({
       }
     })
   },
-  loadMyObserver(event_code) {
+  loadMyObserver() {
     let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
     if (reloadTrigger.mid === false) {
       return;
@@ -153,11 +187,11 @@ Page({
       });
       wx.hideLoading();
       reloadTrigger.mid = false;
-      if(this.data.myObserverList.length){
+      if (this.data.myObserverList.length) {
         this.loadfollowerList('myObserverList');
       }
     }, (error) => {
-      if (error.code === '2001'){
+      if (error.code === '2001') {
         wx.showToast({
           title: '角色不匹配',
           icon: 'none',
@@ -174,14 +208,14 @@ Page({
   },
   addObserverForUser(e) {
     wx.navigateTo({
-      url: 'allObserver/allObserver?code=' + this.data.event_code +
+      url: 'allObserver/allObserver?code=' + event_code +
         '&observed=' + e.currentTarget.dataset.observed,
     })
   },
   loadUserObserver(observed_open_id) {
     return new Promise((reslove, reject) => {
       service.getUserObserver({
-        code: this.data.event_code,
+        code: event_code,
         observered_open_id: observed_open_id
       }).then(observerList => {
         reslove(observerList);
@@ -190,18 +224,18 @@ Page({
   },
   loadfollowerList(userListType) {
     const userList = [...this.data[userListType]]
-      userList.forEach((e, key) => {
-        this.loadUserObserver(e.open_id).then(followerList => {
-          let newUserList = [...this.data[userListType]]
-          newUserList.splice(key, 1, {
-            ...newUserList[key],
-            followerList: followerList.map(e => e.name)
-          })
-          this.setData({
-            [userListType]: newUserList
-          })
+    userList.forEach((e, key) => {
+      this.loadUserObserver(e.open_id).then(followerList => {
+        let newUserList = [...this.data[userListType]]
+        newUserList.splice(key, 1, {
+          ...newUserList[key],
+          followerList: followerList.map(e => e.name)
         })
-      });
+        this.setData({
+          [userListType]: newUserList
+        })
+      })
+    });
   },
   cancelObserverForMyself(e) {
     let _this = this;
@@ -215,7 +249,7 @@ Page({
             mask: true
           })
           let data = {
-            code: _this.data.event_code,
+            code: event_code,
             observed_open_id: e.currentTarget.dataset.observed,
             action: 'cancel'
           };
@@ -235,14 +269,14 @@ Page({
           reloadTrigger.right = true;
           reloadTrigger.mid = true;
         } else if (res.cancel) {
-      
+
         }
       }
     })
 
 
-   
-    
+
+
   },
 
   /**
@@ -257,12 +291,12 @@ Page({
    */
   onShow: function() {
     let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
-    if (reloadTrigger.mid === true && this.data.currentTab === 'tabmiddle'
-        && this.data.myObserverList.length) {
+    if (reloadTrigger.mid === true && this.data.currentTab === '1' &&
+      this.data.myObserverList.length) {
       this.loadfollowerList('myObserverList');
     }
-    if (reloadTrigger.right === true && this.data.currentTab === 'tabright'
-        && this.data.allUserList.length) {
+    if (reloadTrigger.right === true && this.data.currentTab === '2' &&
+      this.data.allUserList.length) {
       this.loadfollowerList('allUserList');
     }
   },

@@ -2,13 +2,15 @@ const conf = require('./conf.js');
 //app.js
 App({
   onLaunch: function() {
-    wx.hideTabBar();
+    wx.hideTabBar()
     wx.cloud.init({
       env: conf.cloud_env_code
     });
   },
   globalData: {
-    userInfo: null,
+    userInfo: {
+      open_id: undefined
+    },
     'managerHomeTaskManagerTaskAdd': {
       roles: '',
       stepIndex: 0,
@@ -43,7 +45,7 @@ App({
       myDataload: true,
       userDataLoad: true
     },
-    'managerHomeTaskManageTaskAdd':{
+    'managerHomeTaskManageTaskAdd': {
       load: true
     }
   }

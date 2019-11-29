@@ -149,7 +149,7 @@ async function getEventList(user, param) {
     } else {
       return {
         code: '2002',
-        msg: '',
+        msg: `no records for ${param.power} power`,
         data: null
       }
     }
@@ -165,7 +165,7 @@ async function getEventList(user, param) {
     } else {
       return {
         code: '2002',
-        msg: '',
+        msg: `no records for ${param.role} role`,
         data: null
       }
     }

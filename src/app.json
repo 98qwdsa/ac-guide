@@ -27,16 +27,10 @@
     "selectedColor": "#000",
     "list": [
       {
-        "pagePath": "pages/home/event_list/event_list",
-        "text": "首页",
-        "iconPath": "asset/hr_guide2.png",
-        "selectedIconPath": "asset/hr_guide.png"
+        "pagePath": "pages/home/event_list/event_list"
       },
       {
-        "pagePath": "pages/manage/home/home",
-        "text": "管理",
-        "iconPath": "asset/hr_guide4.png",
-        "selectedIconPath": "asset/hr_guide3.png"
+        "pagePath": "pages/manage/home/home"
       }
     ]
   },

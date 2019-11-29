@@ -1,4 +1,5 @@
 /* src/pages/manage/taskProgress/taskProgress.wxss */
+
 page {
   background-color: #f5f5f5;
 }
@@ -13,8 +14,13 @@ page {
   padding: 0;
 }
 
+.pad_top {
+  padding-top: 100rpx;
+}
+
 .tab-wrapper {
   position: fixed;
+  top: 0;
   z-index: 10;
   display: flex;
   flex-direction: row;
@@ -40,7 +46,6 @@ page {
 .content-wrapper {
   width: 95%;
   flex: 1;
-  margin-top: 100rpx;
 }
 
 .task_progress_item {
@@ -77,7 +82,8 @@ page {
   font-family: SourceHanSansCN-Regular;
   z-index: 10;
 }
-.content-wrapper .cancelColor{
-  background: #EFEFEF;
+
+.content-wrapper .cancelColor {
+  background: #efefef;
   color: #666;
 }

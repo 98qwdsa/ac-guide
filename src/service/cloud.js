@@ -1,5 +1,9 @@
 module.exports = {
-  call(name, data) {
+  call(name, param) {
+    let data = {
+      ...param,
+      open_id: getApp().globalData.userInfo.open_id
+    }
     return new Promise((reslove, reject) => {
       wx.cloud.callFunction({
         name,

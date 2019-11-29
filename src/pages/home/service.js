@@ -39,8 +39,14 @@ module.exports = {
     });
   },
   getAllObserver() {
-    return cloud.call('queryAllObserver', {
-    })
+    return cloud.call('queryAllObserver', {})
   },
-  
+
+  getPowerRole(types, open_id = undefined) {
+    return cloud.call('getPowerRole', {
+      open_id,
+      types
+    })
+  }
+
 }

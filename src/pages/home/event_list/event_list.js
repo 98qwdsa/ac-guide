@@ -9,6 +9,7 @@ Page({
     checkingUser: false
   },
   onLoad() {
+    wx.hideTabBar()
     // 查看是否授权
     const _this = this;
     wx.getSetting({
@@ -51,9 +52,19 @@ Page({
           title: '首页',
         })
         if (data.power.includes('event_admin') || data.power.includes('account_admin')) {
-          wx.showTabBar();
-        } else {
-          wx.hideTabBar()
+          wx.setTabBarItem({
+            "index": 0,
+            "text": "首页",
+            "iconPath": "asset/hr_guide2.png",
+            "selectedIconPath": "asset/hr_guide.png"
+          })
+          wx.setTabBarItem({
+            "index": 1,
+            "text": "管理",
+            "iconPath": "asset/hr_guide4.png",
+            "selectedIconPath": "asset/hr_guide3.png"
+          })
+          wx.showTabBar()
         }
         reslove();
       }).catch(e => {
@@ -72,18 +83,20 @@ Page({
       service.getEventList().then(eventList => {
         this.setData({
           eventList
-      })
+        })
         wx.hideLoading();
         reslove()
       }, error => {
-        if (error.code === '2003') {
+        if (error.code === '2003' || error.code === '2002') {
           wx.showToast({
             title: '没有可参与的事件',
             icon: 'none',
             duration: 2000
           })
         }
-        reject()
+        this.setData({
+          eventList: []
+        });
       });
     })
   },
@@ -115,8 +128,7 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function() {
-    this.loadData().then(() => {
-      wx.stopPullDownRefresh()
-    });
+    wx.stopPullDownRefresh()
+    this.loadData()
   }
 })

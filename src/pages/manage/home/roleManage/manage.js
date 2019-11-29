@@ -44,7 +44,7 @@ Page({
   loadRole() {
     let reloadTrigger = getApp().globalData.managerHomeRoleManage;
     return new Promise((reslove, reject) => {
-      service.getPowerRole().then(powerRole => {
+      service.getPowerRole(['role']).then(powerRole => {
         reslove(powerRole);
         let role = powerRole.role
         this.setData({
@@ -78,13 +78,13 @@ Page({
         [role]: [],
       })
       reloadTrigger[role] = false
-      if (error.code === '2000'){
+      if (error.code === '2000') {
         wx.showToast({
           title: '用户没有权限，请求被拒绝',
           icon: 'none',
           duration: 2000
         })
-      }else if (error.code === '2001' || error.code === '2002'){
+      } else if (error.code === '2001' || error.code === '2002') {
         wx.showToast({
           title: '该角色没有用户，请添加',
           icon: 'none',

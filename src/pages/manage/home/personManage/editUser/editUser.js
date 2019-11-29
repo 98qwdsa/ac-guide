@@ -19,11 +19,11 @@ Page({
   onLoad: function(options) {
     this.displayData(options.userId);
   },
-  displayData(userId){
+  displayData(userId) {
     Promise.all([this.loadRole(), this.loadUserData(userId)]).then(values => {
       wx.hideLoading();
-      values[0].power.forEach(val =>{
-        if (values[1].power.includes(val.code)){
+      values[0].power.forEach(val => {
+        if (values[1].power.includes(val.code)) {
           val.checked = true;
         }
       })
@@ -40,25 +40,25 @@ Page({
       })
     })
   },
-  loadRole(){
+  loadRole() {
     wx.showLoading({
       title: '加载中...',
     })
-    return new Promise((reslove, reject) =>{
-      service.getPowerRole().then(powerRole => {
+    return new Promise((reslove, reject) => {
+      service.getPowerRole(['role', 'power']).then(powerRole => {
         reslove(powerRole);
       })
     })
   },
-  loadUserData(_id){
-    return new Promise((reslove, reject) =>{
+  loadUserData(_id) {
+    return new Promise((reslove, reject) => {
       service.queryUser(_id).then(user => {
         reslove(user);
       })
     })
   },
-  submit:function(e){
-    if (e.detail.value.userName === '' || e.detail.value.power.length === 0){
+  submit: function(e) {
+    if (e.detail.value.userName === '' || e.detail.value.power.length === 0) {
       wx.showModal({
         title: '提示',
         content: '用户名字和权限都不能为空',
@@ -70,15 +70,15 @@ Page({
     })
     service.editUser({
       _id: e.detail.value.userId,
-      data:{
+      data: {
         name: e.detail.value.userName,
         power: e.detail.value.power,
         role: e.detail.value.role
       }
-    }).then(()=>{
+    }).then(() => {
       wx.hideLoading();
       wx.navigateBack();
-    },error =>{
+    }, error => {
       wx.showToast({
         title: '请先修改用户信息',
         icon: 'none',
@@ -90,7 +90,7 @@ Page({
     userInfo.power = e.detail.value.power;
     userInfo.role = e.detail.value.role
   },
-  checkboxChange(e){
+  checkboxChange(e) {
 
   },
 
