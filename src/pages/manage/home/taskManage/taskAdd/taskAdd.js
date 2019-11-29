@@ -121,7 +121,7 @@ Page({
     })
   },
   editTaskStep: function(e) {
-    wx: wx.navigateTo({
+    wx.navigateTo({
       url: 'addTaskStep/addTaskStep?stepname=' +
         e.currentTarget.dataset.steptask +
         '&&stepindex=' + e.currentTarget.dataset.stepindex

@@ -9,51 +9,52 @@ Page({
   data: {
     userId: '',
     userName: '',
-    power: [{
-        name: 'account_admin',
-        checked: false
-      },
-      {
-        name: 'event_admin',
-        checked: false
-      }
-    ],
-    role: [{
-      name: 'Observer',
-      checked: false
-    },
-    {
-      name: 'Participant',
-      checked: false
-    },
-    {
-      name: 'Publisher',
-      checked: false
-    }
-    ]
+    power: [],
+    role: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    let power = options.power.split(',');
-    let role = options.role.split(',');
-    this.data.power.forEach(function(val){
-      if (power.includes(val.name)){
-        val.checked = true;
-      }
+    this.displayData(options.userId);
+  },
+  displayData(userId){
+    Promise.all([this.loadRole(), this.loadUserData(userId)]).then(values => {
+      wx.hideLoading();
+      values[0].power.forEach(val =>{
+        if (values[1].power.includes(val.code)){
+          val.checked = true;
+        }
+      })
+      values[0].role.forEach(val => {
+        if (values[1].role.includes(val.code)) {
+          val.checked = true;
+        }
+      })
+      this.setData({
+        userId: values[1]._id,
+        userName: values[1].name,
+        power: values[0].power,
+        role: values[0].role,
+      })
     })
-    this.data.role.forEach(function (val) {
-      if (role.includes(val.name)) {
-        val.checked = true;
-      }
+  },
+  loadRole(){
+    wx.showLoading({
+      title: '加载中...',
     })
-    this.setData({
-      userId: options.userId,
-      userName: options.userName,
-      power: this.data.power,
-      role: this.data.role
+    return new Promise((reslove, reject) =>{
+      service.getPowerRole().then(powerRole => {
+        reslove(powerRole);
+      })
+    })
+  },
+  loadUserData(_id){
+    return new Promise((reslove, reject) =>{
+      service.queryUser(_id).then(user => {
+        reslove(user);
+      })
     })
   },
   submit:function(e){
@@ -78,11 +79,10 @@ Page({
       wx.hideLoading();
       wx.navigateBack();
     },error =>{
-      wx.showModal({
-        title: '提示',
-        content: '请修改用户信息',
-        success: function(res) {},
-        fail: function(res) {},
+      wx.showToast({
+        title: '请先修改用户信息',
+        icon: 'none',
+        duration: 2000
       })
     })
     userInfo._id = e.detail.value.userId;

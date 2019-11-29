@@ -13,25 +13,28 @@ Page({
    */
   onLoad: function(options) {},
   loadData() {
-    return new Promise((reslove, reject) => {
-      wx.showLoading({
-        mask: true,
-      })
-      service.getEventList().then(taskDetailList => {
-        this.setData({
-          taskDetailList
-        })
-        wx.hideLoading();
-      }, error => {
-        if (error.code === '2003') {
-          wx.showToast({
-            title: '无事件',
-            icon: 'none',
-            duration: 2000
-          })
-        }
-      });
+    let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
+    if (reloadTrigger.load === false) {
+      return;
+    }
+    wx.showLoading({
+      mask: true,
     })
+    service.getEventList().then(taskDetailList => {
+      this.setData({
+        taskDetailList
+      })
+      wx.hideLoading();
+      reloadTrigger.load = false;
+    }, error => {
+      if (error.code === '2003') {
+        wx.showToast({
+          title: '无事件',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    });
   },
   taskAdd() {
     wx.navigateTo({
@@ -51,26 +54,23 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
-    if (reloadTrigger.load === false) {
-      return;
-    }
-    this.loadData().then(() => {
-      reloadTrigger.load = false;
-    });
+    this.loadData();
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function() {
-    getApp().globalData.managerHomeTaskManageTaskAdd.load = true
+
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {},
+
+  onUnload: function() {
+    getApp().globalData.managerHomeTaskManageTaskAdd.load = true
+  },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作

@@ -65,4 +65,6 @@
 .event_item_warp navigator:last-child {
   margin: 0;
 }
-
+.event_item_warp{
+  margin-bottom: 16rpx;
+}

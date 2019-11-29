@@ -17,14 +17,10 @@ Page({
   },
   formSubmit: function(e){
     if (e.detail.value.userName == "") {
-      wx.showModal({
-        title: '提示',
-        content: '名字不能为空',
-        success(res) {
-          if (res.confirm) {
-          } else if (res.cancel) {
-          }
-        }
+      wx.showToast({
+        title: '名字不能为空',
+        icon: 'none',
+        duration: 2000
       })
       return;
     }
@@ -32,19 +28,12 @@ Page({
     wx.navigateBack();
   },
   formReset:function(){
-    wx.navigateBack({
-      delta: 1,
-    })
+    wx.navigateBack();
   },
   deleteText(e){
     this.setData({
       userName: ''
     });
-    wx.showToast({
-      title: '姓名已重置成功',
-      icon: 'success',
-      duration: 2000
-    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
