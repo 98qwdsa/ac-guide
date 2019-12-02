@@ -87,7 +87,7 @@ function checkParams(data) {
 async function checkUserPermission(open_id) {
   const res = await cloud.callFunction({
     name: 'checkUserInfo',
-    data:{
+    data: {
       open_id
     }
   });
@@ -107,7 +107,11 @@ async function recordStep(data) {
   const COLTION = DB.collection(data.code + '_event_user');
   const step = await checkStep(data);
 
-  const res = await writeStep(step, data)
+  if (step.code != '0000') {
+    return step;
+  }
+
+  const res = await writeStep(step.data, data)
 
   if (res) {
     return {
@@ -119,11 +123,11 @@ async function recordStep(data) {
   //添加一步到事件的用户表
   async function writeStep(userStep, data) {
     data.status_code = await checkVerify(data, data.step_Uid);
-    if (step.action === 'new') {
+    if (userStep.action === 'new') {
       return await newStep(data);
-    } else if (step.action === 'add') {
+    } else if (userStep.action === 'add') {
       return await addStep(data, userStep);
-    } else if (step.action === 'edit') {
+    } else if (userStep.action === 'edit') {
       return await editStep(data, userStep);
     }
     //新建步骤
@@ -147,14 +151,14 @@ async function recordStep(data) {
         }
         return false;
       } catch (e) {
-        
+
       }
     }
 
     async function addStep(data, userStep) {
       const _ = DB.command
       try {
-        const res = await COLTION.update({
+        const res = await COLTION.doc(userStep.data._id).update({
           data: {
             steps: _.push({
               step_Uid: data.step_Uid,
@@ -238,36 +242,52 @@ async function recordStep(data) {
   // }
 
   async function checkStep(data) {
-    const res = await COLTION.where({
-      user_open_id: data.user_open_id
-    }).get();
+    try {
+      const res = await COLTION.where({
+        user_open_id: data.user_open_id
+      }).get();
 
-    let msg = {
-      action: 'new',
-      data: null
-    };
+      let msg = {
+        action: 'new',
+        data: null
+      };
 
-    if (res.data.length) {
-      try {
-        res.data[0].steps.forEach(e => {
-          if (e.step_Uid === data.step_Uid) {
-            msg = {
-              action: 'edit',
-              data: res.data[0]
+      if (res.data.length) {
+        try {
+          res.data[0].steps.forEach(e => {
+            if (e.step_Uid === data.step_Uid) {
+              msg = {
+                action: 'edit',
+                data: res.data[0]
+              }
+              throw new Error();
+            } else {
+              msg = {
+                action: 'add',
+                data: res.data[0]
+              }
             }
-            throw new Error();
-          } else {
-            msg = {
-              action: 'add',
-              data: res.data[0]
-            }
+          })
+        } catch (e) {
+          return {
+            code: '3002',
+            msg: e,
+            data: null
           }
-        })
-      } catch (e) {
-
+        }
+      }
+      return {
+        code: '0000',
+        msg: '',
+        data: msg
+      }
+    } catch (e) {
+      return {
+        code: '3003',
+        msg: e,
+        data: null
       }
     }
-    return msg;
   }
 }
 
