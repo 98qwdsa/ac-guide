@@ -109,7 +109,7 @@ exports.main = async(event, context) => {
       data.open_id = ''
     }
 
-    if (userInfo.data._id) {
+    if (userInfo.code === '0000' && userInfo.data._id) {
       const res = await CLION.doc(userInfo.data._id).update({
         data: {
           open_id: wxContext.OPENID
