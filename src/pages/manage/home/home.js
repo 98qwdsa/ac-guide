@@ -1,17 +1,15 @@
 const APP = getApp();
-const service = require('../../business.js');
+const service = require('../service.js');
 Page({
   data: {
-    actionList: [
-    ],
+    actionList: [],
     name: '',
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     authButtonShow: true,
     checkingUser: false,
   },
   onLoad() {
-    this.checkoutUser().then(() => {
-    })
+    this.checkoutUser().then(() => {})
   },
   checkoutUser() {
     wx.showLoading({
@@ -24,7 +22,7 @@ Page({
       service.checkUserInfo().then(data => {
         APP.globalData.userInfo = data;
         wx.hideLoading();
-        
+
         let list = _this.data.actionList;
         if (data.power.includes('event_admin')) {
           list.push({

@@ -49,7 +49,7 @@ Page({
         let role = powerRole.role
         this.setData({
           role,
-          currentTab: role[0].code
+          currentTab: role[1].code
         });
         for (let i in role) {
           reloadTrigger[role[i].code] = true;

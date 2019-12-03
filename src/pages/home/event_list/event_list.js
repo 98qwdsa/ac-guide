@@ -1,5 +1,5 @@
 const APP = getApp();
-const service = require('../../business.js');
+const service = require('../service.js');
 Page({
   data: {
     eventList: [],

@@ -1,6 +1,9 @@
 const cloud = require('../../service/cloud.js');
 
 module.exports = {
+  checkUserInfo() {
+    return cloud.call('checkUserInfo');
+  },
   addEvent(data) {
     return cloud.call('adminAddEvent', {
       ...data
@@ -21,11 +24,6 @@ module.exports = {
       _id
     })
   },
-  // getQueryAllUserEventDetail(data){
-  //   return cloud.call('queryAllUserEventDetail',{
-  //     ...data
-  //   });
-  // },
   getQueryObserverEventDetail(data) {
     return cloud.call('queryObserverEventDetail', {
       ...data
@@ -59,7 +57,8 @@ module.exports = {
   },
   addUser(name) {
     return cloud.call('addUser', {
-      name
+      name,
+      action: 'adminAddUser'
     })
   },
   editUser(data) {

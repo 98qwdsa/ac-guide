@@ -3,6 +3,12 @@ const cloudFileConf = {
   PATH: 'steps_attachments/'
 }
 module.exports = {
+  checkUserInfo() {
+    return cloud.call('checkUserInfo');
+  },
+  getEventList() {
+    return cloud.call('queryEventList');
+  },
   getEventList() {
     return cloud.call('queryEventList');
   },

@@ -118,7 +118,7 @@ function checkParamFormat(data) {
         role,
         name
       }
-      
+
     }
     res.data = {
       page: {

@@ -112,7 +112,7 @@ async function checkPermission() {
         open_id: wxContext.OPENID
       }
     })
-    if (!curUserInfo.result.data.power.includes('event_admin')) {
+    if (!curUserInfo.result.data.power.includes('account_admin')) {
       return {
         code: '2000',
         msg: 'permission denied',

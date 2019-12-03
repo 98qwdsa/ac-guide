@@ -5,6 +5,7 @@
       <input  placeholder="步骤名称" placeholder-class="event_placeholder"
           class="event_name" value='{{stepName}}' name='stepName' />
       <icon type="clear" size="20" catchtap="deleteText" class="deleteText"/>
+      
      </view>
   </view> 
   <view class='event_buttons'>

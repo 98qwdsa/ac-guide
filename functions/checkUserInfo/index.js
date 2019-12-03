@@ -9,30 +9,34 @@ function checkParamFormat(event) {
   const wxContext = cloud.getWXContext();
   let {
     open_id = wxContext.OPENID,
-      _id
+      _id,
+      name
   } = event;
   const res = {
     code: '0000',
     msg: [],
     data: null
   }
-  if (open_id === undefined && _id === undefined) {
+  if (open_id === undefined && _id === undefined && name === undefined) {
     res.code = '1001';
-    res.msg.push('_id:string, open_id:string');
+    res.msg.push('_id:string, open_id:string, name:string');
   } else {
-    if (open_id === undefined && _id != undefined) {
-      if (typeof(_id) != 'string') {
-        res.code = '1001';
-        res.msg.push('_id:string');
-      }
+
+    if (_id && typeof(_id) != 'string') {
+      res.code = '1001';
+      res.msg.push('_id:string');
     }
 
-    if (_id === undefined && open_id != undefined) {
-      if (typeof(open_id) != 'string') {
-        res.code = '1001';
-        res.msg.push('open_id:string');
-      }
+    if (open_id && typeof(open_id) != 'string') {
+      res.code = '1001';
+      res.msg.push('open_id:string');
     }
+
+    if (name && typeof(name) != 'string') {
+      res.code = '1001';
+      res.msg.push('name:string');
+    }
+
   }
 
 
@@ -48,7 +52,8 @@ function checkParamFormat(event) {
     res.msg = 'param format ok';
     res.data = {
       open_id,
-      _id
+      _id,
+      name
     }
   }
   return res;
@@ -57,11 +62,26 @@ function checkParamFormat(event) {
 async function getUserInfo(data) {
   let {
     _id,
-    open_id
+    open_id,
+    name
   } = data;
-  const excuseFn = _id ? CLION.doc(_id) : CLION.where({
-    open_id
-  })
+
+  let excuseFn = null;
+  if (name) {
+    excuseFn = CLION.where({
+      name
+    })
+  }
+  if (open_id) {
+    excuseFn = CLION.where({
+      open_id
+    })
+  }
+  if (_id) {
+    excuseFn = CLION.doc(_id)
+  }
+
+
   try {
     const res = await excuseFn.get();
     if (_id) {

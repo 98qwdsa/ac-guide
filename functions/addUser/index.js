@@ -2,19 +2,19 @@
 const cloud = require('wx-server-sdk')
 
 cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV
+  env: 'prod-ayp2z'
 });
 const CLION = cloud.database().collection('user');
 //检查参数格式
 function checkParamFormat(data) {
   let {
-    name
+    name,
+    action,
   } = data;
   const res = {
     code: '0000',
     msg: [],
-    data: {
-    }
+    data: {}
   }
   if (name === undefined) {
     res.code = '1000'
@@ -26,6 +26,10 @@ function checkParamFormat(data) {
     }
   }
 
+  if (action && action != 'adminAddUser') {
+    res.code = '1001'
+    res.msg.push('action:string')
+  }
 
   if (res.code === '1000') {
     res.msg = 'param ' + res.msg.join(',') + ' required';
@@ -38,12 +42,49 @@ function checkParamFormat(data) {
   if (res.code === '0000') {
     res.msg = 'param format ok';
     res.data = {
-      name
+      name,
+      action
     }
   }
   return res;
 }
 
+//检查用户是否有admin权限
+async function checkUserInfo(name) {
+  //角色验证
+  try {
+    const curUserInfo = await cloud.callFunction({
+      name: 'checkUserInfo',
+      data: {
+        name
+      }
+    })
+    if (curUserInfo.result.code !== '0000') {
+      return {
+        code: '2010',
+        msg: curUserInfo.result,
+        data: null
+      }
+    }
+
+    return {
+      code: '0000',
+      msg: '',
+      data: curUserInfo.result.data
+    }
+  } catch (e) {
+    return {
+      code: '3000',
+      msg: e,
+      data: null
+    }
+  }
+}
+/**
+ * name
+ * [action:adminAddUser]
+ * 
+ */
 
 // 云函数入口函数
 exports.main = async(event, context) => {
@@ -52,33 +93,63 @@ exports.main = async(event, context) => {
   if (param.code != '0000') {
     return param;
   }
-  try {
-    const res = await CLION.add({
-      data: {
-        name: param.data.name,
-        //event_attended: [],
-        open_id: wxContext.OPENID,
-        //phone: event.phone,
-        power: [],
-        role: ['Participant']
-      }
-    });
 
-    if (!res._id) {
+  const userInfo = await checkUserInfo(param.data.name);
+  try {
+    let data = {
+      name: param.data.name,
+      //event_attended: [],
+      open_id: wxContext.OPENID,
+      //phone: event.phone,
+      power: [],
+      role: ['Participant']
+    }
+
+    if (param.data.action === 'adminAddUser') {
+      data.open_id = ''
+    }
+
+    if (userInfo.data._id) {
+      const res = await CLION.doc(userInfo.data._id).update({
+        data: {
+          open_id: wxContext.OPENID
+        }
+      });
+
+      if (res.errMsg !== "document.update:ok") {
+        return {
+          code: '2000',
+          msg: res.errMsg,
+          data: ''
+        };
+      }
       return {
-        code: '2000',
-        msg: res.errMsg,
-        data: ''
-      };
+        code: '0000',
+        msg: 'add user success',
+        data: res
+      }
+    } else {
+      const res = await CLION.add({
+        data
+      });
+
+      if (!res._id) {
+        return {
+          code: '2000',
+          msg: res.errMsg,
+          data: ''
+        };
+      }
+      return {
+        code: '0000',
+        msg: 'add user success',
+        data: res._id
+      }
     }
-    return {
-      code: '0000',
-      msg: 'add user success',
-      data: res._id
-    }
+
   } catch (e) {
     return {
-      code: '3000',
+      code: '3001',
       msg: e,
       data: null
     }
