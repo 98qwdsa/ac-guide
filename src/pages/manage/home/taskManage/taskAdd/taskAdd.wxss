@@ -30,7 +30,7 @@ form{
 }
 .event_view{
   width: 690rpx;
-  height: 100rpx;
+  min-height: 100rpx;
   border: 1px solid #DCDCDC;
   margin-top: 20rpx;
   padding-left: 20rpx;
@@ -64,9 +64,9 @@ form{
 .nav_role checkbox-group{
   line-height: 90rpx;
 }
-.event_view.step{
+/* .event_view.step{
   height: auto;
-}
+} */
 .step label{
   font-size: 30rpx;
   color: #666;

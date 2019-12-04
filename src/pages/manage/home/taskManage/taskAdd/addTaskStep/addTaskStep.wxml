@@ -1,15 +1,25 @@
 <form bindsubmit="formSubmit" bindreset="formReset" enctype="multipart/form-data">
   <view class="content">
-     <text>新入职员工完成事项</text> 
-     <view class="input-container">
-      <input  placeholder="步骤名称" placeholder-class="event_placeholder"
-          class="event_name" value='{{stepName}}' name='stepName' />
-      <icon type="clear" size="20" catchtap="deleteText" class="deleteText"/>
-      
-     </view>
-  </view> 
+    <text>新入职员工完成事项</text>
+    <view class="input-container">
+      <input placeholder="title" placeholder-class="event_placeholder" class="event_name" value='{{stepName}}' name='stepName' />
+      <icon type="clear" size="20" catchtap="deleteText" class="deleteText" />
+    </view>
+  </view>
+  <view class="tips">
+    <text>tips</text>
+    <block wx:for='{{tips}}' wx:key='index'>
+      <input type="text" class="tips-content" value='{{item}}' 
+        data-tipindex="{{index}}" bindblur="inputedit"></input>
+    </block>
+    <image bindtap="addTips" src="../../../../../../asset/Task_add.svg"></image>
+  </view>
+  <view class="filler">
+  </view>
   <view class='event_buttons'>
     <button form-type='reset' class="reset">返回</button>
-    <button form-type='submit' class="submit" >提交</button>
+    <button form-type='submit' class="submit">提交</button>
   </view>
 </form>
+
+

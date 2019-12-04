@@ -25,9 +25,12 @@
       <view class='event_view step'>
         <text>步骤</text>
         <checkbox-group name="steps">
-          <label class="checkbox-item" wx:for="{{eventDetail.steps}}" bindtap="editTaskStep" wx:key="index" data-steptask="{{item}}" data-stepindex="{{index}}">
-            <checkbox value="{{item}}" checked="{{true}}" /> {{index+1}}: {{item}}
-            <image src="../../../../../asset/task_step_delete.png" data-steptask="{{item}}" catchtap="deleteTaskStep" class="delete"></image>
+          <label class="checkbox-item" wx:for="{{eventDetail.steps}}" bindtap="editTaskStep" 
+          wx:key="index" data-steptask="{{item.title}}" data-stepindex="{{index}}" 
+          data-steptips="{{item.tips}}">
+            {{index+1}}: {{item.title}}
+            <image src="../../../../../asset/task_step_delete.png" class="delete"
+            data-steptask="{{item.title}}" catchtap="deleteTaskStep" ></image>
           </label>
         </checkbox-group>
         <view class="addStep">

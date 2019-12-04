@@ -3,7 +3,7 @@ const cloud = require('wx-server-sdk')
 const typeEmu = ['power', 'role']
 
 cloud.init({
-  env: 'prod-ayp2z'
+  env: cloud.DYNAMIC_CURRENT_ENV
 })
 const DB = cloud.database();
 
@@ -75,7 +75,7 @@ async function checkPermision(data) {
       }
     }
 
-    if (!curUserInfo.result.data.power.includes('event_admin') && !curUserInfo.result.data.power.includes('account_account')) {
+    if (!curUserInfo.result.data.power.includes('event_admin') && !curUserInfo.result.data.power.includes('account_admin')) {
       return {
         code: '2003',
         msg: 'permission denied',

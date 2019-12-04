@@ -1,4 +1,4 @@
-let taskAdd = getApp().globalData.managerHomeTaskManagerTaskAdd;
+let taskAdd = getApp().globalData.managerHomeTaskManagerTaskAddTaskStep;
 const service = require('../../../../service.js');
 let roleChecked = [];
 Page({

@@ -11,10 +11,13 @@ App({
     userInfo: {
       open_id: undefined
     },
-    'managerHomeTaskManagerTaskAdd': {
+    'managerHomeTaskManagerTaskAddTaskStep': {
       roles: '',
-      stepIndex: 0,
-      stepName: '',
+      step:{
+        index: 0,
+        name: '',
+        tips: []
+      }
     },
     'managerHomeTaskManagerTaskProgess': {
       left: true,

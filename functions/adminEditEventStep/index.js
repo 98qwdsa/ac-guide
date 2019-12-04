@@ -2,7 +2,7 @@
 const cloud = require('wx-server-sdk')
 
 cloud.init({
-  env: 'prod-ayp2z'
+  env: cloud.DYNAMIC_CURRENT_ENV
 })
 const DB = cloud.database();
 let COLION;

@@ -34,21 +34,31 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    let taskAdd = getApp().globalData.managerHomeTaskManagerTaskAdd;
+    let taskAdd = getApp().globalData.managerHomeTaskManagerTaskAddTaskStep;
     if (taskAdd.roles.length) {
       detail.role = taskAdd.roles;
       taskAdd.roles = [];
     }
-    if (taskAdd.stepIndex) {
-      if (taskAdd.stepName) {
-        detail.steps[taskAdd.stepIndex] = taskAdd.stepName;
-        taskAdd.stepName = '';
-        taskAdd.stepIndex = 0;
+    if (taskAdd.step.index) {
+      if (taskAdd.step.name) {
+        detail.steps[taskAdd.step.index] = {
+          title: taskAdd.step.name,
+          tips: taskAdd.step.tips
+        };
+        taskAdd.step.name = '';
+        taskAdd.step.index = 0;
+        taskAdd.step.tips = [];
       }
     } else {
-      if (taskAdd.stepName) {
-        detail.steps.push(taskAdd.stepName);
-        taskAdd.stepName = '';
+      if (taskAdd.step.name) {
+        detail.steps.push({
+            title: taskAdd.step.name,
+            tips: taskAdd.step.tips
+          }
+        );
+        taskAdd.step.name = '';
+        taskAdd.step.index = 0;
+        taskAdd.step.tips = [];
       }
     }
     this.setData({
@@ -68,9 +78,9 @@ Page({
       title: '添加事件中...',
       mask: true
     })
-    params.steps = params.steps.map(e => ({
-      title: e
-    }))
+    params.steps = detail.steps;
+    console.log("添加事件的数据：",params);
+    
     service.addEvent(params).then(() => {
       wx.hideLoading();
       let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
@@ -111,7 +121,7 @@ Page({
       success(res) {
         if (res.confirm) {
           detail.steps = detail.steps.filter(function(item) {
-            return (item !== e.currentTarget.dataset.steptask);
+            return (item.title !== e.currentTarget.dataset.steptask);
           });
           _this.setData({
             eventDetail: detail
@@ -124,7 +134,8 @@ Page({
     wx.navigateTo({
       url: 'addTaskStep/addTaskStep?stepname=' +
         e.currentTarget.dataset.steptask +
-        '&&tips=' + e.currentTarget.dataset.stepindex
+        '&stepindex=' + e.currentTarget.dataset.stepindex+
+        '&steptips=' + e.currentTarget.dataset.steptips
     })
   },
   onUnload() {

@@ -1,36 +1,66 @@
-let taskAdd = getApp().globalData.managerHomeTaskManagerTaskAdd;
+let taskAdd = getApp().globalData.managerHomeTaskManagerTaskAddTaskStep;
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    stepName: ''
+    stepName: '',
+    tips: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    if (options.stepindex && options.stepname){
-      taskAdd.stepName = options.stepname;
-      taskAdd.stepIndex = options.stepindex;
-      this.setData({
-        stepName: options.stepname
-      });
+  onLoad: function(options) {
+    taskAdd.step.name = options.stepname;
+    taskAdd.step.index = options.stepindex;
+    if (options.steptips){
+      taskAdd.step.tips = options.steptips.split(',');
     }
   },
-  formSubmit: function(e){
-    taskAdd.stepName = e.detail.value.stepName;
+  onShow: function() {
+    let step = {};
+    if (taskAdd.step.name) {
+      step = {
+        ...step,
+        stepName: taskAdd.step.name
+      }
+    }
+    if (taskAdd.step.tips) {
+      step = {
+        ...step,
+        tips: taskAdd.step.tips
+      }
+    }
+    this.setData({
+      ...step
+    });
+  },
+  formSubmit(e) {
+    taskAdd.step.name = e.detail.value.stepName;
+    taskAdd.step.tips = this.data.tips;
     wx.navigateBack()
   },
-  formReset: function(e){
+  formReset(e) {
     wx.navigateBack();
   },
-  deleteText: function(e){
+  deleteText(e) {
     this.setData({
       stepName: ''
     })
+  },
+  addTips(e) {
+    this.data.tips.push('');
+    this.setData({
+      tips: this.data.tips
+    })
+  },
+  inputedit(e){
+    let value = e.detail.value;
+    let index = e.currentTarget.dataset.tipindex;
+    this.data.tips[index] = value;
   }
+
 
 })
