@@ -49,9 +49,19 @@ form {
 }
 .tips-content{
   background: #f5f5f5;
-  padding: 20rpx 30rpx;
+  padding: 20rpx 60rpx 20rpx 30rpx;
   margin-top: 15rpx;
   font-size: 32rpx;
+  position: relative;
+}
+.tips .delete{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 3rpx;
+  width: 60rpx;
+  height: 60rpx;
+  z-index: 100;
 }
 
 

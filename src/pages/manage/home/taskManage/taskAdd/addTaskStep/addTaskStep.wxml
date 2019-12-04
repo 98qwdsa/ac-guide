@@ -10,7 +10,10 @@
     <text>tips</text>
     <block wx:for='{{tips}}' wx:key='index'>
       <input type="text" class="tips-content" value='{{item}}' 
-        data-tipindex="{{index}}" bindblur="inputedit"></input>
+        data-tipindex="{{index}}" bindblur="inputedit">
+      <image src="../../../../../../asset/task_step_delete.png" class="delete"
+        data-tipsindex="{{index}}" catchtap="deleteTips" ></image>
+      </input>
     </block>
     <image bindtap="addTips" src="../../../../../../asset/Task_add.svg"></image>
   </view>

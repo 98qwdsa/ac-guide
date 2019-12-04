@@ -60,7 +60,22 @@ Page({
     let value = e.detail.value;
     let index = e.currentTarget.dataset.tipindex;
     this.data.tips[index] = value;
+  },
+  deleteTips(e){
+    let _this = this;
+    let index = e.currentTarget.dataset.tipsindex;
+    wx.showModal({
+      title: '提示',
+      content: '是否删除该tips',
+      success(res) {
+        if (res.confirm) {
+          _this.data.tips.splice(index, 1);
+          _this.setData({
+            tips: _this.data.tips
+          })
+        } 
+      }
+    })
   }
-
-
 })
+
