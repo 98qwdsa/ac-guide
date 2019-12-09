@@ -79,14 +79,11 @@ Page({
       mask: true
     })
     params.steps = detail.steps;
-    console.log("添加事件的数据：",params);
-    
     service.addEvent(params).then(() => {
       wx.hideLoading();
       let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
       reloadTrigger.load = true;
       wx.navigateBack();
-
     });
   },
   formReset: function() {

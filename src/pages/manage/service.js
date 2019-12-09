@@ -34,13 +34,6 @@ module.exports = {
       ...data
     })
   },
-  nextStep(code, step_Uid) {
-    return cloud.call('employeeAddStep', {
-      code,
-      step_Uid,
-      status_code: 50
-    })
-  },
   // getAllObserver(){
   //   return cloud.call('queryAllObserver', {
   //   })

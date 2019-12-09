@@ -1,13 +1,17 @@
 /* components/step_warp/step_warp.wxss */
 @import "../../common/css/common.wxss";
-
+.step_text{
+  color: #999;
+  display: block;
+  margin-bottom: 18rpx;
+}
 .step_warp {
   margin-top: 20rpx;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 8rpx;
   background: #fff;
   box-shadow: 0 0 10rpx 0 rgba(0, 0, 0, 0.15);
-  padding: 26rpx;
+  padding: 18rpx 26rpx 26rpx;
 }
 
 .step_warp .step {

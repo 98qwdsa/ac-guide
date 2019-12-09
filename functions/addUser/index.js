@@ -4,7 +4,8 @@ const cloud = require('wx-server-sdk')
 cloud.init({
   env: 'prod-ayp2z'
 });
-const CLION = cloud.database().collection('user');
+const DB = cloud.database();
+const CLION = DB.collection('user');
 //检查参数格式
 function checkParamFormat(data) {
   let {
@@ -98,11 +99,12 @@ exports.main = async(event, context) => {
   try {
     let data = {
       name: param.data.name,
-      //event_attended: [],
+      event_attended: [],
       open_id: wxContext.OPENID,
-      //phone: event.phone,
+      event_completed: [],
       power: [],
-      role: ['Participant']
+      role: ['Participant'],
+      create_date: DB.serverDate()
     }
 
     if (param.data.action === 'adminAddUser') {

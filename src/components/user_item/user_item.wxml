@@ -1,6 +1,6 @@
 <!--components/user_item/user_item.wxml-->
+<wxs src='../../wxs/format.wxs' module="m1" />
 <view class="user_item">
-  <text>{{userName}}</text>
+  <text>{{data.name}}</text> {{m1.formatDate(data.create_date)}}
   <slot></slot>
 </view>
-

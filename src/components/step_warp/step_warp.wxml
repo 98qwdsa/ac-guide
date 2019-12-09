@@ -1,24 +1,21 @@
 <!--components/step_warp/step_warp.wxml-->
 <view class="step_warp">
-    <view wx:for="{{stepList}}" wx:key="unique" class="step">
-      <view class="first image">
-        <image class="pull-left" wx:if="{{item.user_step.status_code === 100}}"
-               src="../../asset/task_dtl_icon.svg"></image>
-        <image class="pull-left" wx:else src="../../asset/task_list_circle.svg"></image>
-      </view>
+  <text class="step_text">步骤:</text>
+  <view wx:for="{{stepList}}" wx:key="unique" class="step">
+    <view class="first image">
+      <image class="pull-left" wx:if="{{item.user_step.status_code === 100}}" src="../../asset/task_dtl_icon.svg"></image>
+      <image class="pull-left" wx:else src="../../asset/task_list_circle.svg"></image>
+    </view>
 
-      <view class="second desc">
-        <text class="title">{{index+1}}.{{item.title}}</text>
-        <view class="tips">
-          <text wx:for="{{item.tips}}" wx:key="unique" 
-                wx:for-item="tip" class="tip">{{tip}}</text>
-        </view>
-      </view>
-
-      <view class="last button" 
-        wx:if="{{item.user_step.status_code != 100 && index == curStep}}">
-        <button bindtap="onTap" bindcustomevent="myEventListener"
-         data-uid="{{item._id}}" class="pull-right">完成</button>
+    <view class="second desc">
+      <text class="title">{{index+1}}.{{item.title}}</text>
+      <view class="tips">
+        <text wx:for="{{item.tips}}" wx:key="unique" wx:for-item="tip" class="tip">{{tip}}</text>
       </view>
     </view>
+
+    <view class="last button" wx:if="{{item.user_step.status_code != 100 && index == curStep}}">
+      <button bindtap="onTap" bindcustomevent="myEventListener" data-item="{{item}}" class="pull-right">完成</button>
+    </view>
   </view>
+</view>

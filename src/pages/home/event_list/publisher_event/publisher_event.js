@@ -107,8 +107,8 @@ Page({
     wx.showLoading({
       mask: true
     })
-    const dataSet = e.detail.currentTarget.dataset;
-    service.nextStep(event_code, dataSet.uid).then(data => {
+    const dataSet = e.detail;
+    service.nextStep(event_code, dataSet._id, dataSet.lastStep).then(data => {
       wx.hideLoading();
       wx.showToast({
         icon: 'success',
@@ -197,9 +197,9 @@ Page({
           icon: 'none',
           duration: 2000
         })
-      } else if (error.code === '2002') {
+      } else if (error.code === '2000') {
         wx.showToast({
-          title: '你还没有关注的用户',
+          title: '没有关注的用户',
           icon: 'none',
           duration: 2000
         })
@@ -234,6 +234,14 @@ Page({
         this.setData({
           [userListType]: newUserList
         })
+      }, (error) => {
+        if (error.code === '2001') {
+          wx.showToast({
+            title: '没有关注的用户',
+            icon: 'none',
+            duration: 2000
+          })
+        }
       })
     });
   },
