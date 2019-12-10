@@ -132,15 +132,26 @@ async function recordStep(data, user_id) {
     }
     //新建步骤
     async function newStep(data) {
-      const updateUser = await updateUserCollection(data.code, user_id, 50)
-      if (updateUser.code !== '0000') {
-        return res;
-      }
       try {
+        let status = 50;
+        if(data.lastStep){
+          const checklastStep = await checkLastStep(data.step_Uid,data.code)
+          if(checklastStep.code !== '0000'){
+            return checklastStep
+          }
+          if(checklastStep.data && data.status_code == 100){
+            status = 100;
+          }
+        }
+        const updateUser = await updateUserCollection(data.code, user_id, status)
+        if (updateUser.code !== '0000') {
+          return res;
+        }
+
         const res = await COLTION.add({
           data: {
             user_open_id: data.user_open_id,
-            status: 50,
+            status,
             steps: [{
               step_Uid: data.step_Uid,
               status_code: data.status_code,
@@ -374,7 +385,7 @@ async function recordStep(data, user_id) {
       }
     }
   }
-  //
+  //判断该事件步骤是否为最后一步
   async function checkLastStep(_id, code) {
     try {
       let data = false;

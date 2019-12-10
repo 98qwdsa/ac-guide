@@ -99,9 +99,7 @@ exports.main = async(event, context) => {
   try {
     let data = {
       name: param.data.name,
-      event_attended: [],
       open_id: wxContext.OPENID,
-      event_completed: [],
       power: [],
       role: ['Participant'],
       create_date: DB.serverDate()
