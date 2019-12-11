@@ -1,5 +1,4 @@
 {
-  "usingComponents": {
-  },
-  "navigationBarTitleText": "任务列表"
+  "usingComponents": {},
+  "navigationBarTitleText": "添加任务"
 }

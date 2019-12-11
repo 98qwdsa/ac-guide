@@ -7,21 +7,19 @@
   </view>
 
   <view class='content-wrapper'>
-    <view >
+    <view>
       <view class="user_add" bindtap="addRoleUser">
         <image src="../../../../asset/Task_add.svg"></image>
         <text>添加成员</text>
       </view>
     </view>
 
-    <view class="user-list" wx:if='{{userList.length !== 0}}'>
-      <block wx:for='{{userList}}' wx:key="index">
-        <user-item userName="{{item.name}}">
-          <view class="user-delete" bindtap="deleteUserRole" data-deleteid="{{item._id}}">
-            <image src="../../../../asset/task_step_delete.png"></image>
-          </view>
-        </user-item>
-      </block>
+    <view class="user-list" wx:for='{{userList}}' wx:key="index" wx:if='{{userList.length}}'>
+      <user-item userName="{{item.name}}">
+        <view class="user-delete" bindtap="deleteUserRole" data-deleteid="{{item._id}}">
+          <image src="../../../../asset/task_step_delete.png"></image>
+        </view>
+      </user-item>
     </view>
   </view>
 </view>

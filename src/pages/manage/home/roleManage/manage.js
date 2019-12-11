@@ -18,8 +18,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+
     this.loadRole().then(() => {
-      this.loadData(this.data.currentTab);
+      this.loadData(this.data.currentTab, false);
     });
 
   },
@@ -42,6 +43,10 @@ Page({
     })
   },
   loadRole() {
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
     let reloadTrigger = getApp().globalData.managerHomeRoleManage;
     return new Promise((reslove, reject) => {
       service.getPowerRole(['role']).then(powerRole => {
@@ -57,12 +62,14 @@ Page({
       })
     })
   },
-  loadData(role) {
+  loadData(role, loading = true) {
     let reloadTrigger = getApp().globalData.managerHomeRoleManage;
-    wx.showLoading({
-      title: '加载中...',
-      mask: true
-    })
+    if (loading) {
+      wx.showLoading({
+        title: '加载中...',
+        mask: true
+      })
+    }
     service.getUserList({
       role: [role]
     }).then(userList => {
@@ -151,7 +158,7 @@ Page({
   onShow: function() {
     let userList = this.data.userList;
     const reloadTrigger = getApp().globalData.managerHomeRoleManage;
-    if (userList === '' || reloadTrigger.user.length === 0) {
+    if (userList.length === 0 || reloadTrigger.user.length === 0) {
       return;
     }
     reloadTrigger.user.forEach(function(item) {
