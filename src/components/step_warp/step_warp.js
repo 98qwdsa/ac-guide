@@ -11,22 +11,25 @@ Component({
     curStep: {
       type: Number,
       value: 0
-    } 
+    }
   },
 
   /**
    * 组件的初始数据
    */
   data: {
-    
+
   },
 
   /**
    * 组件的方法列表
    */
   methods: {
-    onTap: function (e) {
-      this.triggerEvent('customevent', e)
+    onTap: function(e) {
+      let lastStep = e.target.dataset.item._id === [...this.data.stepList].pop()._id
+      this.triggerEvent('customevent', { ...e.target.dataset.item,
+        lastStep
+      })
     }
   }
 })

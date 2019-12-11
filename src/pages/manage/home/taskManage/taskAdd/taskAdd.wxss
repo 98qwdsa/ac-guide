@@ -118,6 +118,7 @@ checkbox{
   background-color: #F5F5F5;
 }
 .event_buttons{
+  z-index: 101;
   width: 100%;
   position: fixed;
   height: 100rpx;

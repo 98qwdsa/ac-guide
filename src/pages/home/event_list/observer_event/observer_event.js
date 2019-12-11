@@ -61,7 +61,6 @@ Page({
     service.getQueryObserverEventDetail({
       code: event_code
     }).then(observer => {
-      console.log("我关注的用户：", observer);
       this.setData({
         observerEvent: observer.data
       })

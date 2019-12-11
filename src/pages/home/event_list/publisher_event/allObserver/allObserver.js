@@ -18,13 +18,13 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     this.event_code = options.code;
     this.observed_open_id = options.observed;
     this.loadAllObserver();
     this.loadUserObserver();
   },
-  switchTap(e){
+  switchTap(e) {
     let currentTab = e.currentTarget.id;
     this.setData({
       currentTab
@@ -40,7 +40,7 @@ Page({
         userList: res
       });
       wx.hideLoading();
-    },error =>{
+    }, error => {
       wx.showToast({
         title: '无观察者用户',
         icon: 'none',
@@ -57,18 +57,17 @@ Page({
         observerList
       });
       wx.hideLoading();
-    },error => {
-      // if(error.code === ''){
-      //   wx.showToast({
-      //     title: '暂时无已关注的人',
-      //     icon: 'none',
-      //     duration: 2000
-      //   })
-      // }
+    }, (error) => {
+      if (error.code === '2001') {
+        wx.showToast({
+          title: '没有关注的用户',
+          icon: 'none',
+          duration: 2000
+        })
+      }
     });
   },
   addObserve(e) {
-    let _this = this;
     let observer = e.currentTarget.dataset.observer;
     let data = {
       code: this.event_code,
@@ -79,15 +78,15 @@ Page({
     wx.showModal({
       title: '提示',
       content: '是否添加关注',
-      success(res) {
+      success:(res) => {
         if (res.confirm) {
           wx.showLoading({
             title: '添加关注中...',
             mask: true
           })
           service.editObserverForUser(data).then(() => {
-            _this.setData({
-              observerList: [..._this.data.observerList, {
+            this.setData({
+              observerList: [...this.data.observerList, {
                 name: observer.name,
                 open_id: observer.open_id
               }]
@@ -101,7 +100,6 @@ Page({
     })
   },
   cancleObserve(e) {
-    let _this = this;
     let data = {
       code: this.event_code,
       observer_open_id: e.currentTarget.dataset.item.open_id,
@@ -111,7 +109,7 @@ Page({
     wx.showModal({
       title: '提示',
       content: '是否取消关注',
-      success(res) {
+      success:(res)=> {
         if (res.confirm) {
           wx.showLoading({
             title: '取消关注中...',
@@ -119,7 +117,7 @@ Page({
           })
           service.editObserverForUser(data).then(() => {
             let index = undefined;
-            let newObserverList = [..._this.data.observerList];
+            let newObserverList = [...this.data.observerList];
             try {
               newObserverList.forEach((e, key) => {
                 if (e.open_id === data.observer_open_id) {
@@ -127,10 +125,10 @@ Page({
                   throw new Error(key)
                 }
               })
-            } catch (e) { }
+            } catch (e) {}
             if (index != undefined) {
               newObserverList.splice(index, 1)
-              _this.setData({
+              this.setData({
                 observerList: newObserverList
               })
             }
@@ -138,7 +136,7 @@ Page({
             reloadTrigger.right = true;
             wx.hideLoading();
           });
-        } 
+        }
       }
     })
   },
@@ -146,49 +144,49 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   }
 })

@@ -1,8 +1,7 @@
 <!--src/pages/manage/personDetail/personDetail.wxml-->
 <view class="input-container">
-  <input class="input" placeholder-class="search_name_placeholder"
-    bindinput="bindKeyInput" placeholder="搜索" value="{{searchInput}}"/>
-  <icon type="clear" size="20" catchtap="deleteText"/>
+  <input class="input" placeholder-class="search_name_placeholder" bindinput="bindKeyInput" placeholder="搜索" value="{{searchInput}}" />
+  <icon type="clear" size="20" catchtap="deleteText" />
 </view>
 <view class="user_add" bindtap="addUser">
   <image src="../../../../asset/Task_add.svg"></image>
@@ -10,8 +9,7 @@
 </view>
 <view class="user-list">
   <block wx:for="{{userList}}" wx:key="index">
-    <user-item userName="{{item.name}}" bindtap="editUser" data-username="{{item.name}}"
-      data-userpower="{{item.power}}" data-userrole="{{item.role}}" data-userid="{{item._id}}">
+    <user-item data="{{item}}" bindtap="editUser" data-username="{{item.name}}" data-userpower="{{item.power}}" data-userrole="{{item.role}}" data-userid="{{item._id}}">
       <view class="user-delete" catchtap="deleteUser" data-deleteid="{{item._id}}">
         <image src="../../../../asset/task_step_delete.png"></image>
       </view>

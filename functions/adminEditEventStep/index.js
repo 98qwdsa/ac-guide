@@ -2,7 +2,7 @@
 const cloud = require('wx-server-sdk')
 
 cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV
+  env: 'prod-ayp2z'
 })
 const DB = cloud.database();
 let COLION;
@@ -82,7 +82,7 @@ function checkParamFormat(data) {
                   res.code = '1001';
                   res.msg.push('param.desc:string')
                 }
-                if (param['tips'] != undefined && (!(param['tips'] instanceof Array) || param['tips'].length < 1)) {
+                if (param['tips'] != undefined && (!param['tips'] instanceof Array)) {
                   res.code = '1001';
                   res.msg.push('param.tips:array')
                 }

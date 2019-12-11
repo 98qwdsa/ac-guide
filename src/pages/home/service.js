@@ -17,11 +17,12 @@ module.exports = {
       code
     });
   },
-  nextStep(code, step_Uid) {
+  nextStep(code, step_Uid, lastStep = false) {
     return cloud.call('employeeAddStep', {
       code,
       step_Uid,
-      status_code: 50
+      status_code: 50,
+      lastStep
     })
   },
   getQueryObserverEventDetail(data) {

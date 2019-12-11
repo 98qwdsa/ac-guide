@@ -34,17 +34,6 @@ module.exports = {
       ...data
     })
   },
-  nextStep(code, step_Uid) {
-    return cloud.call('employeeAddStep', {
-      code,
-      step_Uid,
-      status_code: 50
-    })
-  },
-  // getAllObserver(){
-  //   return cloud.call('queryAllObserver', {
-  //   })
-  // },
   getUserObserver(data) {
     return cloud.call('queryUserObserver', {
       ...data
@@ -73,35 +62,4 @@ module.exports = {
     })
   }
 
-  // getEventDetail(code) {
-  //   return cloud.call('queryEventList', {
-  //     code
-  //   });
-  // },
-  // getEventSteps(code) {
-  //   return cloud.call('adminQueryEventSteps', {
-  //     code
-  //   });
-  // },
-
-  // eventTrigger(data) {
-  //   return cloud.call('adminDisableEvent', {
-  //     code: data.code,
-  //     disabled: !data.disabled
-  //   });
-  // },
-  // addSteps(code, param) {
-  //   return cloud.call('adminEditEventStep', {
-  //     code,
-  //     param,
-  //     action: 'add'
-  //   })
-  // },
-  // deleteEventStep(code, _id) {
-  //   return cloud.call('adminEditEventStep', {
-  //     _id,
-  //     code,
-  //     action: 'remove'
-  //   })
-  // },
 }
