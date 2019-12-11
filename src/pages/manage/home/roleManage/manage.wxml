@@ -15,7 +15,7 @@
     </view>
 
     <view class="user-list" wx:for='{{userList}}' wx:key="index" wx:if='{{userList.length}}'>
-      <user-item userName="{{item.name}}">
+      <user-item data="{{item}}">
         <view class="user-delete" bindtap="deleteUserRole" data-deleteid="{{item._id}}">
           <image src="../../../../asset/task_step_delete.png"></image>
         </view>

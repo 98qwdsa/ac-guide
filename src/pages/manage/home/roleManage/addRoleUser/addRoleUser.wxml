@@ -1,14 +1,12 @@
 <!--src/pages/manage/addRole/addRole.wxml-->
 <view class="input-container">
-  <input  placeholder="搜索" placeholder-class="user_placeholder" bindinput="bindKeyInput"
-      class="user_name" value='{{searchInput}}' name='userName'/>
-  <icon type="clear" size="20" catchtap="deleteInputText"/>
+  <input placeholder="搜索" placeholder-class="user_placeholder" bindinput="bindKeyInput" class="user_name" value='{{searchInput}}' name='userName' />
+  <icon type="clear" size="20" catchtap="deleteInputText" />
 </view>
 <view class="user-list">
   <block wx:for="{{userList}}" wx:key="index">
-    <user-item userName="{{item.name}}">
-      <view class="user-add" bindtap="addUser" data-adduserid="{{item._id}}" 
-            data-addusername="{{item.name}}">
+    <user-item data="{{item}}">
+      <view class="user-add" bindtap="addUser" data-adduserid="{{item._id}}" data-addusername="{{item.name}}">
         <label>
           <text>添加</text>
         </label>
