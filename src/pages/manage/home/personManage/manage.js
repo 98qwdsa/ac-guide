@@ -153,11 +153,8 @@ Page({
         mask: true
       })
       let newUserList = [...allUserList];
-      service.addUser(trigger.userName).then(_id => {
-        newUserList.push({
-          _id,
-          name: trigger.userName
-        })
+      service.addUser(trigger.userName).then(userInfo => {
+        newUserList.push(userInfo)
         this.setData({
           userList: newUserList
         })

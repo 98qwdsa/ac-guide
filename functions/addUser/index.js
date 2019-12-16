@@ -2,7 +2,7 @@
 const cloud = require('wx-server-sdk')
 
 cloud.init({
-  env: 'prod-ayp2z'
+  env: 'demo-5c0mj'
 });
 const DB = cloud.database();
 const CLION = DB.collection('user');
@@ -10,6 +10,7 @@ const CLION = DB.collection('user');
 function checkParamFormat(data) {
   let {
     name,
+    modify_openid = cloud.getWXContext().OPENID,
     action,
   } = data;
   const res = {
@@ -44,6 +45,7 @@ function checkParamFormat(data) {
     res.msg = 'param format ok';
     res.data = {
       name,
+      modify_openid,
       action
     }
   }
@@ -101,8 +103,9 @@ exports.main = async(event, context) => {
       name: param.data.name,
       open_id: wxContext.OPENID,
       power: [],
+      modify_openid: param.data.modify_openid,
       role: ['Participant'],
-      create_date: DB.serverDate()
+      create_date: new Date().toString()
     }
 
     if (param.data.action === 'adminAddUser') {
@@ -126,7 +129,11 @@ exports.main = async(event, context) => {
       return {
         code: '0000',
         msg: 'add user success',
-        data: res
+        data: {
+          ...userInfo.data,
+          open_id: wxContext.OPENID
+
+        }
       }
     } else {
       const res = await CLION.add({
@@ -143,7 +150,10 @@ exports.main = async(event, context) => {
       return {
         code: '0000',
         msg: 'add user success',
-        data: res._id
+        data: {
+          _id: res._id,
+          ...data
+        }
       }
     }
 

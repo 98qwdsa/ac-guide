@@ -15,7 +15,8 @@
     "pages/manage/home/personManage/editUser/editUser",
     "pages/home/event_list/observer_event/observer_event",
     "pages/home/event_list/publisher_event/publisher_event",
-    "pages/home/event_list/publisher_event/allObserver/allObserver"
+    "pages/home/event_list/publisher_event/allObserver/allObserver",
+    "pages/manage/home/taskManage/taskAdd/eventVerifiers/eventVerifiers"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -6,7 +6,6 @@
       <icon type="clear" size="20" catchtap="deleteText" class="deleteText"/>
   </view> 
   <view class='user_buttons'>
-    <button form-type='reset' class="reset">返回</button>
     <button form-type='submit' class="submit" >提交</button>
   </view>
 </form>

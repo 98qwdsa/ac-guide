@@ -22,21 +22,34 @@
           <label class="right-arrow"></label>
         </navigator>
       </view>
+
+      <view class='event_view'>
+        <view class="nav_role" data-verifiers="{{eventDetail.verifiers}}" bindtap="eventVerifiers">
+          <checkbox-group name="verifiers">
+            <label class="checkbox-item" wx:for="{{eventDetail.verifiers}}" wx:key="index">
+              <checkbox value="{{item.open_id}}" checked="{{true}}" />
+            </label>
+          </checkbox-group>
+          <block wx:if="{{m1.formatArray(eventDetail.verifiers)}}">
+            <text class="text_role">{{m1.formatVerifiers(eventDetail.verifiers)}}</text>
+          </block>
+          <block wx:else>
+            <text>事件校验者</text>
+          </block>
+          <label class="right-arrow"></label>
+        </view>
+      </view>
+
       <view class='event_view step'>
         <text>步骤</text>
         <checkbox-group name="steps">
-          <label class="checkbox-item" wx:for="{{eventDetail.steps}}" bindtap="editTaskStep" 
-          wx:key="index" data-steptask="{{item.title}}" data-stepindex="{{index}}" 
-          data-steptips="{{item.tips}}">
+          <label class="checkbox-item" wx:for="{{eventDetail.steps}}" bindtap="editTaskStep" wx:key="index" data-steptask="{{item.title}}" data-stepindex="{{index}}" data-steptips="{{item.tips}}"  data-verifierid="{{item.verifiers}}" data-verifiers="{{eventDetail.verifiers}}">
             {{index+1}}: {{item.title}}
-            <image src="../../../../../asset/task_step_delete.png" class="delete"
-            data-steptask="{{item.title}}" catchtap="deleteTaskStep" ></image>
+            <image src="../../../../../asset/task_step_delete.png" class="delete" data-steptask="{{item.title}}" catchtap="deleteTaskStep"></image>
           </label>
         </checkbox-group>
         <view class="addStep">
-          <navigator url="addTaskStep/addTaskStep">
-            <image src="../../../../../asset/Task_add.svg"></image>
-          </navigator>
+          <image src="../../../../../asset/Task_add.svg" bindtap="addTaskStep" data-verifiers="{{eventDetail.verifiers}}"></image>
         </view>
       </view>
       <view class="event_view">

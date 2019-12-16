@@ -2,7 +2,7 @@
 const cloud = require('wx-server-sdk')
 
 cloud.init({
-  env: 'prod-ayp2z'
+  env: 'demo-5c0mj'
 });
 
 function checkParams(data) {
@@ -118,7 +118,22 @@ async function recordStep(data, user_id) {
     return step;
   }
 
+  async function updateStatus(data){
+    let status = 50;
+    if(data.lastStep){
+      const checklastStep = await checkLastStep(data.step_Uid, data.code)
+      if (checklastStep.code !== '0000') {
+        return checklastStep
+      }
+      if (checklastStep.data && data.status_code == 100) {
+        status = 100;
+      }
+    }
+    return status
+  }
+
   return await writeStep(step.data, data)
+
 
   //添加一步到事件的用户表
   async function writeStep(userStep, data) {
@@ -133,16 +148,8 @@ async function recordStep(data, user_id) {
     //新建步骤
     async function newStep(data) {
       try {
-        let status = 50;
-        if(data.lastStep){
-          const checklastStep = await checkLastStep(data.step_Uid,data.code)
-          if(checklastStep.code !== '0000'){
-            return checklastStep
-          }
-          if(checklastStep.data && data.status_code == 100){
-            status = 100;
-          }
-        }
+        const status = await updateStatus(data);
+
         const updateUser = await updateUserCollection(data.code, user_id, status)
         if (updateUser.code !== '0000') {
           return res;
@@ -155,7 +162,7 @@ async function recordStep(data, user_id) {
             steps: [{
               step_Uid: data.step_Uid,
               status_code: data.status_code,
-              date: DB.serverDate()
+              date: new Date().toString()
             }]
           }
         })
@@ -190,30 +197,20 @@ async function recordStep(data, user_id) {
     async function addStep(data, userStep) {
       const _ = DB.command
       try {
-        let status = 50;
-        if (data.lastStep) {
-          const checklastStep = await checkLastStep(data.step_Uid, data.code)
-          if (checklastStep.code !== '0000') {
-            return checklastStep
-          }
+        const status = await updateStatus(data);
 
-          if (checklastStep.data && data.status_code == 100) {
-            status = 100;
-          }
+        const updateUser = await updateUserCollection(data.code, user_id, status)
+        if (updateUser.code !== '0000') {
+          return res;
         }
-        if (status === 100) {
-          const res = await updateUserCollection(data.code, user_id, status)
-          if (res.code !== '0000') {
-            return res;
-          }
-        }
+      
         const res = await COLTION.doc(userStep.data._id).update({
           data: {
             status,
             steps: _.push({
               step_Uid: data.step_Uid,
               status_code: data.status_code,
-              date: DB.serverDate()
+              date: new Date().toString()
             })
           }
         })
@@ -245,23 +242,13 @@ async function recordStep(data, user_id) {
     //编辑改步骤
     async function editStep(data, userStep) {
       try {
-        let status = 50;
-        if (data.lastStep) {
-          const checklastStep = await checkLastStep(data.step_Uid, data.code)
-          if (checklastStep.code !== '0000') {
-            return checklastStep
-          }
+        const status = await updateStatus(data);
 
-          if (checklastStep.data && data.status_code == 100) {
-            status = 100;
-          }
+        const res = await updateUserCollection(data.code, user_id, status)
+        if (res.code !== '0000') {
+          return res;
         }
-        if (status === 100) {
-          const res = await updateUserCollection(data.code, user_id, status)
-          if (res.code !== '0000') {
-            return res;
-          }
-        }
+       
         steps = userStep.data.steps.map(e => {
           let item = { ...e
           }
@@ -275,6 +262,7 @@ async function recordStep(data, user_id) {
         })
         const res = await COLTION.doc(userStep.data._id).update({
           data: {
+            status,
             steps
           }
         });

@@ -12,6 +12,12 @@ function formatRole(arr) {
   })
   return formatArray(roles);
 }
+function formatVerifiers(arr) {
+  var verifiers = arr.map(function(e) {
+    return e.name
+  })
+  return formatArray(verifiers);
+}
 
 var getProgress = function(array) {
   if (array == undefined) {
@@ -88,3 +94,5 @@ module.exports.formatArray = formatArray
 module.exports.getProgress = getProgress
 module.exports.formatRole = formatRole
 module.exports.formatDate = formatDate
+module.exports.formatVerifiers = formatVerifiers
+

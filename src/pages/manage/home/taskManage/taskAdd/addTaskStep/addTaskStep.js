@@ -1,4 +1,7 @@
 let taskAdd = getApp().globalData.managerHomeTaskManagerTaskAddTaskStep;
+const service = require('../../../../service.js');
+let observer = [];
+let observerId = [];
 Page({
 
   /**
@@ -6,7 +9,8 @@ Page({
    */
   data: {
     stepName: '',
-    tips: []
+    tips: [],
+    verifiers: []
   },
 
   /**
@@ -15,9 +19,42 @@ Page({
   onLoad: function(options) {
     taskAdd.step.name = options.stepname;
     taskAdd.step.index = options.stepindex;
-    if (options.steptips){
+    if (options.steptips) {
       taskAdd.step.tips = options.steptips.split(',');
     }
+    if (options.verifiers) {
+      observer = options.verifiers.split('|');
+    }
+    if (options.verifierid){
+      observerId = options.verifierid.split('|');
+    }
+    
+    this.setVerifiers();
+  },
+  setVerifiers() {
+    let verifiers = observer.map(e => {
+      var o = e.split(',');
+      return {
+        _id: o[0],
+        open_id: o[1],
+        name: o[2]
+      }
+    })
+    verifiers.forEach(e =>{
+      if(observerId.includes(e.open_id)){
+        e.checked = true;
+      }else{
+        e.checked = false;
+      }
+    })
+    taskAdd.step.verifiers = verifiers.map(e =>{
+      if(observerId.includes(e.open_id)){
+        return e.open_id;
+      }
+    });
+    this.setData({
+      verifiers
+    })
   },
   onShow: function() {
     let step = {};
@@ -40,7 +77,8 @@ Page({
   formSubmit(e) {
     taskAdd.step.name = e.detail.value.stepName;
     taskAdd.step.tips = this.data.tips;
-    wx.navigateBack()
+    taskAdd.step.verifiers = e.detail.value.verifiers;
+    wx.navigateBack();
   },
   formReset(e) {
     wx.navigateBack();
@@ -56,12 +94,12 @@ Page({
       tips: this.data.tips
     })
   },
-  inputedit(e){
+  inputedit(e) {
     let value = e.detail.value;
     let index = e.currentTarget.dataset.tipindex;
     this.data.tips[index] = value;
   },
-  deleteTips(e){
+  deleteTips(e) {
     let _this = this;
     let index = e.currentTarget.dataset.tipsindex;
     wx.showModal({
@@ -73,9 +111,13 @@ Page({
           _this.setData({
             tips: _this.data.tips
           })
-        } 
+        }
       }
     })
-  }
-})
+  },
+  checkboxChange(e) {
 
+  },
+  // onUnload(){
+  // }
+})

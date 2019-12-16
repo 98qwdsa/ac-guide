@@ -10,7 +10,8 @@ Page({
     userId: '',
     userName: '',
     power: [],
-    role: []
+    role: [],
+    init_loading: true
   },
 
   /**
@@ -20,6 +21,9 @@ Page({
     this.displayData(options.userId);
   },
   displayData(userId) {
+    this.setData({
+      init_loading: true
+    })
     Promise.all([this.loadRole(), this.loadUserData(userId)]).then(values => {
       wx.hideLoading();
       values[0].power.forEach(val => {
@@ -37,6 +41,11 @@ Page({
         userName: values[1].name,
         power: values[0].power,
         role: values[0].role,
+        init_loading: false
+      })
+    }, e => {
+      this.setData({
+        init_loading: false
       })
     })
   },

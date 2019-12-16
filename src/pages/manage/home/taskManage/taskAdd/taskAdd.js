@@ -5,6 +5,7 @@ let detail = {
   name: '',
   desc: '',
   disabled: false,
+  verifiers: [],
   role: [],
   steps: []
 };
@@ -15,6 +16,7 @@ Page({
    */
   data: {
     eventDetail: {
+      verifiers: [],
       role: []
     }
   },
@@ -35,30 +37,61 @@ Page({
    */
   onShow: function() {
     let taskAdd = getApp().globalData.managerHomeTaskManagerTaskAddTaskStep;
-    if (taskAdd.roles.length) {
+    if (taskAdd.roles) {
       detail.role = taskAdd.roles;
       taskAdd.roles = [];
     }
+    if (taskAdd.verifiers){
+      detail.verifiers = taskAdd.verifiers; 
+      taskAdd.verifiers = [];
+    }
+    
     if (taskAdd.step.index) {
       if (taskAdd.step.name) {
+        let data = {};
+        if (taskAdd.step.verifiers.length ===0){
+          data = {
+            title: taskAdd.step.name,
+            tips: taskAdd.step.tips,
+          }
+        }else{
+          data = {
+            title: taskAdd.step.name,
+            tips: taskAdd.step.tips,
+            verifiers: taskAdd.step.verifiers
+          }
+        }
         detail.steps[taskAdd.step.index] = {
-          title: taskAdd.step.name,
-          tips: taskAdd.step.tips
+          ...data
         };
         taskAdd.step.name = '';
         taskAdd.step.index = 0;
         taskAdd.step.tips = [];
+        taskAdd.step.verifiers = [];
       }
     } else {
       if (taskAdd.step.name) {
-        detail.steps.push({
+        let data = {};
+        if (taskAdd.step.verifiers.length === 0) {
+          data = {
             title: taskAdd.step.name,
-            tips: taskAdd.step.tips
+            tips: taskAdd.step.tips,
+          }
+        } else {
+          data = {
+            title: taskAdd.step.name,
+            tips: taskAdd.step.tips,
+            verifiers: taskAdd.step.verifiers
+          }
+        }
+        detail.steps.push({
+          ...data
           }
         );
         taskAdd.step.name = '';
         taskAdd.step.index = 0;
         taskAdd.step.tips = [];
+        taskAdd.step.verifiers = [];
       }
     }
     this.setData({
@@ -67,10 +100,10 @@ Page({
   },
   submit: function(e) {
     const params = e.detail.value;
-    if (params.code == "" || params.name == "") {
+    if (params.code == "" || params.name == "" || params.role.length == 0) {
       wx.showToast({
         icon: 'none',
-        title: '事件编码和事件名称都不能为空',
+        title: '事件编码、事件名称和参与角色都不能为空',
       });
       return;
     }
@@ -81,7 +114,7 @@ Page({
     params.steps = detail.steps;
     service.addEvent(params).then(() => {
       wx.hideLoading();
-      let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd
+      let reloadTrigger = getApp().globalData.managerHomeTaskManageTaskAdd;
       reloadTrigger.load = true;
       wx.navigateBack();
     });
@@ -93,6 +126,7 @@ Page({
         name: '',
         desc: '',
         disabled: false,
+        verifiers: [],
         role: [],
         steps: []
       }
@@ -128,11 +162,32 @@ Page({
     })
   },
   editTaskStep: function(e) {
+    let data = e.currentTarget.dataset;
+    let verifiers = data.verifiers.map(e => {
+      return `${e._id},${e.open_id},${e.name}`
+    }).join('|');
+    let verifiersId = data.verifierid.join('|');
     wx.navigateTo({
       url: 'addTaskStep/addTaskStep?stepname=' +
-        e.currentTarget.dataset.steptask +
-        '&stepindex=' + e.currentTarget.dataset.stepindex+
-        '&steptips=' + e.currentTarget.dataset.steptips
+        data.steptask + '&stepindex=' + data.stepindex+
+        '&steptips=' + data.steptips + '&verifierid=' + verifiersId +
+        '&verifiers=' + verifiers
+    })
+  },
+  eventVerifiers(e){
+    let verifiers = e.currentTarget.dataset.verifiers.map(e => {
+      return `${e._id}`
+    }).join('|');
+    wx.navigateTo({
+      url: 'eventVerifiers/eventVerifiers?verifiers=' + verifiers,
+    })
+  },
+  addTaskStep(e){
+    let verifiers = e.currentTarget.dataset.verifiers.map( e =>{
+      return `${e._id},${e.open_id},${e.name}`
+    }).join('|');
+    wx.navigateTo({
+      url: 'addTaskStep/addTaskStep?verifiers=' + verifiers
     })
   },
   onUnload() {
@@ -141,6 +196,7 @@ Page({
       name: '',
       desc: '',
       disabled: false,
+      verifiers: [],
       role: [],
       steps: []
     }

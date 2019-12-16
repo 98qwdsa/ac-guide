@@ -3,7 +3,7 @@ const cloud = require('wx-server-sdk')
 const typeEmu = ['power', 'role']
 
 cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV
+  env: 'demo-5c0mj'
 })
 const DB = cloud.database();
 

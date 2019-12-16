@@ -31,18 +31,15 @@ checkbox-group{
 .event_buttons{
   width: 100%;
   position: fixed;
-  height: 100rpx;
+  height: 110rpx;
   bottom: 0;
 }
 .event_buttons button{
   display: inline-block;
   font-family: SourceHanSansCN-Bold;
   border-radius:0;
-  width: 50%;
-  height: 100rpx;
-}
-.event_buttons .reset{
-  background-color: #EDEDED;
+  width: 100%;
+  height: 110rpx;
 }
 .event_buttons .submit{
   background-image: linear-gradient(-90deg, #7E46DD 0%, #DD60B3 100%);

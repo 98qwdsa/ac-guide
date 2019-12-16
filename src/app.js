@@ -12,11 +12,13 @@ App({
       open_id: undefined
     },
     'managerHomeTaskManagerTaskAddTaskStep': {
-      roles: '',
+      roles: [],
+      verifiers: [],
       step:{
         index: 0,
         name: '',
-        tips: []
+        tips: [],
+        verifiers: []
       }
     },
     'managerHomeTaskManagerTaskProgess': {

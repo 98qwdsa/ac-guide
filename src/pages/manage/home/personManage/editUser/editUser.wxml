@@ -1,8 +1,8 @@
 <!--src/pages/manage/personManage/editUser/editUser.wxml-->
 <view class="content">
-  <form bindsubmit='submit' >
+  <form bindsubmit='submit' wx:if='{{!init_loading}}'>
     <view>
-      <input class="input" name="userId" value="{{userId}}" hidden="true"/>
+      <input class="input" name="userId" value="{{userId}}" hidden="true" />
     </view>
     <view class="userName">
       <label for="userName">用户名字：</label>
@@ -12,7 +12,7 @@
       <label for="power">用户权限：</label>
       <checkbox-group id="power" name="power" bindchange="checkboxChange">
         <label class="checkbox" wx:for="{{power}}" wx:key="item">
-          <checkbox value="{{item.code}}" checked="{{item.checked}}" />{{item.code}}
+          <checkbox value="{{item.code}}" checked="{{item.checked}}" />{{item.label}}
         </label>
       </checkbox-group>
     </view>
@@ -21,14 +21,13 @@
       <label for="role">用户角色：</label>
       <checkbox-group id="role" name="role" bindchange="checkboxChange">
         <label class="checkbox" wx:for="{{role}}" wx:key="item">
-          <checkbox value="{{item.code}}" checked="{{item.checked}}" />{{item.code}}
+          <checkbox value="{{item.code}}" checked="{{item.checked}}" />{{item.label}}
         </label>
       </checkbox-group>
     </view>
 
     <view class='event_buttons'>
-      <button form-type='reset' class="reset">删除</button>
-      <button form-type='submit' class="submit" >保存</button>
+      <button form-type='submit' class="submit">保存</button>
     </view>
   </form>
 </view>

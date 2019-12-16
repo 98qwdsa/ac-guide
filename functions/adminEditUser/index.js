@@ -81,16 +81,23 @@ function checkParamFormat(param) {
 
   if (res.code === '0000') {
     let param = {
-      _id
+      _id,
+      data: {
+        modify_openid: cloud.getWXContext().OPENID
+      }
     }
     if (action === 'edit') {
-      param['data'] = data;
+      param.data = {
+        ...data,
+        ...param.data
+      };
     }
 
     if (action === 'addRole' || action === 'removeRole') {
-      param['data'] = {
-        role: data.role
-      }
+      param.data = {
+        role: data.role,
+        ...param.data
+      };
     }
 
     res.msg = '';

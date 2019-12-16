@@ -1,6 +1,7 @@
+<wxs src='../../../../../../wxs/format.wxs' module="m1" />
 <form bindsubmit="formSubmit" bindreset="formReset" enctype="multipart/form-data">
   <view class="content">
-    <text>新入职员工完成事项</text>
+    <text>新入职员工完成事项：</text>
     <view class="input-container">
       <input placeholder="title" placeholder-class="event_placeholder" class="event_name" value='{{stepName}}' name='stepName' />
       <icon type="clear" size="20" catchtap="deleteText" class="deleteText" />
@@ -9,20 +10,23 @@
   <view class="tips">
     <text>tips</text>
     <block wx:for='{{tips}}' wx:key='index'>
-      <input type="text" class="tips-content" value='{{item}}' 
-        data-tipindex="{{index}}" bindblur="inputedit">
-      <image src="../../../../../../asset/task_step_delete.png" class="delete"
-        data-tipsindex="{{index}}" catchtap="deleteTips" ></image>
+      <input type="text" class="tips-content" value='{{item}}' data-tipindex="{{index}}" bindblur="inputedit">
+      <image src="../../../../../../asset/task_step_delete.png" class="delete" data-tipsindex="{{index}}" catchtap="deleteTips"></image>
       </input>
     </block>
     <image bindtap="addTips" src="../../../../../../asset/Task_add.svg"></image>
   </view>
+  <text class="text">步骤的确认者：</text>
+  <view class="verifiers">
+    <checkbox-group bindchange="checkboxChange" name="verifiers">
+      <label class="checkbox-item" wx:for="{{verifiers}}" wx:key="index">
+        <checkbox value="{{item.open_id}}" checked="{{item.checked}}" /> {{item.name}}
+      </label>
+    </checkbox-group>
+  </view>
   <view class="filler">
   </view>
   <view class='event_buttons'>
-    <button form-type='reset' class="reset">返回</button>
     <button form-type='submit' class="submit">提交</button>
   </view>
 </form>
-
-

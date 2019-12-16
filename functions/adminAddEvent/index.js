@@ -2,7 +2,7 @@
 const cloud = require('wx-server-sdk')
 
 cloud.init({
-  env: 'prod-ayp2z'
+  env: 'demo-5c0mj'
 })
 const DB = cloud.database();
 const COLION = DB.collection('event_list');
@@ -272,8 +272,6 @@ async function createCustomEventCollection(code, steps) {
     result.data.push(e);
     result.msg += 'create ' + code + '_event_user fail, ';
   }
-
-
   try {
     const observers = await DB.createCollection(code + '_event_observeds');
     if (observers.errMsg != "createCollection:ok") {
@@ -285,6 +283,18 @@ async function createCustomEventCollection(code, steps) {
     result.code = '3003';
     result.data.push(e);
     result.msg += 'create ' + code + '_event_observeds fail, '
+  }
+  try{
+    const confirm = await DB.createCollection(code + '_event_step_confirm');
+    if (confirm.errMsg != 'createCollection:ok'){
+      result.code = '2004';
+      result.data.push(e);
+      result.msg += 'create ' + code + '_event_step_confirm fail, '
+    }
+  }catch(e){
+    result.code = '3003';
+    result.data.push(e);
+    result.msg += 'create ' + code + '_event_step_confirm fail, '
   }
   return result;
 }

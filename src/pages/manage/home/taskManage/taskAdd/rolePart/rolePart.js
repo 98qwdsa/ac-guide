@@ -1,6 +1,7 @@
 let taskAdd = getApp().globalData.managerHomeTaskManagerTaskAddTaskStep;
 const service = require('../../../../service.js');
 let roleChecked = [];
+let role = [];
 Page({
 
   /**
@@ -36,6 +37,7 @@ Page({
     });
   },
   checkboxChange: function(e) {
+    role = e.detail.value;
     taskAdd.roles = this.data.roles.filter(item => {
       if (e.detail.value.includes(item.code)) {
         return item
@@ -43,6 +45,14 @@ Page({
     })
   },
   submit: function(e) {
-    wx.navigateBack();
-  }
+    if (role.length){
+      wx.navigateBack();
+    }else{
+      wx.showToast({
+        title: '请选择一个角色',
+        icon: 'none'
+      })
+    }
+  },
+
 })
