@@ -1,6 +1,7 @@
 // src/pages/manage/personManage/editUser/editUser.js
 let userInfo = getApp().globalData.managerHomePersonManageEditUser;
 const service = require('../../../service.js');
+let userId = '';
 Page({
 
   /**
@@ -18,13 +19,32 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    this.displayData(options.userId);
+    userId = options.userId;
+    if (userId){
+      this.editUser(userId);
+    }else{
+      this.addUser();
+    }
   },
-  displayData(userId) {
+  addUser(){
+    this.loadRole().then(powerRole =>{
+      this.setData({
+        power: powerRole.power,
+        role: powerRole.role,
+        init_loading: false
+      })
+      wx.hideLoading();
+    },e =>{
+      this.setData({
+        init_loading: false
+      })
+    })
+  },
+  editUser(userId) {
     this.setData({
       init_loading: true
     })
-    Promise.all([this.loadRole(), this.loadUserData(userId)]).then(values => {
+    Promise.all([this.loadRole(), this.loadUserInfo(userId)]).then(values => {
       wx.hideLoading();
       values[0].power.forEach(val => {
         if (values[1].power.includes(val.code)) {
@@ -59,7 +79,7 @@ Page({
       })
     })
   },
-  loadUserData(_id) {
+  loadUserInfo(_id) {
     return new Promise((reslove, reject) => {
       service.queryUser(_id).then(user => {
         reslove(user);
@@ -74,27 +94,31 @@ Page({
       })
       return;
     }
-    wx.showLoading({
-      title: '正在修改中...',
-    })
-    service.editUser({
-      _id: e.detail.value.userId,
-      data: {
-        name: e.detail.value.userName,
-        power: e.detail.value.power,
-        role: e.detail.value.role
-      }
-    }).then(() => {
-      wx.hideLoading();
-      wx.navigateBack();
-    }, error => {
-      wx.showToast({
-        title: '请先修改用户信息',
-        icon: 'none',
-        duration: 2000
+    if (userId) {
+      wx.showLoading({
+        title: '正在修改中...',
       })
-    })
-    userInfo._id = e.detail.value.userId;
+      service.editUser({
+        _id: e.detail.value.userId,
+        data: {
+          name: e.detail.value.userName,
+          power: e.detail.value.power,
+          role: e.detail.value.role
+        }
+      }).then(() => {
+        wx.hideLoading();
+        wx.navigateBack();
+      }, error => {
+        wx.showToast({
+          title: '请先修改用户信息',
+          icon: 'none',
+          duration: 2000
+        })
+      })
+      userInfo._id = e.detail.value.userId;
+    }else{
+      wx.navigateBack();
+    }
     userInfo.name = e.detail.value.userName;
     userInfo.power = e.detail.value.power;
     userInfo.role = e.detail.value.role

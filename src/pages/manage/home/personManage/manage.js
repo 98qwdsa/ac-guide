@@ -77,7 +77,7 @@ Page({
   },
   addUser() {
     wx.navigateTo({
-      url: 'addUser/addUser',
+      url: 'editUser/editUser',
     })
   },
   deleteUser(e) {
@@ -146,40 +146,36 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    let trigger = getApp().globalData.managerHomePersonManageAddUser;
-    if (trigger.userName !== '') {
-      wx.showLoading({
-        title: '添加用户中...',
-        mask: true
-      })
-      let newUserList = [...allUserList];
-      service.addUser(trigger.userName).then(userInfo => {
-        newUserList.push(userInfo)
-        this.setData({
-          userList: newUserList
-        })
-        wx.hideLoading();
-        allUserList = newUserList
-        trigger.userName = ''
-      });
-    }
-    
+    let newUserList = [...allUserList];
     let userInfo = getApp().globalData.managerHomePersonManageEditUser;
     if (userInfo._id === ''){
-      return;
-    }
-    let newUserList = [...allUserList];
-    newUserList.forEach(function(item,index){
-      if(item._id === userInfo._id){
-        item.name = userInfo.name;
-        item.power = userInfo.power;
-        item.role = userInfo.role;
+      if(userInfo.name !== '' && userInfo.role.length !== 0){
+        wx.showLoading({
+          title: '添加用户中...',
+          mask: true
+        })
+        service.addUser(userInfo.name,userInfo.power,userInfo.role).then(user => {
+          newUserList.push(user);
+          this.setData({
+            userList: newUserList
+          })
+          wx.hideLoading();
+        })
+        allUserList = newUserList
       }
-    });
-    this.setData({
-      userList : newUserList
-    })
-    allUserList = newUserList
+    }else{
+      newUserList.forEach(function (item, index) {
+        if (item._id === userInfo._id) {
+          item.name = userInfo.name;
+          item.power = userInfo.power;
+          item.role = userInfo.role;
+        }
+      });
+      this.setData({
+        userList: newUserList
+      })
+      allUserList = newUserList
+    }
     userInfo._id = '';
     userInfo.name = '';
     userInfo.power = [];

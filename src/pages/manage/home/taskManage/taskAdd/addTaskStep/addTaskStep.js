@@ -24,11 +24,12 @@ Page({
     }
     if (options.verifiers) {
       observer = options.verifiers.split('|');
+    }else{
+      observer = [];
     }
     if (options.verifierid){
       observerId = options.verifierid.split('|');
     }
-    
     this.setVerifiers();
   },
   setVerifiers() {
@@ -117,7 +118,5 @@ Page({
   },
   checkboxChange(e) {
 
-  },
-  // onUnload(){
-  // }
+  }
 })

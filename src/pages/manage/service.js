@@ -44,9 +44,11 @@ module.exports = {
       ...data
     })
   },
-  addUser(name) {
+  addUser(name,power,role) {
     return cloud.call('addUser', {
       name,
+      power,
+      role,
       action: 'adminAddUser'
     })
   },

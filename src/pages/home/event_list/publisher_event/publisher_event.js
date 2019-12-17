@@ -28,7 +28,6 @@ Page({
     });
     event_code = options.code;
     this.initTabs(options).then(data => {
-      console.log(data);
     })
   },
   initTabs(data) {

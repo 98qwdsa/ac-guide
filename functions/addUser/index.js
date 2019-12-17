@@ -10,6 +10,8 @@ const CLION = DB.collection('user');
 function checkParamFormat(data) {
   let {
     name,
+    power,
+    role,
     modify_openid = cloud.getWXContext().OPENID,
     action,
   } = data;
@@ -25,6 +27,23 @@ function checkParamFormat(data) {
     if (typeof(name) !== 'string' || name === '') {
       res.code = '1001'
       res.msg.push('name:string')
+    }
+  }
+  if (role === undefined) {
+    role = ['Participant'];
+  } else {
+    if (!(role instanceof Array)) {
+      res.code = '1001';
+      res.msg.push('role:Array')
+    }
+  }
+
+  if (power === undefined) {
+    power = [];
+  } else {
+    if (!(power instanceof Array)) {
+      res.code = '1001';
+      res.msg.push('power:Array')
     }
   }
 
@@ -45,6 +64,8 @@ function checkParamFormat(data) {
     res.msg = 'param format ok';
     res.data = {
       name,
+      power,
+      role,
       modify_openid,
       action
     }
@@ -102,9 +123,9 @@ exports.main = async(event, context) => {
     let data = {
       name: param.data.name,
       open_id: wxContext.OPENID,
-      power: [],
+      power: param.data.power,
       modify_openid: param.data.modify_openid,
-      role: ['Participant'],
+      role: param.data.role,
       create_date: new Date().toString()
     }
 

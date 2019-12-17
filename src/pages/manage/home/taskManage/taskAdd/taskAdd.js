@@ -39,22 +39,53 @@ Page({
     let taskAdd = getApp().globalData.managerHomeTaskManagerTaskAddTaskStep;
     if (taskAdd.roles) {
       detail.role = taskAdd.roles;
-      taskAdd.roles = [];
+      taskAdd.roles = null;
     }
-    if (taskAdd.verifiers){
-      detail.verifiers = taskAdd.verifiers; 
-      taskAdd.verifiers = [];
+    //从数组中过滤掉另一个数据集合
+    if (taskAdd.verifiers) {
+      const removedVerifers = detail.verifiers.filter(e => {
+        let b = false;
+        taskAdd.verifiers.forEach(m => {
+          if (e.open_id === m.open_id) {
+            b = true;
+          }
+        })
+        return !b;
+      })
+      if (detail.steps.length) {
+        detail.steps = detail.steps.map(e => {
+          if (e.verifiers.length) {
+            const verifiers = e.verifiers.filter(m => {
+              let b = false
+              removedVerifers.forEach(j => {
+                if (m === j.open_id) {
+                  b = true
+                }
+              })
+              return !b;
+            })
+            return {
+              ...e,
+              verifiers
+            }
+          } else {
+            return e
+          }
+        })
+      }
+      detail.verifiers = taskAdd.verifiers;
+      taskAdd.verifiers = null;
     }
-    
+
     if (taskAdd.step.index) {
       if (taskAdd.step.name) {
         let data = {};
-        if (taskAdd.step.verifiers.length ===0){
+        if (taskAdd.step.verifiers.length === 0) {
           data = {
             title: taskAdd.step.name,
             tips: taskAdd.step.tips,
           }
-        }else{
+        } else {
           data = {
             title: taskAdd.step.name,
             tips: taskAdd.step.tips,
@@ -86,8 +117,7 @@ Page({
         }
         detail.steps.push({
           ...data
-          }
-        );
+        });
         taskAdd.step.name = '';
         taskAdd.step.index = 0;
         taskAdd.step.tips = [];
@@ -169,12 +199,12 @@ Page({
     let verifiersId = data.verifierid.join('|');
     wx.navigateTo({
       url: 'addTaskStep/addTaskStep?stepname=' +
-        data.steptask + '&stepindex=' + data.stepindex+
+        data.steptask + '&stepindex=' + data.stepindex +
         '&steptips=' + data.steptips + '&verifierid=' + verifiersId +
         '&verifiers=' + verifiers
     })
   },
-  eventVerifiers(e){
+  eventVerifiers(e) {
     let verifiers = e.currentTarget.dataset.verifiers.map(e => {
       return `${e._id}`
     }).join('|');
@@ -182,8 +212,8 @@ Page({
       url: 'eventVerifiers/eventVerifiers?verifiers=' + verifiers,
     })
   },
-  addTaskStep(e){
-    let verifiers = e.currentTarget.dataset.verifiers.map( e =>{
+  addTaskStep(e) {
+    let verifiers = e.currentTarget.dataset.verifiers.map(e => {
       return `${e._id},${e.open_id},${e.name}`
     }).join('|');
     wx.navigateTo({
@@ -200,5 +230,6 @@ Page({
       role: [],
       steps: []
     }
+
   }
 })

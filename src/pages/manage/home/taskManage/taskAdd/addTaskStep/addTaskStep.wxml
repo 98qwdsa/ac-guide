@@ -16,8 +16,8 @@
     </block>
     <image bindtap="addTips" src="../../../../../../asset/Task_add.svg"></image>
   </view>
-  <text class="text">步骤的确认者：</text>
-  <view class="verifiers">
+  <text class="text" wx:if='{{verifiers.length !== 0}}'>步骤的确认者：</text>
+  <view class="verifiers" wx:if='{{verifiers.length !== 0}}'>
     <checkbox-group bindchange="checkboxChange" name="verifiers">
       <label class="checkbox-item" wx:for="{{verifiers}}" wx:key="index">
         <checkbox value="{{item.open_id}}" checked="{{item.checked}}" /> {{item.name}}

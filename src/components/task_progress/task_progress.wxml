@@ -4,7 +4,7 @@
   <view class="item">
     <view class="left">
       <text>{{detail.name}}</text>
-      <text>({{m1.getProgress(detail.event_steps.steps)}}%)</text>
+      <text>({{m1.getProgress(detail.event_steps.steps)}}/{{detail.event_steps.steps.length}})</text>
     </view>
     <!-- <view class="right">
      <label wx:if="{{cancel != 'undefined'}}">
