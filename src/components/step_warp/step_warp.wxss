@@ -93,8 +93,8 @@
 .step_warp .step .last {
   width: 90rpx;
 }
-
+/* 
 .step_warp .tips .tip {
   display: inline-block;
-}
+} */
 

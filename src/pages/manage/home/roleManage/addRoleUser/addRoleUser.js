@@ -21,6 +21,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    reloadTrigger.user = [];
     role = options.role;
     this.loadData(role);
   },
@@ -80,8 +81,6 @@ Page({
               name: target.addusername,
               id: target.adduserid
             })
-            // reloadTrigger.user = target.addusername;
-            // reloadTrigger.userId = target.adduserid;
             newUserList = newUserList.filter(e =>{
               if(e._id !== target.adduserid){
                 return {
@@ -183,7 +182,12 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    role = '';
+    num = 0;
+    delay = 500;
+    timer = {};
+    userRoleList = [];
+    clear = false;
   },
 
   /**

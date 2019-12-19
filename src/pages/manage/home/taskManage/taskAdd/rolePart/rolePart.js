@@ -54,5 +54,9 @@ Page({
       })
     }
   },
+  onUnload(){
+    roleChecked = [];
+    role = [];
+  }
 
 })

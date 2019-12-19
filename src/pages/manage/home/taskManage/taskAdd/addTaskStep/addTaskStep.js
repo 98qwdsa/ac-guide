@@ -76,6 +76,13 @@ Page({
     });
   },
   formSubmit(e) {
+    if (e.detail.value.stepName === ''){
+      wx.showToast({
+        title: 'title不能为空',
+        icon: 'none'
+      })
+      return;
+    }
     taskAdd.step.name = e.detail.value.stepName;
     taskAdd.step.tips = this.data.tips;
     taskAdd.step.verifiers = e.detail.value.verifiers;
@@ -118,5 +125,9 @@ Page({
   },
   checkboxChange(e) {
 
+  },
+  onUnload(){
+    observer = [];
+    observerId = [];
   }
 })

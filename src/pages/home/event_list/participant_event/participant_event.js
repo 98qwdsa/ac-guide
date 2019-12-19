@@ -64,7 +64,10 @@ Page({
         let curStep = this.data.curStep;
 
         stepList[curStep].user_step = data;
-        curStep += 1;
+        if (stepList[curStep].user_step && stepList[curStep].user_step.status_code === 100){
+          curStep += 1;
+        }
+        
         if (curStep == stepList.length) {
           eventFinished = true;
         }

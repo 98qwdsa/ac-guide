@@ -113,14 +113,25 @@ async function recordStep(data, user_id) {
   const DB = cloud.database();
   const COLTION = DB.collection(data.code + '_event_user');
   const step = await checkStep(data);
-
   if (step.code != '0000') {
     return step;
   }
+  const writeStepRes = await writeStep(step.data, data);
+  if (writeStepRes.code != '0000') {
+    return writeStepRes;
+  }
 
-  async function updateStatus(data){
+  if (data.status_code !== 100) {
+    const stepDetail = await getStepDetail(data.step_Uid);
+    await addConfirmRecord(data.code, stepDetail.data.verifiers, stepDetail.data._id, user_id)
+  }
+  return writeStepRes;
+
+  //添加一步到事件的用户表
+  async function writeStep(userStep, data) {
+    //当前用户在该事件下的状态
     let status = 50;
-    if(data.lastStep){
+    if (data.lastStep) {
       const checklastStep = await checkLastStep(data.step_Uid, data.code)
       if (checklastStep.code !== '0000') {
         return checklastStep
@@ -129,14 +140,7 @@ async function recordStep(data, user_id) {
         status = 100;
       }
     }
-    return status
-  }
-
-  return await writeStep(step.data, data)
-
-
-  //添加一步到事件的用户表
-  async function writeStep(userStep, data) {
+    //当前步骤状态
     data.status_code = await checkVerify(data, data.step_Uid);
     if (userStep.action === 'new') {
       return await newStep(data);
@@ -145,11 +149,11 @@ async function recordStep(data, user_id) {
     } else if (userStep.action === 'edit') {
       return await editStep(data, userStep);
     }
+
+    //当前用户在该事件下的状态
     //新建步骤
     async function newStep(data) {
       try {
-        const status = await updateStatus(data);
-
         const updateUser = await updateUserCollection(data.code, user_id, status)
         if (updateUser.code !== '0000') {
           return res;
@@ -197,13 +201,11 @@ async function recordStep(data, user_id) {
     async function addStep(data, userStep) {
       const _ = DB.command
       try {
-        const status = await updateStatus(data);
-
         const updateUser = await updateUserCollection(data.code, user_id, status)
         if (updateUser.code !== '0000') {
           return res;
         }
-      
+
         const res = await COLTION.doc(userStep.data._id).update({
           data: {
             status,
@@ -242,13 +244,12 @@ async function recordStep(data, user_id) {
     //编辑改步骤
     async function editStep(data, userStep) {
       try {
-        const status = await updateStatus(data);
 
         const res = await updateUserCollection(data.code, user_id, status)
         if (res.code !== '0000') {
           return res;
         }
-       
+
         steps = userStep.data.steps.map(e => {
           let item = { ...e
           }
@@ -296,7 +297,7 @@ async function recordStep(data, user_id) {
     async function checkVerify(data, _id) {
       if (data.status_code === 50) {
         try {
-          const res = DB.collection(data.code + '_event_steps').doc(_id).get();
+          const res = await getStepDetail(_id);
           if (res.data && res.data.verifiers && res.data.verifiers.length > 0) {
             return 50;
           }
@@ -308,6 +309,9 @@ async function recordStep(data, user_id) {
         return 0;
       }
     }
+  }
+  async function getStepDetail(_id) {
+    return await DB.collection(data.code + '_event_steps').doc(_id).get();
   }
   //获取附件
   // async function getAttachment(code, _id = []) {
@@ -353,11 +357,7 @@ async function recordStep(data, user_id) {
             }
           })
         } catch (e) {
-          return {
-            code: '3001',
-            msg: e,
-            data: null
-          }
+
         }
       }
       return {
@@ -429,6 +429,124 @@ async function recordStep(data, user_id) {
         code: '3004',
         msg: e,
         data: null
+      }
+    }
+  }
+
+  async function addConfirmRecord(event_code, observer_open_id, step_uid, participant_uid) {
+    let result = null;
+    const COLTION = DB.collection(data.code + '_event_step_confirm');
+    for (let i in observer_open_id) {
+      let b = await checkObserverOpenId(observer_open_id[i]);
+      if (b.code !== '0000') {
+        return b;
+      }
+      if (b.data) {
+        //更新逻辑
+        await updateVerifierRecord(observer_open_id[i], step_uid, participant_uid)
+      } else {
+        // 往表里插入一条新记录
+        await addVerifierRecord(observer_open_id[i], step_uid, participant_uid);
+      }
+    }
+
+    async function addVerifierRecord(observer_open_id, step_uid, participant_uid) {
+      try {
+        const res = await COLTION.add({
+          data: {
+            observer_open_id,
+            steps: [{
+              step_uid,
+              participant_uid
+            }]
+          }
+        })
+        if (res._id) {
+          return {
+            code: '0000',
+            msg: '',
+            data: {
+              observer_open_id,
+              steps: [{
+                step_uid,
+                participant_uid
+              }]
+            }
+          }
+        } else {
+          return {
+            code: '2005',
+            msg: '',
+            data: null
+          }
+        }
+      } catch (e) {
+        return {
+          code: '3007',
+          msg: e,
+          data: null
+        }
+      }
+    }
+
+    async function updateVerifierRecord(observer_open_id, step_uid, participant_uid) {
+      try {
+        const res = await COLTION.where({
+          observer_open_id
+        }).update({
+          data: {
+            steps: _.push({
+              step_uid,
+              participant_uid
+            })
+          }
+        })
+        if (res.stats.updated) {
+          return {
+            code: '0000',
+            msg: '',
+            data: {
+              step_uid,
+              participant_uid
+            }
+          }
+        }
+        return {
+          code: '2006',
+          msg: '',
+          data: null
+        }
+      } catch (e) {
+        return {
+          code: '3007',
+          msg: e,
+          data: null
+        }
+      }
+
+    }
+
+    async function checkObserverOpenId(observer_open_id) {
+      try {
+        let b = false;
+        //查询observer_open_id是否存在
+        const result = await COLTION.where({
+          observer_open_id
+        }).get()
+        if (result.data.length) {
+          b = true;
+        }
+        return {
+          code: '0000',
+          msg: '',
+          data: b
+        }
+      } catch (e) {
+        return {
+          code: '3001',
+          msg: e,
+          data: null
+        }
       }
     }
   }

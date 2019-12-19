@@ -164,6 +164,7 @@ Page({
     let reloadTrigger = getApp().globalData.homeEventListObserverEvent;
     reloadTrigger.myDataload = true;
     reloadTrigger.userDataLoad = true;
+    event_code = '';
   },
 
   /**
