@@ -8,7 +8,8 @@ cloud.init({
 function checkParams(data) {
   let {
     code,
-    user_open_id,
+    user_open_id = cloud.getWXContext().OPENID,
+    participant_uid = '',
     step_Uid,
     status_code,
     // attachments_Uid
@@ -29,13 +30,14 @@ function checkParams(data) {
     }
   }
 
-  if (user_open_id === undefined) {
-    user_open_id = cloud.getWXContext().OPENID
-  } else {
-    if (typeof(user_open_id) != 'string') {
-      res.code = '1001';
-      res.msg.push('user_open_id:string');
-    }
+  if (typeof(user_open_id) != 'string') {
+    res.code = '1001';
+    res.msg.push('user_open_id:string');
+  }
+
+  if (typeof(participant_uid) != 'string') {
+    res.code = '1001';
+    res.msg.push('participant_uid:string');
   }
 
   if (step_Uid === undefined) {
@@ -81,6 +83,7 @@ function checkParams(data) {
     res.data = {
       code,
       user_open_id,
+      participant_uid,
       step_Uid,
       status_code,
       lastStep
@@ -120,12 +123,22 @@ async function recordStep(data, user_id) {
   if (writeStepRes.code != '0000') {
     return writeStepRes;
   }
+  //如果该步骤不需要确认直接返回确认结果
+  if (data.status_code === 100) {
+    return writeStepRes;
+  } else {
+    //如果该步骤需要确认
 
-  if (data.status_code !== 100) {
-    const stepDetail = await getStepDetail(data.step_Uid);
-    await addConfirmRecord(data.code, stepDetail.data.verifiers, stepDetail.data._id, user_id)
+    //获取该步骤确认者和该步骤表ID
+    const stepDetail = await getStepDetail(data.code, data.step_Uid);
+    //添加待确认步骤到对应步骤确认者
+    const addConfirmRecordres = await addConfirmRecord(data.code, stepDetail.data.verifiers, stepDetail.data._id, user_id)
+    if (addConfirmRecordres.code !== '0000'){
+      return addConfirmRecordres;
+    }
+    return writeStepRes;
   }
-  return writeStepRes;
+
 
   //添加一步到事件的用户表
   async function writeStep(userStep, data) {
@@ -133,7 +146,10 @@ async function recordStep(data, user_id) {
     let status = 50;
     if (data.lastStep) {
       const checklastStep = await checkLastStep(data.step_Uid, data.code)
-      if (checklastStep.code !== '0000') {
+      if (checklastStep.code === '0000') {
+        data.lastStep = true;
+      } else {
+        data.lastStep = false;
         return checklastStep
       }
       if (checklastStep.data && data.status_code == 100) {
@@ -142,6 +158,11 @@ async function recordStep(data, user_id) {
     }
     //当前步骤状态
     data.status_code = await checkVerify(data, data.step_Uid);
+    //根据当前参与者在该事件下的状态，修改该用户的参与事件或者已完成事件字段
+    const updateUser = await updateUserCollection(data.code, user_id, status)
+    if (updateUser.code !== '0000') {
+      return res;
+    }
     if (userStep.action === 'new') {
       return await newStep(data);
     } else if (userStep.action === 'add') {
@@ -150,15 +171,10 @@ async function recordStep(data, user_id) {
       return await editStep(data, userStep);
     }
 
-    //当前用户在该事件下的状态
-    //新建步骤
+
+    //参与者第一次确认步骤，执行新建参加步骤记录
     async function newStep(data) {
       try {
-        const updateUser = await updateUserCollection(data.code, user_id, status)
-        if (updateUser.code !== '0000') {
-          return res;
-        }
-
         const res = await COLTION.add({
           data: {
             user_open_id: data.user_open_id,
@@ -197,15 +213,10 @@ async function recordStep(data, user_id) {
         }
       }
     }
-
+    //参与者添加一条确认步骤
     async function addStep(data, userStep) {
       const _ = DB.command
       try {
-        const updateUser = await updateUserCollection(data.code, user_id, status)
-        if (updateUser.code !== '0000') {
-          return res;
-        }
-
         const res = await COLTION.doc(userStep.data._id).update({
           data: {
             status,
@@ -241,15 +252,9 @@ async function recordStep(data, user_id) {
         }
       }
     }
-    //编辑改步骤
+    //确认者确认当前步骤
     async function editStep(data, userStep) {
       try {
-
-        const res = await updateUserCollection(data.code, user_id, status)
-        if (res.code !== '0000') {
-          return res;
-        }
-
         steps = userStep.data.steps.map(e => {
           let item = { ...e
           }
@@ -261,35 +266,122 @@ async function recordStep(data, user_id) {
           }
           return item
         })
-        const res = await COLTION.doc(userStep.data._id).update({
+        //确认后修改参与者步骤以及当前事件的参与状态
+        const updateStepsRes = await COLTION.doc(userStep.data._id).update({
           data: {
-            status,
+            status: data.lastStep ? 100 : status,
             steps
           }
         });
 
-        if (res.stats.updated) {
-          return {
-            code: '0000',
-            msg: '',
-            data: {
-              step_Uid: data.step_Uid,
-              status_code: data.status_code,
-              date: data.date
-            }
-          }
-        } else {
+        if (!updateStepsRes.stats.updated) {
           return {
             code: '2004',
             msg: '',
             data: null
           }
         }
+        if (data.status_code === 100) {
+          //确认成功后
+          return await updateEventStepComfirm(data.code, data.user_open_id, data.step_Uid, data.participant_uid)
+        }
       } catch (e) {
         return {
-          code: '3006',
+          code: '3007',
           msg: e,
           data: null
+        }
+      }
+      
+      // 更新当前确认者的确认记录。 待确认步骤移动到已确认步骤
+      async function updateEventStepComfirm(code, observer_open_id, step_uid, participant_uid) {
+        const COL = DB.collection(`${code}_event_step_confirm`);
+        const _ = DB.command;
+        const res = await COL.where({
+          observer_open_id
+        }).get();
+
+        //确认后的步骤 从待确认字段移动到已确认字段
+        const updateRes = await COL.doc(res.data[0]._id).update({
+          data: {
+            steps: _.pull({
+              step_uid,
+              participant_uid
+            }),
+            confirm_steps: _.push([{
+              step_uid,
+              participant_uid
+            }])
+          }
+        })
+        //删除当前确认者之外的确认者的当前待确认的步骤记录
+        const removeRes = await removeOtherObserverStep(code, step_uid, participant_uid, observer_open_id);
+        if (removeRes.code !== '0000'){
+          return removeRes;
+        }
+        if (updateRes.stats.updated && removeRes.code === '0000') { 
+          return {
+            code: '0000',
+            data: null,
+            msg: 'confirm success'
+          };
+        } else {
+          return {
+            code: '2008',
+            data: null,
+            msg: ''
+          };
+        }
+      }
+
+      //删除当前确认者之外的确认者的当前待确认的步骤记录
+      async function removeOtherObserverStep(code, step_uid, participant_uid, observer_open_id) {
+        let verifiers = [];
+        try {
+          const step = await DB.collection(`${code}_event_steps`).doc(step_uid).get();
+          verifiers = step.data.verifiers.filter((item) => {
+            return (item !== observer_open_id)
+          });
+        } catch (e) {
+          return {
+            code: '3008',
+            msg: e,
+            data: null
+          }
+        }
+        try {
+          for (let i = 0; i < verifiers.length; i++) {
+            const COL = DB.collection(`${code}_event_step_confirm`);
+            const _ = DB.command;
+            const res = await COL.where({
+              observer_open_id: verifiers[i]
+            }).update({
+              data: {
+                steps: _.pull({
+                  step_uid,
+                  participant_uid
+                })
+              }
+            })
+            if (!res.stats.updated) {
+              return {
+                code: '2009',
+                msg: 'update not success',
+                data: null
+              }
+            }
+          }
+          return {
+            code: '0000',
+            msg: 'all updated success',
+            data: null
+          }
+        } catch (e) {
+          return {
+            code: '3009',
+            msg: e,
+            data: null
+          }
         }
       }
     }
@@ -297,7 +389,7 @@ async function recordStep(data, user_id) {
     async function checkVerify(data, _id) {
       if (data.status_code === 50) {
         try {
-          const res = await getStepDetail(_id);
+          const res = await getStepDetail(data.code, _id);
           if (res.data && res.data.verifiers && res.data.verifiers.length > 0) {
             return 50;
           }
@@ -306,12 +398,13 @@ async function recordStep(data, user_id) {
           console.log(e);
         }
       } else {
-        return 0;
+        return data.status_code;
       }
     }
   }
-  async function getStepDetail(_id) {
-    return await DB.collection(data.code + '_event_steps').doc(_id).get();
+  // 获取步骤详情
+  async function getStepDetail(code, _id) {
+    return await DB.collection(code + '_event_steps').doc(_id).get();
   }
   //获取附件
   // async function getAttachment(code, _id = []) {
@@ -328,7 +421,7 @@ async function recordStep(data, user_id) {
   //   }
   //   return undefined;
   // }
-
+  // 检查当前步骤是否已存在，以及该步骤详情
   async function checkStep(data) {
     try {
       const res = await COLTION.where({
@@ -394,7 +487,7 @@ async function recordStep(data, user_id) {
       }
     }
   }
-
+  //更新用户的参与事件与已完成事件字段
   async function updateUserCollection(code, _id, status = 50) {
     const DB = cloud.database();
     const _ = DB.command
@@ -432,22 +525,30 @@ async function recordStep(data, user_id) {
       }
     }
   }
-
+  //添加参与者确认后需要确认步骤记录
   async function addConfirmRecord(event_code, observer_open_id, step_uid, participant_uid) {
-    let result = null;
     const COLTION = DB.collection(data.code + '_event_step_confirm');
     for (let i in observer_open_id) {
       let b = await checkObserverOpenId(observer_open_id[i]);
       if (b.code !== '0000') {
         return b;
       }
+      let actoinResult;
       if (b.data) {
         //更新逻辑
-        await updateVerifierRecord(observer_open_id[i], step_uid, participant_uid)
+        actoinResult = await updateVerifierRecord(observer_open_id[i], step_uid, participant_uid)
       } else {
         // 往表里插入一条新记录
-        await addVerifierRecord(observer_open_id[i], step_uid, participant_uid);
+        actoinResult = await addVerifierRecord(observer_open_id[i], step_uid, participant_uid);
       }
+      if (actoinResult.code !== '0000') {
+        return actoinResult;
+      }
+    }
+    return{
+      code: '0000',
+      msg: 'update or insert success',
+      data: null
     }
 
     async function addVerifierRecord(observer_open_id, step_uid, participant_uid) {
@@ -490,6 +591,7 @@ async function recordStep(data, user_id) {
     }
 
     async function updateVerifierRecord(observer_open_id, step_uid, participant_uid) {
+      const _ = DB.command
       try {
         const res = await COLTION.where({
           observer_open_id
@@ -556,7 +658,8 @@ async function recordStep(data, user_id) {
  * code:string  事件code 
  * status_code,
  * step_Uid,
- * lastStep:boolean
+ * participant_uid,
+ * lastStep:boolean,
  */
 // 云函数入口函数
 exports.main = async(event, context) => {

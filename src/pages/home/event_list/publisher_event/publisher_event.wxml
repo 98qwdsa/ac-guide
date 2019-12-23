@@ -1,18 +1,21 @@
 <view class='container {{!showMyevent ? "pad_top" :""}}}'>
 
   <view wx:if='{{!showMyevent}}' class='tab-wrapper'>
-    <view wx:for='{{tabs}}' wx:key='index' id='{{index}}' class='tab-left {{currentTab == index? "tab-active":""}}' bindtap='switchTab'>{{item.tab_label}}</view>
+    <view wx:for='{{tabs}}' class='tab-left {{currentTab == item.code ? "tab-active":""}}'    
+    wx:key='index' id='{{item.code}}' bindtap='switchTab'>
+    {{item.tab_label}}</view>
   </view>
 
-  <view class='content-wrapper' wx:if='{{currentTab == 0}}'>
+  <view class='content-wrapper' wx:if="{{currentTab == 'Participant'}}">
     <block wx:if="{{stepList.length}}">
       <view class="task_progress_item">
         <event-detail detail="{{eventDetail}}" finished="{{eventFinished}}"></event-detail>
-        <step-warp stepList="{{stepList}}" curStep="{{curStep}}" bindcustomevent="nextStep"></step-warp>
+        <step-warp stepList="{{stepList}}" bindcompleteClick="nextStep" curStep="{{curStep}}">
+        </step-warp>
       </view>
     </block>
   </view>
-  <view class='content-wrapper' wx:if='{{currentTab == 1}}'>
+  <view class='content-wrapper' wx:if="{{currentTab == 'Observer'}}">
     <block wx:if="{{myObserverList.length}}">
       <view class="task_progress_item" wx:for="{{myObserverList}}" wx:key="index">
         <taskProgress detail='{{item}}' cancel='{{item.cancel}}'>
@@ -25,7 +28,7 @@
       </view>
     </block>
   </view>
-  <view class='content-wrapper' wx:if='{{currentTab == 2}}'>
+  <view class='content-wrapper' wx:if="{{currentTab == 'Publisher'}}">
     <block wx:if="{{allUserList.length}}">
       <view class="task_progress_item" wx:for="{{allUserList}}" wx:key="index">
         <taskProgress detail='{{item}}'>

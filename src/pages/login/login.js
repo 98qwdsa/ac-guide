@@ -26,7 +26,6 @@ Page({
     service.register(
       this.data.data
     ).then(res => {
-      console.log(res);
       APP.globalData.userInfo = res;
       wx.hideLoading();
       wx.switchTab({

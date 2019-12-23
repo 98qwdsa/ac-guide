@@ -9,7 +9,7 @@ Page({
    */
   data: {
     tabs: [],
-    currentTab: 0,
+    currentTab: '',
     allUserList: [],
     myObserverList: [],
     stepList: [],
@@ -46,9 +46,9 @@ Page({
         this.setData({
           tabs,
           showMyevent,
-          currentTab: data.currentTab || 0
+          currentTab: data.currentTab || 'Participant'
         })
-        this.switchTab(0)
+        this.switchTab('Participant')
       })
     })
   },
@@ -61,11 +61,11 @@ Page({
     this.setData({
       currentTab
     });
-    if (currentTab == 0) {
+    if (currentTab == 'Participant') {
       this.loadMyData();
-    } else if (currentTab == 1) {
+    } else if (currentTab == 'Observer') {
       this.loadMyObserver();
-    } else if (currentTab == 2) {
+    } else if (currentTab == 'Publisher') {
       this.loadAllUserForEvent();
     }
   },
@@ -300,11 +300,11 @@ Page({
    */
   onShow: function() {
     let reloadTrigger = getApp().globalData.managerHomeTaskManagerTaskProgess
-    if (reloadTrigger.mid === true && this.data.currentTab === '1' &&
+    if (reloadTrigger.mid === true && this.data.currentTab === 'Observer' &&
       this.data.myObserverList.length) {
       this.loadfollowerList('myObserverList');
     }
-    if (reloadTrigger.right === true && this.data.currentTab === '2' &&
+    if (reloadTrigger.right === true && this.data.currentTab === 'Publisher' &&
       this.data.allUserList.length) {
       this.loadfollowerList('allUserList');
     }

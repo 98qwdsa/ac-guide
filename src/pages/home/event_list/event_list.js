@@ -106,23 +106,22 @@ Page({
     })
   },
   eventDetail(e) {
-    service.checkUserInfo().then(data => {
-      if (data.role.length !== 0 && data.role.includes('Publisher')) {
-        wx.navigateTo({
-          url: 'publisher_event/publisher_event?code=' + e.currentTarget.dataset.code +
-            '&name=' + e.currentTarget.dataset.name
-        })
-      } else if (data.role.length !== 0 && data.role.includes('Observer')) {
-        wx.navigateTo({
-          url: 'observer_event/observer_event?code=' + e.currentTarget.dataset.code +
-            '&name=' + e.currentTarget.dataset.name
-        })
-      } else {
-        wx.navigateTo({
-          url: 'participant_event/participant_event?code=' + e.currentTarget.dataset.code
-        })
-      }
-    })
+    const userInfo = APP.globalData.userInfo;
+    if (userInfo.role.length !== 0 && userInfo.role.includes('Publisher')) {
+      wx.navigateTo({
+        url: 'publisher_event/publisher_event?code=' + e.currentTarget.dataset.code +
+          '&name=' + e.currentTarget.dataset.name
+      })
+    } else if (userInfo.role.length !== 0 && userInfo.role.includes('Observer')) {
+      wx.navigateTo({
+        url: 'observer_event/observer_event?code=' + e.currentTarget.dataset.code +
+          '&name=' + e.currentTarget.dataset.name
+      })
+    } else {
+      wx.navigateTo({
+        url: 'participant_event/participant_event?code=' + e.currentTarget.dataset.code
+      })
+    }
   },
   /**
    * 页面相关事件处理函数--监听用户下拉动作

@@ -1,6 +1,7 @@
 // src/pages/index/user_event_steps/user_event_steps.js
 let reloadTrigger = getApp().globalData.homeEventListObserverEvent;
 const service = require('../../service.js');
+const App = getApp();
 Page({
 
   /**
@@ -12,12 +13,13 @@ Page({
     curStep: 0,
     eventDetail: {}
   },
-
+  code: '',
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    this.loadData(options.code);
+    this.code = options.code;
+    this.loadData(this.code);
   },
   loadData(event_code) {
     wx.showLoading({
@@ -64,10 +66,10 @@ Page({
         let curStep = this.data.curStep;
 
         stepList[curStep].user_step = data;
-        if (stepList[curStep].user_step && stepList[curStep].user_step.status_code === 100){
+        if (stepList[curStep].user_step && stepList[curStep].user_step.status_code === 100) {
           curStep += 1;
         }
-        
+
         if (curStep == stepList.length) {
           eventFinished = true;
         }
@@ -80,6 +82,12 @@ Page({
       reloadTrigger.myDataload = true;
 
     })
+  },
+  confirmStep(e) {
+    service.confirmStep(this.code, e.detail._id, App.globalData.userInfo._id, e.detail.lastStep).then(res => {
+      console.log(res);
+    })
+
   },
   initSwiperHeight() {
     // const query = wx.createSelectorQuery()

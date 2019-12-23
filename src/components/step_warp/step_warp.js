@@ -13,7 +13,6 @@ Component({
       value: 0
     }
   },
-
   /**
    * 组件的初始数据
    */
@@ -27,7 +26,14 @@ Component({
   methods: {
     onTap: function(e) {
       let lastStep = e.target.dataset.item._id === [...this.data.stepList].pop()._id
-      this.triggerEvent('customevent', { ...e.target.dataset.item,
+      this.triggerEvent('completeClick', { ...e.target.dataset.item,
+        lastStep
+      })
+    },
+    confirmStep(e) {
+      let lastStep = e.target.dataset.item._id === [...this.data.stepList].pop()._id
+      this.triggerEvent('confirmClick', {
+        ...e.target.dataset.item,
         lastStep
       })
     }

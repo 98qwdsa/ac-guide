@@ -15,9 +15,9 @@
     </view>
 
     <view class="last button" wx:if="{{index == curStep}}">
-      <button wx:if="{{!item.user_step.status_code}}" bindtap="onTap" bindcustomevent="myEventListener" data-item="{{item}}" class="pull-right">完成</button>
+      <button wx:if="{{!item.user_step.status_code}}" bindtap="onTap" data-item="{{item}}" class="pull-right">完成</button>
 
-      <button wx:if="{{item.user_step.status_code === 50}}" class="pull-right">待确认</button>
+      <button wx:if="{{item.user_step.status_code === 50}}" bindtap="confirmStep" data-item="{{item}}" class="pull-right">待确认</button>
     </view>
   </view>
 </view>

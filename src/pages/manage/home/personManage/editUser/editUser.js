@@ -1,6 +1,7 @@
 // src/pages/manage/personManage/editUser/editUser.js
 let userInfo = getApp().globalData.managerHomePersonManageEditUser;
 const service = require('../../../service.js');
+const APP = getApp();
 let userId = '';
 Page({
 
@@ -106,6 +107,12 @@ Page({
           role: e.detail.value.role
         }
       }).then(() => {
+        let userInfo = APP.globalData.userInfo;
+        if (userInfo._id === e.detail.value.userId){
+          userInfo.name = e.detail.value.userName;
+          userInfo.power = e.detail.value.power,
+          userInfo.role = e.detail.value.role
+        }
         wx.hideLoading();
         wx.navigateBack();
       }, error => {

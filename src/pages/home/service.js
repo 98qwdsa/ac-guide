@@ -25,6 +25,15 @@ module.exports = {
       lastStep
     })
   },
+  confirmStep(code, step_Uid, participant_uid, lastStep = false) {
+    return cloud.call('employeeAddStep', {
+      code,
+      step_Uid,
+      status_code: 100,
+      participant_uid,
+      lastStep
+    })
+  },
   getQueryObserverEventDetail(data) {
     return cloud.call('queryObserverEventDetail', {
       ...data

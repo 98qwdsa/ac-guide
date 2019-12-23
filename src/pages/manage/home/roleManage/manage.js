@@ -1,5 +1,6 @@
 // src/pages/manage/roleDetail/roleDetail.js
 const service = require('../../service.js');
+
 Page({
 
   /**
@@ -8,17 +9,15 @@ Page({
   data: {
     currentTab: '',
     role: [],
-    userList: [],
-    Publisher: [],
-    Observer: [],
-    Participant: []
+    userList: []
   },
-
+  Publisher: [],
+  Observer: [],
+  Participant: [],
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-
     this.loadRole().then(() => {
       this.loadData(this.data.currentTab, false);
     });
@@ -35,7 +34,7 @@ Page({
     } else {
       data = {
         currentTab,
-        userList: this.data[currentTab]
+        userList: this[currentTab]
       }
     }
     this.setData({
@@ -74,16 +73,16 @@ Page({
       role: [role]
     }).then(userList => {
       this.setData({
-        userList: userList.data,
-        [role]: userList.data
+        userList: userList.data
       })
+      this[role] = userList.data
       wx.hideLoading();
       reloadTrigger[role] = false
     }, error => {
       this.setData({
-        userList: [],
-        [role]: [],
+        userList: []
       })
+      this[role] = userList.data
       reloadTrigger[role] = false
       if (error.code === '2000') {
         wx.showToast({
@@ -133,7 +132,7 @@ Page({
                 }
               }
             })
-            _this.data[_this.data.currentTab] = newUserList;
+            _this[_this.data.currentTab] = newUserList;
             _this.setData({
               userList: newUserList
             })
