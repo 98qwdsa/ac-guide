@@ -89,7 +89,7 @@ Page({
       }, error => {
         if (error.code === '2003' || error.code === '2002') {
           wx.showToast({
-            title: '没有可参与的事件',
+            title: '无任务',
             icon: 'none',
             duration: 2000
           })

@@ -16,6 +16,8 @@ function checkParamFormat(data) {
     disabled,
     verifiers,
     role,
+    start_date,
+    due_date,
     steps
   } = data;
   const res = {
@@ -29,6 +31,8 @@ function checkParamFormat(data) {
       disabled,
       verifiers,
       role,
+      start_date,
+      due_date,
       steps
     }
   }
@@ -82,6 +86,24 @@ function checkParamFormat(data) {
     if (!(role instanceof Array)) {
       res.code = '1001';
       res.msg.push('role:string')
+    }
+  }
+  if (start_date === undefined) {
+    res.code = '1000';
+    res.msg.push('start_date:string')
+  } else {
+    if (typeof (start_date) != 'string' || start_date === '') {
+      res.name = '1001';
+      res.msg.push('start_date:string')
+    }
+  }
+  if (due_date === undefined) {
+    res.code = '1000';
+    res.msg.push('due_date:string')
+  } else {
+    if (typeof (due_date) != 'string' || due_date === '') {
+      res.name = '1001';
+      res.msg.push('due_date:string')
     }
   }
   if (steps === undefined) {
@@ -178,7 +200,9 @@ async function addCustomEventToEventList(data) {
       icon = '',
       disabled = false,
       verifiers = [],
-      role = ['Participant']
+      role = ['Participant'],
+      start_date = '',
+      due_date = '',
   } = data;
   try {
     const res = await COLION.add({
@@ -189,7 +213,9 @@ async function addCustomEventToEventList(data) {
         icon,
         disabled,
         verifiers,
-        role
+        role,
+        start_date: new Date(start_date).getTime(),
+        due_date: new Date(due_date).getTime(),
       }
     })
     if (res._id) {
@@ -307,6 +333,8 @@ async function createCustomEventCollection(code, steps) {
  *  disabled = false,
  *  verifiers = [],
  *  role = ['Participant'],
+ *  start_date = '',
+ *  due_date = '',
  *  steps=[]
  * }
  */

@@ -31,8 +31,13 @@ Page({
     })
   },
   initTabs(data) {
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
     return new Promise((reslove, reject) => {
       service.getPowerRole(['role']).then(data => {
+        wx.hideLoading();
         let tabs = data.role.filter(e => {
           if (APP.globalData.userInfo.role.includes(e.code)) {
             return { ...e
@@ -75,7 +80,7 @@ Page({
       return;
     }
     wx.showLoading({
-      mask: true,
+      mask: true
     })
     service.getSelfEventStep(event_code).then(data => {
       const stepList = [...data.steps];

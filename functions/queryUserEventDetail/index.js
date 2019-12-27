@@ -2,7 +2,7 @@
 const cloud = require('wx-server-sdk')
 
 cloud.init({
-  env: 'prod-ayp2z'
+  env: 'demo-5c0mj'
 })
 const DB = cloud.database();
 // 检查参数格式
@@ -152,6 +152,10 @@ async function getEventDetail(code) {
 
 async function mergeSteps(eventSteps, userSteps, eventDetail) {
   // 按事件的步骤信息获取当步骤是否体验用户参与，然后根据用户步骤查询附件
+  let userEventstatus = 0;
+  if(userSteps.length !== 0){
+    userEventstatus = userSteps[0].status
+  }
   let steps = [];
   for (i of eventSteps) {
     let user_step = null
@@ -171,6 +175,7 @@ async function mergeSteps(eventSteps, userSteps, eventDetail) {
     code: '0000',
     msg: '',
     data: {
+      userEventstatus,
       detail: eventDetail,
       steps
     }

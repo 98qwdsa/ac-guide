@@ -10,8 +10,12 @@ module.exports = {
     });
   },
   getEventList() {
+    let date = new Date();
+    let current = date.getFullYear() + '-' + (date.getMonth() + 1)
+      + '-' + (date.getDate());
     return cloud.call('queryEventList', {
-      power: 'event_admin'
+      power: 'event_admin',
+      currentDate: new Date(current).getTime()
     });
   },
   getSelfEventStep(code) {

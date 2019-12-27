@@ -40,10 +40,34 @@
         </view>
       </view>
 
+      <view class="event_view">
+        <picker name="start_date" mode="date" value="{{eventDetail.start_date}}" start="2018-09-01" end="2033-09-01" bindchange="bindStartDateChange" class="picker_container">
+          <block wx:if="{{eventDetail.start_date === ''}}">
+            <view class="picker">起始日期</view>
+          </block>
+          <block wx:else>
+            <view class="picker picker-color">{{eventDetail.start_date}}</view>
+          </block>
+          <label class="right-arrow"></label>
+        </picker>
+      </view>
+
+      <view class="event_view">
+        <picker name="due_date" mode="date" value="{{eventDetail.due_date}}" start="2018-09-01" end="2033-09-01" bindchange="bindDueDateChange" class="picker_container">
+          <block wx:if="{{eventDetail.due_date === ''}}">
+            <view class="picker">截止日期</view>
+          </block>
+          <block wx:else>
+            <view class="picker picker-color">{{eventDetail.due_date}}</view>
+          </block>
+          <label class="right-arrow"></label>
+        </picker>
+      </view>
+
       <view class='event_view step'>
         <text>步骤</text>
         <checkbox-group name="steps">
-          <label class="checkbox-item" wx:for="{{eventDetail.steps}}" bindtap="editTaskStep" wx:key="index" data-steptask="{{item.title}}" data-stepindex="{{index}}" data-steptips="{{item.tips}}"  data-verifierid="{{item.verifiers}}" data-verifiers="{{eventDetail.verifiers}}">
+          <label class="checkbox-item" wx:for="{{eventDetail.steps}}" bindtap="editTaskStep" wx:key="index" data-steptask="{{item.title}}" data-stepindex="{{index}}" data-steptips="{{item.tips}}" data-verifierid="{{item.verifiers}}" data-verifiers="{{eventDetail.verifiers}}">
             {{index+1}}: {{item.title}}
             <image src="../../../../../asset/task_step_delete.png" class="delete" data-steptask="{{item.title}}" catchtap="deleteTaskStep"></image>
           </label>

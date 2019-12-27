@@ -10,6 +10,7 @@ function checkParam(data) {
     _id,
     code,
     power,
+    currentDate,
     role = "Participant"
   } = data;
 
@@ -71,6 +72,15 @@ function checkParam(data) {
       return returnRes();
     }
   }
+  if (currentDate === undefined){
+    res.code = '1000';
+    res.msg.push('currentDate:string');
+  }else{
+    if (typeof (currentDate) != 'string' || currentDate === ''){
+      res.code = '1001';
+      res.msg.push('currentDate:string');
+    }
+  }
 
   function returnRes() {
     if (res.code === '1000') {
@@ -86,13 +96,12 @@ function checkParam(data) {
         _id,
         code,
         power,
+        currentDate,
         role
       }
     }
     return res;
   }
-
-
 }
 
 async function getUserRole() {
@@ -145,7 +154,7 @@ async function getEventList(user, param) {
   if (param.power) {
     if (user.power.includes(param.power)) {
       // 权限过滤暂时没有
-      return await exec();
+      return await exec({});
     } else {
       return {
         code: '2002',
@@ -172,7 +181,11 @@ async function getEventList(user, param) {
   }
   async function exec(filter = {}) {
     try {
-      const res = await COLION.where(filter).get();
+      const res = await COLION.where({
+        ...filter,
+        due_date: _.gte(param.currentDate),
+        start_date: _.lte(param.currentDate)
+      }).get();
       if (res.data.length < 1) {
         return {
           code: '2003',

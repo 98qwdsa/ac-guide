@@ -29,6 +29,11 @@ Page({
   },
   addUser(){
     this.loadRole().then(powerRole =>{
+      powerRole.role.forEach(val => {
+        if (val.code === 'Participant') {
+          val.checked = true;
+        }
+      })
       this.setData({
         power: powerRole.power,
         role: powerRole.role,

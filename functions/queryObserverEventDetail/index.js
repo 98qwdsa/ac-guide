@@ -92,13 +92,13 @@ async function getObserverUserOpenId(data) {
     const res = await DB.collection(data.code + '_event_observeds').where({
       observer_open_id: _.in([data.open_id])
     }).get()
-    if (res.data.length < 1) {
-      return {
-        code: '2000',
-        msg: 'not records',
-        data: null
-      }
-    }
+    // if (res.data.length < 1) {
+    //   return {
+    //     code: '2000',
+    //     msg: 'not records',
+    //     data: null
+    //   }
+    // }
     return {
       code: '0000',
       msg: res.errMsg,
@@ -153,45 +153,59 @@ async function checkRole() {
 async function getObserverEventDetail(param, openIdList) {
   const pageStart = param.page.current_num * param.page.size;
   const qyeryOpenIdList = openIdList.slice(pageStart, pageStart + param.page.size);
-  try {
-    const res = await cloud.callFunction({
-      name: 'queryMultipleUserEventDetail',
-      data: {
-        open_id: cloud.getWXContext().OPENID,
-        code: param.code,
-        user_open_id_list: qyeryOpenIdList,
+  if (openIdList.length) {
+    try {
+      const res = await cloud.callFunction({
+        name: 'queryMultipleUserEventDetail',
+        data: {
+          open_id: cloud.getWXContext().OPENID,
+          code: param.code,
+          user_open_id_list: qyeryOpenIdList,
+        }
+      });
+      if (res.result.code !== '0000') {
+        return {
+          code: '2005',
+          msg: res.result,
+          data: null
+        }
+      } else if (res.result.data.length < 1) {
+        return {
+          code: '2002',
+          msg: '',
+          data: null
+        }
       }
-    });
-    if (res.result.code !== '0000') {
       return {
-        code: '2005',
-        msg: res.result,
-        data: null
-      }
-    } else if (res.result.data.length < 1) {
-      return {
-        code: '2002',
+        code: '0000',
         msg: '',
+        data: {
+          data: res.result.data,
+          page_info: {
+            ...param.page,
+            count: openIdList.length
+          }
+        }
+      };
+    } catch (e) {
+      return {
+        code: '3002',
+        msg: e,
         data: null
       }
     }
+  } else {
     return {
       code: '0000',
       msg: '',
       data: {
-        data: res.result.data,
+        data: [],
         page_info: {
           ...param.page,
           count: openIdList.length
         }
       }
     };
-  } catch (e) {
-    return {
-      code: '3002',
-      msg: e,
-      data: null
-    }
   }
 }
 // 云函数入口函数

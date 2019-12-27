@@ -128,20 +128,50 @@ async function recordStep(data, user_id) {
     return writeStepRes;
   } else {
     //如果该步骤需要确认
-
     //获取该步骤确认者和该步骤表ID
     const stepDetail = await getStepDetail(data.code, data.step_Uid);
     //添加待确认步骤到对应步骤确认者
     const addConfirmRecordres = await addConfirmRecord(data.code, stepDetail.data.verifiers, stepDetail.data._id, user_id)
-    if (addConfirmRecordres.code !== '0000'){
+    if (addConfirmRecordres.code !== '0000') {
       return addConfirmRecordres;
     }
     return writeStepRes;
   }
 
+  //该事件是否有完成事件后的模板
+  async function hasEventCompleteTemplate(code) {
+    const DB = cloud.database();
+    try {
+      const res = await DB.collection(`event_list`).where({
+        code
+      }).get();
+      if (res.data.length < 1) {
+        return {
+          code: '',
+          msg: 'there is no ' + code + '_event',
+          data: null
+        }
+      }
+      return {
+        code: '0000',
+        msg: '',
+        data: res.data[0].complete_tpl
+      }
+    } catch (e) {
+      return {
+        code: '3010',
+        msg: e,
+        data: null
+      }
+    }
+  }
+
 
   //添加一步到事件的用户表
   async function writeStep(userStep, data) {
+    //当前步骤状态
+    data.status_code = await checkVerify(data, data.step_Uid);
+
     //当前用户在该事件下的状态
     let status = 50;
     if (data.lastStep) {
@@ -152,12 +182,20 @@ async function recordStep(data, user_id) {
         data.lastStep = false;
         return checklastStep
       }
+
       if (checklastStep.data && data.status_code == 100) {
+        let complete_tpl = await hasEventCompleteTemplate(data.code);
+        if (complete_tpl.code !== '0000') {
+          return complete_tpl;
+        }
         status = 100;
+        // 如果该事件需要在完成后弹出提示框
+        if (complete_tpl.data) {
+          status = 80
+        }
       }
     }
-    //当前步骤状态
-    data.status_code = await checkVerify(data, data.step_Uid);
+
     //根据当前参与者在该事件下的状态，修改该用户的参与事件或者已完成事件字段
     const updateUser = await updateUserCollection(data.code, user_id, status)
     if (updateUser.code !== '0000') {
@@ -175,6 +213,7 @@ async function recordStep(data, user_id) {
     //参与者第一次确认步骤，执行新建参加步骤记录
     async function newStep(data) {
       try {
+        const date = new Date().getTime()
         const res = await COLTION.add({
           data: {
             user_open_id: data.user_open_id,
@@ -182,7 +221,7 @@ async function recordStep(data, user_id) {
             steps: [{
               step_Uid: data.step_Uid,
               status_code: data.status_code,
-              date: new Date().toString()
+              date
             }]
           }
         })
@@ -194,8 +233,8 @@ async function recordStep(data, user_id) {
             data: {
               step_Uid: data.step_Uid,
               status_code: data.status_code,
-              date: data.date,
-              status: data.status
+              date,
+              status
             }
           }
         } else {
@@ -216,6 +255,7 @@ async function recordStep(data, user_id) {
     //参与者添加一条确认步骤
     async function addStep(data, userStep) {
       const _ = DB.command
+      const date = new Date().getTime();
       try {
         const res = await COLTION.doc(userStep.data._id).update({
           data: {
@@ -223,7 +263,7 @@ async function recordStep(data, user_id) {
             steps: _.push({
               step_Uid: data.step_Uid,
               status_code: data.status_code,
-              date: new Date().toString()
+              date
             })
           }
         })
@@ -233,9 +273,10 @@ async function recordStep(data, user_id) {
             code: '0000',
             msg: '',
             data: {
+              status,
               step_Uid: data.step_Uid,
               status_code: data.status_code,
-              date: data.date
+              date
             }
           }
         }
@@ -266,12 +307,17 @@ async function recordStep(data, user_id) {
           }
           return item
         })
-        //确认后修改参与者步骤以及当前事件的参与状态
+        //确认后修改参与者步骤以及当前事件的参与状态 // 
+        let complete_tpl = await hasEventCompleteTemplate(data.code);
+        if (complete_tpl.code !== '0000') {
+          return complete_tpl;
+        }
+        const newData = {
+          status: data.lastStep ? (complete_tpl.data ? 80 : 100) : status,
+          steps
+        }
         const updateStepsRes = await COLTION.doc(userStep.data._id).update({
-          data: {
-            status: data.lastStep ? 100 : status,
-            steps
-          }
+          data: newData
         });
 
         if (!updateStepsRes.stats.updated) {
@@ -283,7 +329,18 @@ async function recordStep(data, user_id) {
         }
         if (data.status_code === 100) {
           //确认成功后
-          return await updateEventStepComfirm(data.code, data.user_open_id, data.step_Uid, data.participant_uid)
+          const res = await updateEventStepComfirm(data.code, data.user_open_id, data.step_Uid, data.participant_uid)
+          if (res.code === '0000') {
+            return {
+              code: '0000',
+              msg: '',
+              data: { ...newData.steps[0],
+                status: newData.status
+              }
+            }
+          } else {
+            return res
+          }
         }
       } catch (e) {
         return {
@@ -292,7 +349,7 @@ async function recordStep(data, user_id) {
           data: null
         }
       }
-      
+
       // 更新当前确认者的确认记录。 待确认步骤移动到已确认步骤
       async function updateEventStepComfirm(code, observer_open_id, step_uid, participant_uid) {
         const COL = DB.collection(`${code}_event_step_confirm`);
@@ -316,10 +373,10 @@ async function recordStep(data, user_id) {
         })
         //删除当前确认者之外的确认者的当前待确认的步骤记录
         const removeRes = await removeOtherObserverStep(code, step_uid, participant_uid, observer_open_id);
-        if (removeRes.code !== '0000'){
+        if (removeRes.code !== '0000') {
           return removeRes;
         }
-        if (updateRes.stats.updated && removeRes.code === '0000') { 
+        if (updateRes.stats.updated && removeRes.code === '0000') {
           return {
             code: '0000',
             data: null,
@@ -545,7 +602,7 @@ async function recordStep(data, user_id) {
         return actoinResult;
       }
     }
-    return{
+    return {
       code: '0000',
       msg: 'update or insert success',
       data: null
@@ -635,7 +692,7 @@ async function recordStep(data, user_id) {
         const result = await COLTION.where({
           observer_open_id
         }).get()
-        if (result.data.length) {
+        if (result.data.length !== 0) {
           b = true;
         }
         return {

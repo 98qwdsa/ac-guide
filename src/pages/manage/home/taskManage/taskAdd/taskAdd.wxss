@@ -144,6 +144,21 @@ button{
 button::after{
   border-radius: 0;
 }
+.picker_container{
+  position: relative;
+}
+.picker_container .right-arrow{
+  left: 600rpx;
+}
+.picker{
+  line-height: 100rpx;
+  color: #999;
+  font-size: 32rpx;
+}
+.picker-color{
+  color: #000;
+}
+
 
 
 
@@ -164,6 +179,7 @@ button::after{
   display: inline-block;
   width: 10px;
   height: 10px;
+  color: #999;
   z-index: 10;
   position: absolute;
   top: 35rpx;

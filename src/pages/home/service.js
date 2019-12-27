@@ -7,10 +7,12 @@ module.exports = {
     return cloud.call('checkUserInfo');
   },
   getEventList() {
-    return cloud.call('queryEventList');
-  },
-  getEventList() {
-    return cloud.call('queryEventList');
+    let date = new Date();
+    let current = date.getFullYear() + '-' + (date.getMonth()+1)
+      + '-' + (date.getDate());
+    return cloud.call('queryEventList',{
+      currentDate: new Date(current).getTime()
+    });
   },
   getSelfEventStep(code) {
     return cloud.call('queryUserEventDetail', {
@@ -57,7 +59,6 @@ module.exports = {
   getAllObserver() {
     return cloud.call('queryAllObserver', {})
   },
-
   getPowerRole(types, open_id = undefined) {
     return cloud.call('getPowerRole', {
       open_id,

@@ -53,7 +53,7 @@ Page({
       reloadTrigger.myDataload = false;
     })
   },
-  loadUserForEvent() {
+  loadObservedUserList() {
     let reloadTrigger = getApp().globalData.homeEventListObserverEvent;
     if (reloadTrigger.userDataLoad === false) {
       return;
@@ -146,8 +146,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
+    //查询自己参与事件详情
     this.loadMyEventDetail();
-    this.loadUserForEvent();
+    //查询自己关注的用户的事件列表
+    this.loadObservedUserList();
   },
 
   /**

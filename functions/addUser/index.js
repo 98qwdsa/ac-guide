@@ -126,7 +126,7 @@ exports.main = async(event, context) => {
       power: param.data.power,
       modify_openid: param.data.modify_openid,
       role: param.data.role,
-      create_date: new Date().toString()
+      create_date: new Date().getTime()
     }
 
     if (param.data.action === 'adminAddUser') {

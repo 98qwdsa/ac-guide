@@ -6,6 +6,8 @@ let detail = {
   desc: '',
   disabled: false,
   verifiers: [],
+  start_date: '',
+  due_date: '',
   role: [],
   steps: []
 };
@@ -52,9 +54,9 @@ Page({
         })
         return !b;
       })
-      if (detail.steps.length) {
+      if (detail.steps || detail.steps.length) {
         detail.steps = detail.steps.map(e => {
-          if (e.verifiers.length) {
+          if (e.verifiers || e.verifiers.length) {
             const verifiers = e.verifiers.filter(m => {
               let b = false
               removedVerifers.forEach(j => {
@@ -157,6 +159,8 @@ Page({
         desc: '',
         disabled: false,
         verifiers: [],
+        start_date: '',
+        due_date: '',
         role: [],
         steps: []
       }
@@ -220,6 +224,18 @@ Page({
       url: 'addTaskStep/addTaskStep?verifiers=' + verifiers
     })
   },
+  bindStartDateChange(e){
+    detail.start_date = e.detail.value
+    this.setData({
+      eventDetail: detail
+    })
+  },
+  bindDueDateChange(e){
+    detail.due_date = e.detail.value
+    this.setData({
+      eventDetail: detail
+    })
+  },
   onUnload() {
     detail = {
       code: '',
@@ -227,6 +243,8 @@ Page({
       desc: '',
       disabled: false,
       verifiers: [],
+      start_date: '',
+      due_date: '',
       role: [],
       steps: []
     }
